@@ -1,0 +1,51 @@
+:root {
+  --main-color: #f2f2f2;
+
+  --secondary-color: #4fc4cb;
+  --primary-color: #af71b0;
+
+  height: 100dvh;
+  width: 100%;
+  background-color: var(--main-color);
+
+  font-family: "Poppins", ui-sans-serif, system-ui, -apple-system, "system-ui",
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+body {
+  height: 100%;
+  width: 100%;
+}
+
+h1 {
+  font-family: "Dancing Script";
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 1rem 0 1rem 0;
+}
+
+h2 {
+  margin-bottom: 2rem;
+  text-wrap: pretty;
+}
+
+h2 > span {
+  font-style: italic;
+  text-wrap: nowrap;
+}
+
+h2 > span > span {
+  color: var(--secondary-color);
+}
+
+.Slogan > br {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .Slogan > br {
+    display: block;
+  }
+}
