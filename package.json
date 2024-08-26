@@ -32,9 +32,15 @@
     "bump:patch": "nom version patch -m 'v%s'",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "postdeploy": "rm -rf build"
+    "postdeploy": "rm -rf build",
+    "open:ios": "npx cap open ios",
+    "run:ios": "npx cap run ios"
   },
   "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/ios": "^6.1.2",
     "@emotion/styled": "^11.10.6",
     "@fontsource/dancing-script": "^5.0.16",
     "@fontsource/plus-jakarta-sans": "^5.0.17",
