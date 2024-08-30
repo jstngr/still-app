@@ -25,7 +25,7 @@ module.exports = {
   devServer: {
     hot: true,
     historyApiFallback: true,
-    static: path.resolve(__dirname, './dist')
+    static: path.resolve(__dirname, './dist'),
   },
   module: {
     rules: [
@@ -41,8 +41,24 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/i,
+        test: /\.css$/, // Apply loaders to .css files
+        exclude: /\.module\.css$/, // Exclude CSS Modules
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.module\.css$/, // Apply loaders to .module.css files
+        use: [
+          'style-loader', // Injects CSS into the DOM
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                namedExport: false,
+                localIdentName: '[name]__[local]___[hash:base64:5]', // Naming pattern for CSS classes
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.svg$/i,

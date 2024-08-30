@@ -159,14 +159,44 @@
         "*.spec.js",
         "*.test.js"
       ],
-      "extends": ["plugin:jest/recommended", "plugin:jest/style"],
+      "extends": [
+        "import",
+        "plugin:jest/recommended",
+        "plugin:jest/style",
+        "unused-imports"
+      ],
       "rules": {
         "jest/no-conditional-expect": "error",
         "jest/no-export": "error",
         "jest/no-identical-title": "error",
         "jest/prefer-to-be": "error",
         "jest/valid-expect": "error",
-        "jest/valid-title": "error"
+        "jest/valid-title": "error",
+        // Import rules
+        "import/order": [
+          "error",
+          {
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              "parent",
+              "sibling",
+              "index"
+            ],
+            "newlines-between": "always"
+          }
+        ],
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+          "warn",
+          {
+            "vars": "all",
+            "varsIgnorePattern": "^_",
+            "args": "after-used",
+            "argsIgnorePattern": "^_"
+          }
+        ]
       }
     }
   ]

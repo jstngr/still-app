@@ -8,6 +8,8 @@ import '@fontsource/dancing-script';
 import './index.css';
 import './i18n';
 
+import '@mantine/core/styles.css';
+
 const domNode = document.getElementById('root');
 const root = createRoot(domNode);
 
