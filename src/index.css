@@ -16,3 +16,9 @@
 :root[data-mantine-color-scheme="dark"] body {
   --mantine-color-body: #282827;
 }
+
+:root * {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}

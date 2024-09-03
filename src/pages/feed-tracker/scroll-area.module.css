@@ -1,0 +1,9 @@
+.scrollbar {
+  &[data-orientation="horizontal"] .thumb {
+    display: none;
+  }
+}
+
+.corner {
+  display: none;
+}

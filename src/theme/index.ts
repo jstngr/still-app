@@ -9,6 +9,10 @@ const theme: MantineThemeOverride = createTheme({
     xxs: '0.25rem', // 4px
   },
 
+  headings: {
+    textWrap: 'nowrap',
+  },
+
   components: {
     AppShell: {
       defaultProps: {
