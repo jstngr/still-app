@@ -12,7 +12,7 @@ function AppFrame() {
   return (
     <AppShell>
       <AppShell.Main p="env(safe-area-inset-top, 20px) env(safe-area-inset-left, 20px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-right, 20px)">
-        <Stack>
+        <Stack h="100%">
           <AppTitle />
           <Outlet />
         </Stack>

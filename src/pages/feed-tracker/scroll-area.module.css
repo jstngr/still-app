@@ -1,6 +1,17 @@
 .scrollbar {
+  --sa-corner-width: 0;
+
   &[data-orientation="horizontal"] .thumb {
     display: none;
+  }
+
+  &[data-orientation="vertical"] .thumb {
+    background-color: var(--mantine-color-primary-3);
+  }
+  &[data-orientation="vertical"] .thumb:hover,
+  .thumb:active,
+  .thumb:focus {
+    background: var(--mantine-color-primary-3);
   }
 }
 

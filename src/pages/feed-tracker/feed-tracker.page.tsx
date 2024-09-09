@@ -1,54 +1,70 @@
 import {
-  Badge,
-  Button,
   Card,
   Container,
   Divider,
+  Flex,
   Group,
   ScrollArea,
   Stack,
+  Text,
   Title,
 } from '@mantine/core';
-import { IconArrowBadgeLeft, IconSignLeft } from '@tabler/icons-react';
 import BoobButton from 'components/boob-button';
+import KpiCard from 'components/kpi-card/kpi-card';
 import React from 'react';
 import scrollStyles from './scroll-area.module.css';
 
 export default function FeedTracker(props) {
   return (
-    <Container fluid>
-      <Stack align="center" gap="xl">
-        <Badge
-          size="lg"
-          variant="gradient"
-          gradient={{ from: 'primary', to: 'secondary', deg: 90 }}
-        >
+    <Container fluid h="100%">
+      <Stack align="center" gap="xl" h="100%">
+        {/* <Badge size="lg" variant="gradient" gradient={{ from: 'primary', to: 'primary', deg: 90 }}>
           5:45 Min Feeding Left
-        </Badge>
+        </Badge> */}
         <Group grow gap="lg">
           <BoobButton color="primary" label="Left" orientation="left" />
-          <BoobButton color="secondary" label="Right" orientation="right" active />
+          <BoobButton color="primary" variant="outline" label="Right" orientation="right" active />
         </Group>
-        <Divider size="sm" w="100%" />
 
-        <ScrollArea w={'100%'} classNames={scrollStyles} py={'xxs'}>
-          <Group wrap="nowrap">
-            <Card shadow="xs" w="100px">
-              Blaaa
-            </Card>
-            <Card shadow="xs" w="100px">
-              Blaaa
-            </Card>
-            <Card shadow="xs" w="100px">
-              Blaaa
-            </Card>
-            <Card shadow="xs" w="100px">
-              Blaaa
-            </Card>
+        <Flex>
+          <Text>
+            Feeding since{' '}
+            <strong>
+              2:20<small>Min</small>
+            </strong>
+          </Text>
+        </Flex>
+
+        <ScrollArea w={'calc(100% + 10px)'} classNames={scrollStyles}>
+          <Group wrap="nowrap" py="xxs" px="5px">
+            <KpiCard amount={5} title="x feed" text="in the last 24 hours" />
+            <KpiCard amount={5} title="x feed" text="in the last 24 hours" />
+            <KpiCard amount={5} title="x feed" text="in the last 24 hours" />
+            <KpiCard amount={5} title="x feed" text="in the last 24 hours" />
           </Group>
         </ScrollArea>
-        <Divider size="sm" w="100%" />
-        <div></div>
+
+        <Stack flex="1 0 0" w="100%">
+          <Title order={5}>Feeding History</Title>
+          <ScrollArea
+            type="always"
+            flex={'1 0 0'}
+            w={'calc(100% + 10px)'}
+            classNames={scrollStyles}
+          >
+            <Stack p="2px 20px 4px 0px" gap="xs">
+              <Card shadow="xs">Blubba blubb</Card>
+              <Card shadow="xs">Blubba blubb</Card>
+              <Card shadow="xs">Blubba blubb</Card>
+              <Card shadow="xs">Blubba blubb</Card>
+              <Card shadow="xs">Blubba blubb</Card>
+              <Card shadow="xs">Blubba blubb</Card>
+              <Card shadow="xs">Blubba blubb</Card>
+              <Card shadow="xs">Blubba blubb</Card>
+              <Card shadow="xs">Blubba blubb</Card>
+            </Stack>
+          </ScrollArea>
+        </Stack>
       </Stack>
     </Container>
   );

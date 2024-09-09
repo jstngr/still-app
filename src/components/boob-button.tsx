@@ -1,6 +1,5 @@
-import { Button, MantineColor, MantineStyleProp, Stack, Text } from '@mantine/core';
+import { Button, ButtonVariant, MantineColor, MantineStyleProp, Stack, Text } from '@mantine/core';
 import React from 'react';
-import styles from './boob-button.module.css';
 import { IconPlayerPause, IconPlayerPlay, IconPlayerStop } from '@tabler/icons-react';
 
 interface IBoobButtonProps {
@@ -8,10 +7,11 @@ interface IBoobButtonProps {
   label: String;
   orientation: 'left' | 'right';
   active?: boolean;
+  variant?: ButtonVariant;
 }
 
 export default function BoobButton(props: IBoobButtonProps) {
-  const { color, label, orientation, active } = props;
+  const { color, label, active, variant = 'default' } = props;
 
   const rootStyle: MantineStyleProp = {
     borderRadius: '50%',
@@ -19,7 +19,7 @@ export default function BoobButton(props: IBoobButtonProps) {
 
   if (active) {
     return (
-      <Stack gap="xs">
+      <Stack gap="xxs">
         <Button
           styles={{
             root: {
@@ -28,10 +28,11 @@ export default function BoobButton(props: IBoobButtonProps) {
             },
           }}
           color={color}
-          h="calc(4rem - (var(--mantine-spacing-xs) * 0.5))"
-          mah="calc(15vw - (var(--mantine-spacing-xs) * 0.5))"
+          h="calc(4rem - (var(--mantine-spacing-xxs) * 0.5))"
+          mah="calc(15vw - (var(--mantine-spacing-xxs) * 0.5))"
           w="30vw"
           maw="8rem"
+          variant={variant}
         >
           <Stack gap="0" align="center">
             <IconPlayerPause />
@@ -46,8 +47,8 @@ export default function BoobButton(props: IBoobButtonProps) {
             },
           }}
           color={color}
-          h="calc(4rem - (var(--mantine-spacing-xs) * 0.5))"
-          mah="calc(15vw - (var(--mantine-spacing-xs) * 0.5))"
+          h="calc(4rem - (var(--mantine-spacing-xxs) * 0.5))"
+          mah="calc(15vw - (var(--mantine-spacing-xxs) * 0.5))"
           w="30vw"
           maw="8rem"
         >

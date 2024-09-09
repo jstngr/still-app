@@ -1,6 +1,8 @@
 import { createTheme, MantineThemeOverride } from '@mantine/core';
 import themeColors from './colors';
 
+import AppShellStyles from './AppShell.module.css';
+
 const theme: MantineThemeOverride = createTheme({
   fontFamily: 'Poppins',
   ...themeColors,
@@ -11,11 +13,21 @@ const theme: MantineThemeOverride = createTheme({
 
   headings: {
     textWrap: 'nowrap',
+    sizes: {
+      h6: {
+        fontSize: '.75rem',
+      },
+    },
   },
 
   components: {
     AppShell: {
+      classNames: AppShellStyles,
       defaultProps: {
+        style: {
+          overflow: 'hidden',
+        },
+        footer: { height: 66 },
         bg: 'var(--mantine-color-background-0)',
         padding:
           'env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-left, 20px) env(safe-area-inset-bottom, 20px)',
@@ -27,12 +39,11 @@ const theme: MantineThemeOverride = createTheme({
       },
     },
     AppShellMain: {
-      styles: {
-        root: {
-          border: '1px solid red',
-        },
+      defaultProps: {
+        h: 'calc(100dvh - var(--app-shell-footer-height))',
+        mih: 'calc(100dvh - var(--app-shell-footer-height))',
+        mah: 'calc(100dvh - var(--app-shell-footer-height))',
       },
-      defaultProps: {},
     },
   },
 });
