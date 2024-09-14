@@ -1,5 +1,16 @@
-import { AppShell, Container, Divider, Flex, MantineProvider, Stack, Title } from '@mantine/core';
-import React from 'react';
+import {
+  AppShell,
+  Button,
+  Container,
+  Divider,
+  Flex,
+  Group,
+  MantineProvider,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
+import React, { useEffect } from 'react';
 import theme from 'theme';
 
 import Navigation from 'components/navigation/navigation';
@@ -7,12 +18,13 @@ import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
 import { Navigate, Outlet, Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import AppTitle from 'components/app-title';
+import useDatabase from 'database/use-database.hook';
 
 function AppFrame() {
   return (
     <AppShell>
       <AppShell.Main p="env(safe-area-inset-top, 20px) env(safe-area-inset-left, 20px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-right, 20px)">
-        <Stack h="100%">
+        <Stack h="100%" gap="xl">
           <AppTitle />
           <Outlet />
         </Stack>

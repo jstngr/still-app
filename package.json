@@ -41,6 +41,7 @@
     "@capacitor/cli": "^6.1.2",
     "@capacitor/core": "^6.1.2",
     "@capacitor/ios": "^6.1.2",
+    "@capacitor/preferences": "^6.0.2",
     "@emotion/styled": "^11.10.6",
     "@fontsource/dancing-script": "^5.0.16",
     "@fontsource/plus-jakarta-sans": "^5.0.17",

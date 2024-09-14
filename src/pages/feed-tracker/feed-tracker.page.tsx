@@ -1,16 +1,6 @@
-import {
-  Card,
-  Container,
-  Divider,
-  Flex,
-  Group,
-  ScrollArea,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Card, Container, Flex, Group, ScrollArea, Stack, Text, Title } from '@mantine/core';
 import BoobButton from 'components/boob-button';
-import KpiCard from 'components/kpi-card/kpi-card';
+import KpiCard from 'components/kpi-card';
 import React from 'react';
 import scrollStyles from './scroll-area.module.css';
 
@@ -18,9 +8,6 @@ export default function FeedTracker(props) {
   return (
     <Container fluid h="100%">
       <Stack align="center" gap="xl" h="100%">
-        {/* <Badge size="lg" variant="gradient" gradient={{ from: 'primary', to: 'primary', deg: 90 }}>
-          5:45 Min Feeding Left
-        </Badge> */}
         <Group grow gap="lg">
           <BoobButton color="primary" label="Left" orientation="left" />
           <BoobButton color="primary" variant="outline" label="Right" orientation="right" active />
