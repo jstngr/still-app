@@ -17,8 +17,8 @@ const mockData: IFeedingEntry[] = [
   },
   {
     id: 6,
-    created: new Date().getTime() - 60 * 22 * 1000,
-    stopped: new Date().getTime() - 60 * 15 * 1000,
+    created: new Date().getTime() - 60 * 65 * 1000,
+    stopped: new Date().getTime() - 60 * 62 * 1000,
     boob: 'Right',
   },
   {

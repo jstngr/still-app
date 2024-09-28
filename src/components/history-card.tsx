@@ -91,15 +91,17 @@ export default function HistoryCard(props: IHistoryCardProps) {
                 {!showTimeAgoPlaceholder && (
                   <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
                     {(timer) => (
-                      <Text className={monoStyles.monoFont}>
-                        {formatTime(timer.seconds, false)}
-                      </Text>
+                      <>
+                        <Text className={monoStyles.monoFont}>
+                          {formatTime(timer.seconds, false)}
+                        </Text>
+                        <Text size="12px" c="dimmed">
+                          {timer.seconds > 60 * 60 ? 'hours ago' : 'min ago'}
+                        </Text>
+                      </>
                     )}
                   </Timer>
                 )}
-                <Text size="12px" c="dimmed">
-                  min ago
-                </Text>
               </Stack>
             )}
           </Group>
