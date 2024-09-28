@@ -1,23 +1,35 @@
-import { Button, ButtonVariant, MantineColor, MantineStyleProp, Stack, Text } from '@mantine/core';
-import React from 'react';
+import { Button, Stack, Text } from '@mantine/core';
 import { IconPlayerPause, IconPlayerPlay, IconPlayerStop } from '@tabler/icons-react';
-
+import React, { useMemo } from 'react';
+import { useFeedingContext } from 'service/feeding.service';
+import { IBoob } from 'shared/types/types';
+import styles from './boob-button.module.css';
 interface IBoobButtonProps {
-  color: MantineColor;
   label: String;
-  orientation: 'left' | 'right';
-  active?: boolean;
-  variant?: ButtonVariant;
+  orientation: IBoob;
 }
 
 export default function BoobButton(props: IBoobButtonProps) {
-  const { color, label, active, variant = 'default' } = props;
+  const { label } = props;
+  const {
+    startFeeding,
+    feedingEntries,
+    activeFeeding,
+    stopFeeding,
+    pauseFeeding,
+    continueFeeding,
+  } = useFeedingContext();
 
-  const rootStyle: MantineStyleProp = {
-    borderRadius: '50%',
-  };
+  const isActive = useMemo(() => activeFeeding?.boob === props.orientation, [activeFeeding]);
+  const isPause = useMemo(() => isActive && activeFeeding?.pauseStart, [activeFeeding, isActive]);
 
-  if (active) {
+  const markAsNext = useMemo(
+    () =>
+      !activeFeeding && !!feedingEntries?.length && feedingEntries[0]?.boob !== props.orientation,
+    [props.orientation, feedingEntries, activeFeeding]
+  );
+
+  if (isActive) {
     return (
       <Stack gap="xxs">
         <Button
@@ -27,17 +39,25 @@ export default function BoobButton(props: IBoobButtonProps) {
               borderTopRightRadius: '99999px',
             },
           }}
-          color={color}
+          color={'primary'}
           h="calc(4rem - (var(--mantine-spacing-xxs) * 0.5))"
           mah="calc(15vw - (var(--mantine-spacing-xxs) * 0.5))"
           w="30vw"
           maw="8rem"
-          variant={variant}
+          variant={'outline'}
+          onClick={isPause ? continueFeeding : pauseFeeding}
         >
-          <Stack gap="0" align="center">
-            <IconPlayerPause />
-            <Text size="xs">Pause</Text>
-          </Stack>
+          {isPause ? (
+            <Stack gap="0" align="center">
+              <IconPlayerPlay />
+              <Text size="xs">Continue</Text>
+            </Stack>
+          ) : (
+            <Stack gap="0" align="center">
+              <IconPlayerPause />
+              <Text size="xs">Pause</Text>
+            </Stack>
+          )}
         </Button>
         <Button
           styles={{
@@ -46,11 +66,12 @@ export default function BoobButton(props: IBoobButtonProps) {
               borderBottomRightRadius: '99999px',
             },
           }}
-          color={color}
+          color={'primary'}
           h="calc(4rem - (var(--mantine-spacing-xxs) * 0.5))"
           mah="calc(15vw - (var(--mantine-spacing-xxs) * 0.5))"
           w="30vw"
           maw="8rem"
+          onClick={stopFeeding}
         >
           <Stack gap="0" align="center">
             <IconPlayerStop />
@@ -68,12 +89,14 @@ export default function BoobButton(props: IBoobButtonProps) {
           borderRadius: '50%',
         },
       }}
-      color={color}
+      color={'primary'}
       h="30vw"
       mah="8rem"
       w="30vw"
       maw="8rem"
+      onClick={() => startFeeding(props.orientation)}
     >
+      {markAsNext && <div className={styles.boobButtonIndicator} />}
       <Stack gap="xxs" align="center">
         <IconPlayerPlay />
         <Text>{label}</Text>

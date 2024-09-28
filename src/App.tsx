@@ -19,6 +19,7 @@ import { Navigate, Outlet, Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import AppTitle from 'components/app-title';
 import useDatabase from 'database/use-database.hook';
+import { FeedingProvider } from 'service/feeding.service';
 
 function AppFrame() {
   return (
@@ -39,18 +40,20 @@ function AppFrame() {
 export default function App() {
   return (
     <MantineProvider theme={theme}>
-      <Container p={0} maw="500px">
-        <BrowserRouter>
-          <Routes>
-            <Route path="*" element={<AppFrame />}>
-              <Route path="feed-tracker" element={<FeedTracker />} />
-              <Route path="poop-tracker" element={<div>Poop tracker</div>} />
-              <Route path="statistics" element={<div>Statistics</div>} />
-              <Route path="*" element={<Navigate to="/feed-tracker" replace />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </Container>
+      <FeedingProvider>
+        <Container p={0} maw="500px">
+          <BrowserRouter>
+            <Routes>
+              <Route path="*" element={<AppFrame />}>
+                <Route path="feed-tracker" element={<FeedTracker />} />
+                <Route path="poop-tracker" element={<div>Poop tracker</div>} />
+                <Route path="statistics" element={<div>Statistics</div>} />
+                <Route path="*" element={<Navigate to="/feed-tracker" replace />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </Container>
+      </FeedingProvider>
     </MantineProvider>
   );
 }

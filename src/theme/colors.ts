@@ -28,6 +28,20 @@ const themeColors: MantineThemeOverride = {
       '#a45527',
       '#90481e',
     ],
+    accent: [
+      '#e7f6e9',
+      '#d7f8db',
+      '#cbefd0',
+      '#bee8c5',
+      '#b4e0bb',
+      '#a3dbad',
+      '#97cfa1',
+      '#7bbe88',
+      '#4c8e5b',
+      '#428351',
+      '#216534',
+      '#002b00',
+    ],
   },
 };
 

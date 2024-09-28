@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 
 import 'normalize.css';
 import '@fontsource/poppins';
+import '@fontsource-variable/jetbrains-mono';
 import '@fontsource/dancing-script';
 import './index.css';
 import './i18n';
