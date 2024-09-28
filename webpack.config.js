@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   devtool: 'source-map',
@@ -13,6 +14,11 @@ module.exports = {
     },
     extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      stream: require.resolve('stream-browserify'),
+      vm: require.resolve('vm-browserify'),
+    },
   },
   // output: {
   //   path: path.resolve(__dirname, 'dist'),
@@ -81,6 +87,9 @@ module.exports = {
       patterns: [
         { from: 'CNAME', to: '' }, // Copy CNAME file to the root of the build directory
       ],
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
     }),
   ],
 };

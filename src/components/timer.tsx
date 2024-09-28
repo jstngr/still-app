@@ -21,8 +21,6 @@ export default function Timer(props: ITimerProps) {
   const [seconds, setSeconds] = useState(startingSeconds || 0);
   const [resetId, setResetId] = useState(timerId || 0);
 
-  console.log('startingSeconds', startingSeconds);
-
   useEffect(() => {
     if (resetId !== timerId) {
       setSeconds(startingSeconds || 0);

@@ -8,9 +8,10 @@ import {
   MantineProvider,
   Stack,
   Text,
+  TextInput,
   Title,
 } from '@mantine/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import theme from 'theme';
 
 import Navigation from 'components/navigation/navigation';
@@ -20,6 +21,11 @@ import { BrowserRouter } from 'react-router-dom';
 import AppTitle from 'components/app-title';
 import useDatabase from 'database/use-database.hook';
 import { FeedingProvider } from 'service/feeding.service';
+import sqliteService from 'service/sqlite-service';
+
+import { CapacitorSQLite, SQLiteConnection } from '@capacitor-community/sqlite';
+import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
+import { Capacitor } from '@capacitor/core';
 
 function AppFrame() {
   return (
@@ -38,6 +44,42 @@ function AppFrame() {
 }
 
 export default function App() {
+  const [items, setItems] = useState<any[]>([]);
+  const [name, setName] = useState('');
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      jeepSqlite(window);
+    }
+  }, []);
+
+  // Initialize the database on component mount
+  useEffect(() => {
+    const initDb = async () => {
+      await sqliteService.initDb();
+      loadItems();
+    };
+    initDb();
+
+    // Close the database on component unmount
+    return () => {
+      sqliteService.closeDb();
+    };
+  }, []);
+
+  const loadItems = async () => {
+    const loadedItems = await sqliteService.loadItems();
+    setItems(loadedItems);
+  };
+
+  const addItem = async () => {
+    await sqliteService.insertItem(name, value);
+    setName('');
+    setValue('');
+    loadItems(); // Reload items after insertion
+  };
+
   return (
     <MantineProvider theme={theme}>
       <FeedingProvider>
