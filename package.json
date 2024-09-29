@@ -51,6 +51,7 @@
     "@fontsource/public-sans": "^4.5.12",
     "@ionic/react": "^8.2.7",
     "@mantine/core": "^7.12.1",
+    "@mantine/hooks": "^7.13.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.131",
     "@mui/material": "^5.11.15",

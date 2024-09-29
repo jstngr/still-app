@@ -2,6 +2,7 @@ import React, { createContext, useState, ReactNode, useContext, useMemo, useEffe
 import { IBoob, IFeedingEntry } from 'shared/types/types';
 import FeedingEntry from '../classes/feeding-entry.class';
 import mockData from './mock-data';
+import { useDisclosure } from '@mantine/hooks';
 
 interface FeedingContextType {
   activeFeeding?: IFeedingEntry;
@@ -10,6 +11,12 @@ interface FeedingContextType {
   stopFeeding: () => void;
   pauseFeeding: () => void;
   continueFeeding: () => void;
+  switchBoob: () => void;
+  boobSwitchModal: {
+    boobSwitchModalOpened: boolean;
+    openBoobSwitchModal: () => void;
+    closeBoobSwitchModal: () => void;
+  };
 }
 
 const FeedingContext = createContext<FeedingContextType | undefined>(undefined);
@@ -22,6 +29,8 @@ export const FeedingProvider: React.FC<FeedingProviderProps> = ({ children }) =>
   const [feedingEntries, setFeedingEntries] = useState<IFeedingEntry[]>(mockData);
   const [activeFeeding, setActiveFeeding] = useState<IFeedingEntry>();
   const lastId = useMemo(() => feedingEntries[0]?.id || 0, [feedingEntries]);
+  const [boobSwitchModalOpened, { open: openBoobSwitchModal, close: closeBoobSwitchModal }] =
+    useDisclosure(false);
 
   const updateFeedingEntry = (updateWith: FeedingEntry) => {
     setFeedingEntries((current) =>
@@ -48,11 +57,30 @@ export const FeedingProvider: React.FC<FeedingProviderProps> = ({ children }) =>
     setActiveFeeding(undefined);
   };
 
-  const startFeeding = (boob: IBoob) => {
+  /**
+   *
+   * @param boob Boob side to switch to
+   * @param force Boolean to indicate if it should check for boob switch
+   * @returns void
+   */
+  const startFeeding = (boob: IBoob, force?: boolean) => {
+    if (activeFeeding && !force) {
+      openBoobSwitchModal();
+      return;
+    }
     stopFeeding();
     const newFeeding = new FeedingEntry({ id: lastId + 1, boob });
     setActiveFeeding(newFeeding.toObject());
     setFeedingEntries((current) => [newFeeding.toObject(), ...current]);
+  };
+
+  const switchBoob = () => {
+    const currentBoob = activeFeeding?.boob;
+    if (currentBoob === 'Left') {
+      startFeeding('Right', true);
+    } else {
+      startFeeding('Left', true);
+    }
   };
 
   const continueFeeding = () => {
@@ -84,6 +112,12 @@ export const FeedingProvider: React.FC<FeedingProviderProps> = ({ children }) =>
         activeFeeding,
         pauseFeeding,
         continueFeeding,
+        switchBoob,
+        boobSwitchModal: {
+          boobSwitchModalOpened,
+          openBoobSwitchModal,
+          closeBoobSwitchModal,
+        },
       }}
     >
       {children}

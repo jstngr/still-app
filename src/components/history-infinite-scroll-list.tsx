@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { VariableSizeList as List } from 'react-window';
 import { IFeedingEntry } from 'shared/types/types';
-import HistoryCard from './history-card';
+import HistoryCard from './history-card/history-card';
 import { Box, Flex, Stack } from '@mantine/core';
 import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
 import AutoSizer from 'react-virtualized-auto-sizer';

@@ -1,17 +1,12 @@
-import { Card, Container, Flex, Group, ScrollArea, Stack, Text, Title } from '@mantine/core';
-import BoobButton from 'components/boob-button';
-import KpiCard from 'components/kpi-card';
-import React from 'react';
-import scrollStyles from './scroll-area.module.css';
-import { useFeedingContext } from 'service/feeding.service';
+import { Container, Group, Stack, Text, Title } from '@mantine/core';
+import BoobButton from 'components/boob-button/boob-button';
+import BoobSwitchModal from 'components/boob-button/boob-switch-modal';
 import FeedTimer from 'components/feed-timer';
-import HistoryCard from 'components/history-card';
-import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
-import formatDateLocaleFromTimestamp from 'shared/helpers/format-date-locale-from-timestamp';
-import { IFeedingEntry } from 'shared/types/types';
 import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
+import React from 'react';
+import { useFeedingContext } from 'service/feeding.service';
 
-export default function FeedTracker(props) {
+export default function FeedTracker() {
   const { feedingEntries } = useFeedingContext();
 
   return (
@@ -52,6 +47,7 @@ export default function FeedTracker(props) {
           )}
         </Stack>
       </Stack>
+      <BoobSwitchModal />
     </Container>
   );
 }

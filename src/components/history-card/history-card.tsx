@@ -9,7 +9,7 @@ import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import monoStyles from 'shared/styles/mono-styles.module.css';
 import { IFeedingEntry } from 'shared/types/types';
 import styles from './history-card.module.css';
-import Timer from './timer';
+import Timer from '../timer';
 
 interface IHistoryCardProps {
   entry: IFeedingEntry;
@@ -105,7 +105,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
               align="end"
               className={showTimeAgoPlaceholder ? styles.timeAgoPlaceholder : ''}
             >
-              {!showTimeAgoPlaceholder && (
+              {!showTimeAgoPlaceholder ? (
                 <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
                   {(timer) => (
                     <>
@@ -118,6 +118,8 @@ export default function HistoryCard(props: IHistoryCardProps) {
                     </>
                   )}
                 </Timer>
+              ) : (
+                ' asd'
               )}
             </Stack>
           )}
