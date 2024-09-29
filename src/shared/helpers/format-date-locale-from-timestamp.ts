@@ -9,9 +9,20 @@ export default function formatDateLocaleFromTimestamp(timestamp: number): string
     return '-';
   }
 
+  if (isSameDay(timestamp, new Date().getTime())) return 'Today';
+
   const date = new Date(timestamp);
   const day = String(date.getDate()).padStart(2, '0'); // Day with leading zero
   const month = date.toLocaleString('en-US', { month: 'short' }); // Short month format (e.g., "Sept")
 
   return `${day}. ${month}`;
+}
+
+function isSameDay(timestamp1: number, timestamp2: number) {
+  const date1 = new Date(timestamp1);
+  const date2 = new Date(timestamp2);
+  if (date1.getDate() !== date2.getDate()) return false;
+  if (date1.getMonth() !== date2.getMonth()) return false;
+  if (date1.getFullYear() !== date2.getFullYear()) return false;
+  return true;
 }

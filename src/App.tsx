@@ -26,6 +26,7 @@ import sqliteService from 'service/sqlite-service';
 import { CapacitorSQLite, SQLiteConnection } from '@capacitor-community/sqlite';
 import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
 import { Capacitor } from '@capacitor/core';
+import InfiniteScrollList from 'components/infinite-scroll-list';
 
 function AppFrame() {
   return (

@@ -17,3 +17,9 @@
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
+
+/* Enable overlay scrollbars for WebView */
+body {
+  -webkit-overflow-scrolling: touch; /* For iOS momentum scrolling */
+  overflow: overlay;
+}

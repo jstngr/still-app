@@ -8,6 +8,8 @@ import FeedTimer from 'components/feed-timer';
 import HistoryCard from 'components/history-card';
 import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
 import formatDateLocaleFromTimestamp from 'shared/helpers/format-date-locale-from-timestamp';
+import { IFeedingEntry } from 'shared/types/types';
+import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
 
 export default function FeedTracker(props) {
   const { feedingEntries } = useFeedingContext();
@@ -36,46 +38,18 @@ export default function FeedTracker(props) {
 
         <Stack flex="1 0 0" w="100%" gap="xs">
           <Title order={5}>Feeding History</Title>
-          <ScrollArea
-            type="always"
-            flex={'1 0 0'}
-            w={'calc(100% + 10px)'}
-            classNames={scrollStyles}
-          >
-            <Stack p="2px 20px 4px 0px" gap="xs">
-              {feedingEntries.map((entry, index) => {
-                const prevEntry = feedingEntries[index - 1];
-                let label = <></>;
-                if (
-                  !prevEntry ||
-                  formatDateFromTimestamp(prevEntry.created) !==
-                    formatDateFromTimestamp(entry.created)
-                ) {
-                  label = (
-                    <Text c="dimmed" size="12px" mt={index !== 0 ? 'xs' : undefined}>
-                      {formatDateLocaleFromTimestamp(entry.created)}
-                    </Text>
-                  );
-                }
-                return (
-                  <>
-                    {label}
-                    <HistoryCard entry={entry} index={index} />
-                  </>
-                );
-              })}
-              {!feedingEntries?.length && (
-                <Stack gap="xxs" align="center" mt="xl">
-                  <Text size="sm" c={'dimmed'}>
-                    There is no history yet.
-                  </Text>
-                  <Text size="sm" c={'dimmed'}>
-                    Start tracking now!
-                  </Text>
-                </Stack>
-              )}
+          {feedingEntries?.length ? (
+            <HistoryInfiniteScrollList data={feedingEntries} ItemComponent={<></>} />
+          ) : (
+            <Stack gap="xxs" align="center" mt="xl">
+              <Text size="sm" c={'dimmed'}>
+                There is no history yet.
+              </Text>
+              <Text size="sm" c={'dimmed'}>
+                Start tracking now!
+              </Text>
             </Stack>
-          </ScrollArea>
+          )}
         </Stack>
       </Stack>
     </Container>

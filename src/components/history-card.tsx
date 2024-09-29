@@ -1,6 +1,9 @@
-import { Badge, Card, Group, Stack, Text, Transition } from '@mantine/core';
+import { Badge, Card, Group, Stack, Text } from '@mantine/core';
 import FeedingEntry from 'classes/feeding-entry.class';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useFeedingContext } from 'service/feeding.service';
+import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
+import formatDateLocaleFromTimestamp from 'shared/helpers/format-date-locale-from-timestamp';
 import formatTime from 'shared/helpers/format-time';
 import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import monoStyles from 'shared/styles/mono-styles.module.css';
@@ -14,7 +17,17 @@ interface IHistoryCardProps {
 }
 
 export default function HistoryCard(props: IHistoryCardProps) {
-  const { entry } = props;
+  const { entry, index } = props;
+
+  const { feedingEntries } = useFeedingContext();
+
+  const showDateLabel = useMemo(() => {
+    const prevEntry = feedingEntries[index - 1];
+    return (
+      !prevEntry ||
+      formatDateFromTimestamp(prevEntry.created) !== formatDateFromTimestamp(entry.created)
+    );
+  }, [feedingEntries]);
 
   const { isRunning, isPaused, timeAgo, timeFrom, timeTo } = useMemo(() => {
     const feedingEntry = new FeedingEntry(entry);
@@ -36,82 +49,80 @@ export default function HistoryCard(props: IHistoryCardProps) {
   const showTimeAgoPlaceholder = useMemo(() => props.index > 2, [props.index]);
 
   return (
-    <Transition mounted={mounted} transition="fade" duration={400} timingFunction="ease">
-      {(transitionStyles) => (
-        <Card style={transitionStyles} key={entry.id} shadow="xs">
-          {isRunning && <div className={styles.activeCardIndicator} />}
-          <Group justify="space-between">
-            <Group gap="lg">
-              <Badge variant="outline" size="lg" className={monoStyles.monoFont}>
-                {entry.boob === 'Left' ? 'L' : 'R'}
-              </Badge>
-
-              <Stack gap={'xxs'} align="start">
-                <Group gap={'xs'} justify="end" grow>
-                  <Text size="12px" c="dimmed">
-                    from
-                  </Text>
-                  <Text size="12px" className={monoStyles.monoFont}>
-                    {timeFrom}
-                  </Text>
-                </Group>
-                <Group gap={'xs'} justify="end" w="100%" grow>
-                  <Text size="12px" c="dimmed">
-                    to
-                  </Text>
-                  <Text size="12px" className={monoStyles.monoFont}>
-                    {timeTo}
-                  </Text>
-                </Group>
-              </Stack>
-            </Group>
-
-            <Stack gap="0" align="end">
-              <Timer
-                isRunning={!!(isRunning && !isPaused)}
-                isStopped={false}
-                startingSeconds={Math.floor(new FeedingEntry(entry).getDuration() / 1000)}
-              >
-                {(timer) => (
-                  <Text className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}>
-                    {formatTime(timer.seconds)}
-                  </Text>
-                )}
-              </Timer>
-              <Text size="12px" c="dimmed">
-                duration
-              </Text>
-            </Stack>
-            {showTimeAgo && (
-              <Stack
-                gap="0"
-                align="end"
-                className={showTimeAgoPlaceholder ? styles.timeAgoPlaceholder : ''}
-              >
-                {!showTimeAgoPlaceholder && (
-                  <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
-                    {(timer) => (
-                      <>
-                        <Text className={monoStyles.monoFont}>
-                          {formatTime(timer.seconds, false)}
-                        </Text>
-                        <Text size="12px" c="dimmed">
-                          {timer.seconds > 60 * 60 ? 'hours ago' : 'min ago'}
-                        </Text>
-                      </>
-                    )}
-                  </Timer>
-                )}
-              </Stack>
-            )}
-          </Group>
-        </Card>
+    <>
+      {showDateLabel && (
+        <Text c="dimmed" size="12px">
+          {formatDateLocaleFromTimestamp(entry.created)}
+        </Text>
       )}
-    </Transition>
+      <Card key={entry.id} shadow="xs">
+        {isRunning && <div className={styles.activeCardIndicator} />}
+        <Group justify="space-between">
+          <Group gap="lg">
+            <Badge variant="outline" size="lg" className={monoStyles.monoFont}>
+              {entry.boob === 'Left' ? 'L' : 'R'}
+            </Badge>
+
+            <Stack gap={'xxs'} align="start">
+              <Group gap={'xs'} justify="end" grow>
+                <Text size="12px" c="dimmed">
+                  from
+                </Text>
+                <Text size="12px" className={monoStyles.monoFont}>
+                  {timeFrom}
+                </Text>
+              </Group>
+              <Group gap={'xs'} justify="end" w="100%" grow>
+                <Text size="12px" c="dimmed">
+                  to
+                </Text>
+                <Text size="12px" className={monoStyles.monoFont}>
+                  {timeTo}
+                </Text>
+              </Group>
+            </Stack>
+          </Group>
+
+          <Stack gap="0" align="end">
+            <Timer
+              isRunning={!!(isRunning && !isPaused)}
+              isStopped={false}
+              startingSeconds={Math.floor(new FeedingEntry(entry).getDuration() / 1000)}
+            >
+              {(timer) => (
+                <Text className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}>
+                  {formatTime(timer.seconds)}
+                </Text>
+              )}
+            </Timer>
+            <Text size="12px" c="dimmed">
+              duration
+            </Text>
+          </Stack>
+          {showTimeAgo && (
+            <Stack
+              gap="0"
+              align="end"
+              className={showTimeAgoPlaceholder ? styles.timeAgoPlaceholder : ''}
+            >
+              {!showTimeAgoPlaceholder && (
+                <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
+                  {(timer) => (
+                    <>
+                      <Text className={monoStyles.monoFont}>
+                        {formatTime(timer.seconds, false)}
+                      </Text>
+                      <Text size="12px" c="dimmed">
+                        {timer.seconds > 60 * 60 ? 'hours ago' : 'min ago'}
+                      </Text>
+                    </>
+                  )}
+                </Timer>
+              )}
+            </Stack>
+          )}
+        </Group>
+      </Card>
+    </>
   );
 }
-
-// duration
-// start
-// end
-// since
