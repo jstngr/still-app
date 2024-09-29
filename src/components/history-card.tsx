@@ -51,11 +51,11 @@ export default function HistoryCard(props: IHistoryCardProps) {
   return (
     <>
       {showDateLabel && (
-        <Text c="dimmed" size="12px">
+        <Text c="dimmed" size="12px" key={`label_${entry.id}`}>
           {formatDateLocaleFromTimestamp(entry.created)}
         </Text>
       )}
-      <Card key={entry.id} shadow="xs">
+      <Card key={`card_${entry.id}`} shadow="xs">
         {isRunning && <div className={styles.activeCardIndicator} />}
         <Group justify="space-between">
           <Group gap="lg">

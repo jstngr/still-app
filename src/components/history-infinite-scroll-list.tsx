@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { VariableSizeList as List } from 'react-window';
 import { IFeedingEntry } from 'shared/types/types';
@@ -25,7 +25,14 @@ const Item = ({
   data: IFeedingEntry[];
 }) => {
   return (
-    <Flex align="center" style={style} py={'4px'} px="4px" flex="1 0 0">
+    <Flex
+      key={`wrapper_${data[index].id}`}
+      align="center"
+      style={style}
+      py={'4px'}
+      px="4px"
+      flex="1 0 0"
+    >
       <Stack gap="8px" flex="1 0 0">
         <HistoryCard entry={data[index]} index={index} />
       </Stack>
@@ -36,6 +43,7 @@ const Item = ({
 export default function HistoryInfiniteScrollList(props: IInfiniteScrollListProps) {
   const {} = useInView();
   const { data } = props;
+  const listRef = useRef<List>(null);
 
   const getItemSize = (index: number) => {
     const prevEntry = data[index - 1];
@@ -48,11 +56,18 @@ export default function HistoryInfiniteScrollList(props: IInfiniteScrollListProp
     return SIZE_WITHOUT_LABEL;
   };
 
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.resetAfterIndex(0, true);
+    }
+  }, [data?.length]);
+
   return (
     <Box flex="1 0 0" w="calc(100% + 8px)" ml="-4px" h={'100%'}>
       <AutoSizer>
         {({ height, width }) => (
           <List
+            ref={listRef}
             width={width}
             height={height}
             itemCount={data.length}
