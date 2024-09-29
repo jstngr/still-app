@@ -1,4 +1,4 @@
-import { Badge, Card, Group, Stack, Text } from '@mantine/core';
+import { Badge, Card, Grid, Group, Stack, Text } from '@mantine/core';
 import FeedingEntry from 'classes/feeding-entry.class';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFeedingContext } from 'service/feeding.service';
@@ -57,73 +57,76 @@ export default function HistoryCard(props: IHistoryCardProps) {
       )}
       <Card key={`card_${entry.id}`} shadow="xs">
         {isRunning && <div className={styles.activeCardIndicator} />}
-        <Group justify="space-between">
-          <Group gap="lg">
-            <Badge variant="outline" size="lg" className={monoStyles.monoFont}>
-              {entry.boob === 'Left' ? 'L' : 'R'}
-            </Badge>
-
-            <Stack gap={'xxs'} align="start">
-              <Group gap={'xs'} justify="end" grow>
-                <Text size="12px" c="dimmed">
-                  from
-                </Text>
-                <Text size="12px" className={monoStyles.monoFont}>
-                  {timeFrom}
-                </Text>
-              </Group>
-              <Group gap={'xs'} justify="end" w="100%" grow>
-                <Text size="12px" c="dimmed">
-                  to
-                </Text>
-                <Text size="12px" className={monoStyles.monoFont}>
-                  {timeTo}
-                </Text>
-              </Group>
+        <Grid gutter={'4px'}>
+          <Grid.Col span={6}>
+            <Group align="center" h="100%">
+              <Badge variant="outline" size="lg" className={monoStyles.monoFont}>
+                {entry.boob === 'Left' ? 'L' : 'R'}
+              </Badge>
+              <Stack gap={'xxs'} align="start">
+                <Group gap={'xs'} justify="end" grow>
+                  <Text size="12px" c="dimmed">
+                    from
+                  </Text>
+                  <Text size="12px" className={monoStyles.monoFont}>
+                    {timeFrom}
+                  </Text>
+                </Group>
+                <Group gap={'xs'} justify="end" w="100%" grow>
+                  <Text size="12px" c="dimmed">
+                    to
+                  </Text>
+                  <Text size="12px" className={monoStyles.monoFont}>
+                    {timeTo}
+                  </Text>
+                </Group>
+              </Stack>
+            </Group>
+          </Grid.Col>
+          <Grid.Col span={3}>
+            <Stack gap="0" align="end">
+              <Timer
+                isRunning={!!(isRunning && !isPaused)}
+                isStopped={false}
+                startingSeconds={Math.floor(new FeedingEntry(entry).getDuration() / 1000)}
+              >
+                {(timer) => (
+                  <Text className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}>
+                    {formatTime(timer.seconds)}
+                  </Text>
+                )}
+              </Timer>
+              <Text size="12px" c="dimmed">
+                duration
+              </Text>
             </Stack>
-          </Group>
-
-          <Stack gap="0" align="end">
-            <Timer
-              isRunning={!!(isRunning && !isPaused)}
-              isStopped={false}
-              startingSeconds={Math.floor(new FeedingEntry(entry).getDuration() / 1000)}
-            >
-              {(timer) => (
-                <Text className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}>
-                  {formatTime(timer.seconds)}
-                </Text>
-              )}
-            </Timer>
-            <Text size="12px" c="dimmed">
-              duration
-            </Text>
-          </Stack>
-          {showTimeAgo && (
-            <Stack
-              gap="0"
-              align="end"
-              className={showTimeAgoPlaceholder ? styles.timeAgoPlaceholder : ''}
-            >
-              {!showTimeAgoPlaceholder ? (
-                <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
-                  {(timer) => (
-                    <>
-                      <Text className={monoStyles.monoFont}>
-                        {formatTime(timer.seconds, false)}
-                      </Text>
-                      <Text size="12px" c="dimmed">
-                        {timer.seconds > 60 * 60 ? 'hours ago' : 'min ago'}
-                      </Text>
-                    </>
-                  )}
-                </Timer>
-              ) : (
-                ' asd'
-              )}
-            </Stack>
-          )}
-        </Group>
+          </Grid.Col>
+          <Grid.Col span={3}>
+            {showTimeAgo && (
+              <Stack
+                gap="0"
+                align="end"
+                className={showTimeAgoPlaceholder ? styles.timeAgoPlaceholder : ''}
+              >
+                {!showTimeAgoPlaceholder && (
+                  <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
+                    {(timer) => (
+                      <>
+                        <Text className={monoStyles.monoFont}>
+                          {formatTime(timer.seconds, false)}
+                        </Text>
+                        <Text size="12px" c="dimmed">
+                          {timer.seconds > 60 * 60 ? 'hours ago' : 'min ago'}
+                        </Text>
+                      </>
+                    )}
+                  </Timer>
+                )}
+              </Stack>
+            )}
+          </Grid.Col>
+        </Grid>
+        <Group justify="space-between"></Group>
       </Card>
     </>
   );
