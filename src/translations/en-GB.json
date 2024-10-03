@@ -10,8 +10,9 @@
   "empty-history-hint-2": "Start tracking now!",
   "feeding-history-title": "Feeding History",
   "left": "Left",
-  "navigation-button-label-feed-tracker": "Feed tracker",
-  "navigation-button-label-poop-tracker": "Poop tracker",
+  "navigation-button-label-feed-tracker": "Feed",
+  "navigation-button-label-poop-tracker": "Poop",
+  "navigation-button-label-sleep-tracker": "Sleep",
   "navigation-button-label-statistics": "Statistics",
   "right": "Right"
 }

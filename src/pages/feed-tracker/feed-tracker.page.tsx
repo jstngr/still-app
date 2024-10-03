@@ -21,18 +21,6 @@ export default function FeedTracker() {
 
         <FeedTimer />
 
-        {/* <Stack w="100%" gap="xs">
-          <Title order={5}>At a glance</Title>
-          <ScrollArea w={'calc(100% + 10px)'} classNames={scrollStyles}>
-            <Group wrap="nowrap" py="xxs" px="5px">
-              <KpiCard amount={5} title="x feed" text="in the last 24 hours" />
-              <KpiCard amount={5} title="x feed" text="in the last 24 hours" />
-              <KpiCard amount={5} title="x feed" text="in the last 24 hours" />
-              <KpiCard amount={5} title="x feed" text="in the last 24 hours" />
-            </Group>
-          </ScrollArea>
-        </Stack> */}
-
         <Stack flex="1 0 0" w="100%" gap="xs">
           <Title order={5}>{t('feeding-history-title')}</Title>
           {feedingEntries?.length ? (

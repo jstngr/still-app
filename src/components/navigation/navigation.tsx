@@ -1,7 +1,15 @@
 import { Button, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import React, { ForwardRefExoticComponent, RefAttributes } from 'react';
 import styles from './nav-button.module.css';
-import { Icon, IconBabyBottle, IconChartBar, IconPoo, IconProps } from '@tabler/icons-react';
+import {
+  Icon,
+  IconBabyBottle,
+  IconBed,
+  IconBedFlat,
+  IconChartBar,
+  IconPoo,
+  IconProps,
+} from '@tabler/icons-react';
 import NavButton from './nav-button';
 import { useLocation, useMatches, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -13,18 +21,24 @@ export default function Navigation(props: INavigationProps) {
   const { t } = useTranslation();
 
   return (
-    <SimpleGrid cols={3} maw="500px" style={{ margin: '0 auto 0 auto' }}>
+    <SimpleGrid cols={4} maw="500px" m="0 auto 0 auto" px="20px">
       <NavButton
-        to="poop-tracker"
-        active={pathname.includes('poop-tracker')}
+        to="feed"
+        active={pathname.includes('feed')}
+        label={t('navigation-button-label-feed-tracker')}
+        Icon={IconBabyBottle}
+      />
+      <NavButton
+        to="poop"
+        active={pathname.includes('poop')}
         label={t('navigation-button-label-poop-tracker')}
         Icon={IconPoo}
       />
       <NavButton
-        to="feed-tracker"
-        active={pathname.includes('feed-tracker')}
-        label={t('navigation-button-label-feed-tracker')}
-        Icon={IconBabyBottle}
+        to="sleep"
+        active={pathname.includes('sleep')}
+        label={t('navigation-button-label-sleep-tracker')}
+        Icon={IconBedFlat}
       />
       <NavButton
         to="statistics"

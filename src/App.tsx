@@ -63,7 +63,7 @@ export default function App() {
     await sqliteService.insertItem(name, value);
     setName('');
     setValue('');
-    loadItems(); // Reload items after insertion
+    loadItems();
   };
 
   return (
@@ -73,10 +73,11 @@ export default function App() {
           <BrowserRouter>
             <Routes>
               <Route path="*" element={<AppFrame />}>
-                <Route path="feed-tracker" element={<FeedTracker />} />
-                <Route path="poop-tracker" element={<div>Poop tracker</div>} />
+                <Route path="feed" element={<FeedTracker />} />
+                <Route path="poop" element={<div>Poop tracker</div>} />
                 <Route path="statistics" element={<div>Statistics</div>} />
-                <Route path="*" element={<Navigate to="/feed-tracker" replace />} />
+                <Route path="sleep" element={<div>Sleep</div>} />
+                <Route path="*" element={<Navigate to="/feed" replace />} />
               </Route>
             </Routes>
           </BrowserRouter>
