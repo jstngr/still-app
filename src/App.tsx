@@ -1,7 +1,7 @@
 import { AppShell, Container, MantineProvider, Stack } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import theme from 'theme';
-
+import { SplashScreen } from '@capacitor/splash-screen';
 import AppTitle from 'components/app-title';
 import Navigation from 'components/navigation/navigation';
 import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
@@ -12,6 +12,8 @@ import sqliteService from 'service/sqlite-service';
 
 import { Capacitor } from '@capacitor/core';
 import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
+import SettingsPage from 'pages/settings/settings.page';
+import { SettingsProvider } from 'service/settings-service';
 
 function AppFrame() {
   return (
@@ -33,6 +35,7 @@ export default function App() {
   const [items, setItems] = useState<any[]>([]);
   const [name, setName] = useState('');
   const [value, setValue] = useState('');
+  const [databaseLoading, setDatabaseLoading] = useState(true);
 
   useEffect(() => {
     if (Capacitor.isNativePlatform()) {
@@ -44,7 +47,8 @@ export default function App() {
   useEffect(() => {
     const initDb = async () => {
       await sqliteService.initDb();
-      loadItems();
+      setDatabaseLoading(false);
+      SplashScreen.hide();
     };
     initDb();
 
@@ -54,34 +58,25 @@ export default function App() {
     };
   }, []);
 
-  const loadItems = async () => {
-    const loadedItems = await sqliteService.loadItems();
-    setItems(loadedItems);
-  };
-
-  const addItem = async () => {
-    await sqliteService.insertItem(name, value);
-    setName('');
-    setValue('');
-    loadItems();
-  };
-
   return (
     <MantineProvider theme={theme}>
       <FeedingProvider>
-        <Container p={0} maw="500px">
-          <BrowserRouter>
-            <Routes>
-              <Route path="*" element={<AppFrame />}>
-                <Route path="feed" element={<FeedTracker />} />
-                <Route path="poop" element={<div>Poop tracker</div>} />
-                <Route path="statistics" element={<div>Statistics</div>} />
-                <Route path="sleep" element={<div>Sleep</div>} />
-                <Route path="*" element={<Navigate to="/feed" replace />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </Container>
+        <SettingsProvider databaseReady={!databaseLoading}>
+          <Container p={0} maw="500px">
+            <BrowserRouter>
+              <Routes>
+                <Route path="*" element={<AppFrame />}>
+                  <Route path="feed" element={<FeedTracker />} />
+                  <Route path="poop" element={<div>Poop tracker</div>} />
+                  <Route path="statistics" element={<div>Statistics</div>} />
+                  <Route path="sleep" element={<div>Sleep</div>} />
+                  <Route path="settings" element={<SettingsPage />} />
+                  <Route path="*" element={<Navigate to="/feed" replace />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </Container>
+        </SettingsProvider>
       </FeedingProvider>
     </MantineProvider>
   );

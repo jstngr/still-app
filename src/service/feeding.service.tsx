@@ -4,7 +4,7 @@ import FeedingEntry from '../classes/feeding-entry.class';
 import mockData from './mock-data';
 import { useDisclosure } from '@mantine/hooks';
 
-interface FeedingContextType {
+interface IFeedingContextType {
   activeFeeding?: IFeedingEntry;
   feedingEntries: IFeedingEntry[];
   startFeeding: (boob: IBoob) => void;
@@ -19,13 +19,13 @@ interface FeedingContextType {
   };
 }
 
-const FeedingContext = createContext<FeedingContextType | undefined>(undefined);
+const FeedingContext = createContext<IFeedingContextType | undefined>(undefined);
 
-interface FeedingProviderProps {
+interface IFeedingProviderProps {
   children: ReactNode;
 }
 
-export const FeedingProvider: React.FC<FeedingProviderProps> = ({ children }) => {
+export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) => {
   const [feedingEntries, setFeedingEntries] = useState<IFeedingEntry[]>(mockData);
   const [activeFeeding, setActiveFeeding] = useState<IFeedingEntry>();
   const lastId = useMemo(() => feedingEntries[0]?.id || 0, [feedingEntries]);

@@ -1,6 +1,7 @@
 import { Badge, Card, Grid, Group, Stack, Text } from '@mantine/core';
 import FeedingEntry from 'classes/feeding-entry.class';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
 import formatDateLocaleFromTimestamp from 'shared/helpers/format-date-locale-from-timestamp';
@@ -8,8 +9,8 @@ import formatTime from 'shared/helpers/format-time';
 import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import monoStyles from 'shared/styles/mono-styles.module.css';
 import { IFeedingEntry } from 'shared/types/types';
-import styles from './history-card.module.css';
 import Timer from '../timer';
+import styles from './history-card.module.css';
 
 interface IHistoryCardProps {
   entry: IFeedingEntry;
@@ -18,6 +19,7 @@ interface IHistoryCardProps {
 
 export default function HistoryCard(props: IHistoryCardProps) {
   const { entry, index } = props;
+  const { t } = useTranslation();
 
   const { feedingEntries } = useFeedingContext();
 
@@ -40,11 +42,6 @@ export default function HistoryCard(props: IHistoryCardProps) {
     };
   }, [entry]);
 
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const showTimeAgo = useMemo(() => !isRunning && !isPaused, [isPaused, isRunning]);
   const showTimeAgoPlaceholder = useMemo(() => props.index > 2, [props.index]);
 
@@ -66,7 +63,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
               <Stack gap={'xxs'} align="start">
                 <Group gap={'xs'} justify="end" grow>
                   <Text size="12px" c="dimmed">
-                    from
+                    {t('history-card-label-from')}
                   </Text>
                   <Text size="12px" className={monoStyles.monoFont}>
                     {timeFrom}
@@ -74,7 +71,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
                 </Group>
                 <Group gap={'xs'} justify="end" w="100%" grow>
                   <Text size="12px" c="dimmed">
-                    to
+                    {t('history-card-label-to')}
                   </Text>
                   <Text size="12px" className={monoStyles.monoFont}>
                     {timeTo}
@@ -97,7 +94,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
                 )}
               </Timer>
               <Text size="12px" c="dimmed">
-                duration
+                {t('history-card-label-duration')}
               </Text>
             </Stack>
           </Grid.Col>
@@ -116,7 +113,9 @@ export default function HistoryCard(props: IHistoryCardProps) {
                           {formatTime(timer.seconds, false)}
                         </Text>
                         <Text size="12px" c="dimmed">
-                          {timer.seconds > 60 * 60 ? 'hours ago' : 'min ago'}
+                          {timer.seconds > 60 * 60
+                            ? t('history-card-label-hours-ago')
+                            : t('history-card-label-min-ago')}
                         </Text>
                       </>
                     )}

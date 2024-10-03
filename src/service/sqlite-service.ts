@@ -10,6 +10,7 @@ class SQLiteService {
   sqlite: SQLiteConnection | null = null;
   db: SQLiteDBConnection | null = null;
   dbName = 'still-app-database';
+  blubb = 'test1';
 
   constructor() {
     const platform = Capacitor.getPlatform();
@@ -49,9 +50,9 @@ class SQLiteService {
     if (!this.db) return;
 
     const query = `
-      CREATE TABLE IF NOT EXISTS items (
+      CREATE TABLE IF NOT EXISTS settings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
+        key TEXT NOT NULL,
         value TEXT NOT NULL
       );
     `;
@@ -64,37 +65,33 @@ class SQLiteService {
   }
 
   /**
-   * Insert data into the database.
-   * @param name - Name of the item
-   * @param value - Value of the item
+   * Insert/Manipulate data into the database.
+   * @param query - Query to run
    * @returns {Promise<void>}
    */
-  async insertItem(name: string, value: string): Promise<void> {
+  async run(query: string): Promise<void> {
     if (!this.db) return;
 
-    const query = `INSERT INTO items (name, value) VALUES (?, ?);`;
     try {
-      await this.db.run(query, [name, value]);
-      console.log(`Inserted: ${name}, ${value}`);
+      await this.db.run(query);
+      console.log(`Query run: ${query}`);
     } catch (err) {
-      console.error('Error inserting item:', err);
+      console.error(`Error running: ${query}`);
     }
   }
 
   /**
-   * Load all items from the database.
+   * Run query to load data
    * @returns {Promise<any[]>}
    */
-  async loadItems(): Promise<any[]> {
-    if (!this.db) return [];
-
-    const query = `SELECT * FROM items;`;
+  async query<IResult>(query: string): Promise<IResult | null> {
+    if (!this.db) return null;
     try {
-      const result = await this.db.query(query);
-      return result.values ? result.values : [];
+      const result = (await this.db.query(query)) as IResult;
+      return result;
     } catch (err) {
       console.error('Error loading items:', err);
-      return [];
+      return null;
     }
   }
 
