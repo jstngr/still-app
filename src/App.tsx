@@ -1,32 +1,17 @@
-import {
-  AppShell,
-  Button,
-  Container,
-  Divider,
-  Flex,
-  Group,
-  MantineProvider,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { AppShell, Container, MantineProvider, Stack } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import theme from 'theme';
 
+import AppTitle from 'components/app-title';
 import Navigation from 'components/navigation/navigation';
 import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
 import { Navigate, Outlet, Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
-import AppTitle from 'components/app-title';
-import useDatabase from 'database/use-database.hook';
 import { FeedingProvider } from 'service/feeding.service';
 import sqliteService from 'service/sqlite-service';
 
-import { CapacitorSQLite, SQLiteConnection } from '@capacitor-community/sqlite';
-import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
 import { Capacitor } from '@capacitor/core';
-import InfiniteScrollList from 'components/infinite-scroll-list';
+import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
 
 function AppFrame() {
   return (

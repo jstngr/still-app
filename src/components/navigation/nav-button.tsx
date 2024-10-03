@@ -1,6 +1,6 @@
 import { Button, Stack, Text, Title } from '@mantine/core';
 import React, { ForwardRefExoticComponent, RefAttributes } from 'react';
-import { Icon, IconPoo, IconProps } from '@tabler/icons-react';
+import { Icon, IconProps } from '@tabler/icons-react';
 import { useNavigate } from 'react-router';
 
 interface INavButtonProps {

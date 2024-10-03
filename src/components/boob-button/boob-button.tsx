@@ -4,12 +4,15 @@ import React, { useMemo } from 'react';
 import { useFeedingContext } from 'service/feeding.service';
 import { IBoob } from 'shared/types/types';
 import styles from './boob-button.module.css';
+import { DefaultTFuncReturn } from 'i18next';
+import { useTranslation } from 'react-i18next';
 interface IBoobButtonProps {
-  label: String;
+  label: DefaultTFuncReturn;
   orientation: IBoob;
 }
 
 export default function BoobButton(props: IBoobButtonProps) {
+  const { t } = useTranslation();
   const { label } = props;
   const {
     startFeeding,
@@ -39,7 +42,7 @@ export default function BoobButton(props: IBoobButtonProps) {
               borderTopRightRadius: '99999px',
             },
           }}
-          color={'primary'}
+          color="primary"
           h="calc(4rem - (var(--mantine-spacing-xxs) * 0.5))"
           mah="calc(15vw - (var(--mantine-spacing-xxs) * 0.5))"
           w="30vw"
@@ -50,12 +53,12 @@ export default function BoobButton(props: IBoobButtonProps) {
           {isPause ? (
             <Stack gap="0" align="center">
               <IconPlayerPlay />
-              <Text size="xs">Continue</Text>
+              <Text size="xs">{t('boob-button-label-continue')}</Text>
             </Stack>
           ) : (
             <Stack gap="0" align="center">
               <IconPlayerPause />
-              <Text size="xs">Pause</Text>
+              <Text size="xs">{t('boob-button-label-pause')}</Text>
             </Stack>
           )}
         </Button>
@@ -75,7 +78,7 @@ export default function BoobButton(props: IBoobButtonProps) {
         >
           <Stack gap="0" align="center">
             <IconPlayerStop />
-            <Text size="xs">Stop</Text>
+            <Text size="xs">{t('boob-button-label-stop')}</Text>
           </Stack>
         </Button>
       </Stack>

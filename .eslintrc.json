@@ -105,7 +105,12 @@
         "no-undef-init": "error",
         "operator-assignment": "error",
         "prefer-const": "error",
-        "prefer-rest-params": "error"
+        "prefer-rest-params": "error",
+        "react/jsx-curly-brace-presence": [
+          "error",
+          { "props": "never", "children": "ignore" }
+        ],
+        "jsx-quotes": ["error", "prefer-double"]
       }
     },
     {

@@ -1,8 +1,10 @@
 import { Button, Divider, Group, Modal, Stack, Text } from '@mantine/core';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 
 export default function BoobSwitchModal() {
+  const { t } = useTranslation();
   const { boobSwitchModal, switchBoob } = useFeedingContext();
   const { boobSwitchModalOpened, closeBoobSwitchModal } = boobSwitchModal;
 
@@ -16,19 +18,19 @@ export default function BoobSwitchModal() {
       opened={boobSwitchModalOpened}
       onClose={closeBoobSwitchModal}
       centered
-      title="Change Boob?"
+      title={t('boob-switch-modal-title')}
       autoFocus={false}
     >
       <Stack>
         <Divider />
-        <Text>This will start a new Timer.</Text>
+        <Text>{t('boob-switch-modal-text')}</Text>
         <Divider />
         <Group justify="end">
           <Button variant="outline" onClick={closeBoobSwitchModal}>
-            Cancel
+            {t('boob-switch-modal-button-action-2')}
           </Button>
           <Button data-autofocus onClick={onConfirm}>
-            Change Boob
+            {t('boob-switch-modal-button-action-1')}
           </Button>
         </Group>
       </Stack>

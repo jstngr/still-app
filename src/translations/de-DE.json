@@ -1,1 +1,17 @@
-{}
+{
+  "boob-button-label-continue": "Weiter",
+  "boob-button-label-pause": "Pause",
+  "boob-button-label-stop": "Stop",
+  "boob-switch-modal-button-action-1": "Brust wechseln",
+  "boob-switch-modal-button-action-2": "Abbrechen",
+  "boob-switch-modal-text": "Damit wird ein neuer Timer gestartet.",
+  "boob-switch-modal-title": "Brust wechseln?",
+  "empty-history-hint-1": "Es gibt noch keinen Verlauf.",
+  "empty-history-hint-2": "Jetzt mit der Aufzeichnung beginnen!",
+  "feeding-history-title": "Fütterungshistorie",
+  "left": "Links",
+  "navigation-button-label-feed-tracker": "Füttern",
+  "navigation-button-label-poop-tracker": "Kacka",
+  "navigation-button-label-statistics": "Statistik",
+  "right": "Rechts"
+}

@@ -4,17 +4,19 @@ import BoobSwitchModal from 'components/boob-button/boob-switch-modal';
 import FeedTimer from 'components/feed-timer';
 import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 
 export default function FeedTracker() {
   const { feedingEntries } = useFeedingContext();
+  const { t } = useTranslation();
 
   return (
     <Container fluid h="100%" w="100%">
       <Stack align="center" gap="xl" h="100%" w="100%">
         <Group grow gap="lg">
-          <BoobButton label="Left" orientation="Left" />
-          <BoobButton label="Right" orientation="Right" />
+          <BoobButton label={t('left')} orientation="Left" />
+          <BoobButton label={t('right')} orientation="Right" />
         </Group>
 
         <FeedTimer />
@@ -32,16 +34,16 @@ export default function FeedTracker() {
         </Stack> */}
 
         <Stack flex="1 0 0" w="100%" gap="xs">
-          <Title order={5}>Feeding History</Title>
+          <Title order={5}>{t('feeding-history-title')}</Title>
           {feedingEntries?.length ? (
             <HistoryInfiniteScrollList data={feedingEntries} ItemComponent={<></>} />
           ) : (
             <Stack gap="xxs" align="center" mt="xl">
               <Text size="sm" c={'dimmed'}>
-                There is no history yet.
+                {t('empty-history-hint-1')}
               </Text>
               <Text size="sm" c={'dimmed'}>
-                Start tracking now!
+                {t('empty-history-hint-2')}
               </Text>
             </Stack>
           )}

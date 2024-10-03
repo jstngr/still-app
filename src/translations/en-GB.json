@@ -1,1 +1,17 @@
-{}
+{
+  "boob-button-label-continue": "Continue",
+  "boob-button-label-pause": "Pause",
+  "boob-button-label-stop": "Stop",
+  "boob-switch-modal-button-action-1": "Change Boob",
+  "boob-switch-modal-button-action-2": "Cancel",
+  "boob-switch-modal-text": "This will start a new Timer.",
+  "boob-switch-modal-title": "Change Boob?",
+  "empty-history-hint-1": "There is no history yet.",
+  "empty-history-hint-2": "Start tracking now!",
+  "feeding-history-title": "Feeding History",
+  "left": "Left",
+  "navigation-button-label-feed-tracker": "Feed tracker",
+  "navigation-button-label-poop-tracker": "Poop tracker",
+  "navigation-button-label-statistics": "Statistics",
+  "right": "Right"
+}
