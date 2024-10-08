@@ -19,5 +19,7 @@
   "navigation-button-label-poop-tracker": "Kacka",
   "navigation-button-label-sleep-tracker": "Schlaf",
   "navigation-button-label-statistics": "Statistik",
-  "right": "Rechts"
+  "right": "Rechts",
+  "settings-page-input-label-name": "Name deines Babies",
+  "settings-page-title": "Einstellungen"
 }

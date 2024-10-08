@@ -19,5 +19,7 @@
   "navigation-button-label-poop-tracker": "Poop",
   "navigation-button-label-sleep-tracker": "Sleep",
   "navigation-button-label-statistics": "Statistics",
-  "right": "Right"
+  "right": "Right",
+  "settings-page-input-label-name": "Name of your little one",
+  "settings-page-title": "Settings"
 }

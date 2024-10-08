@@ -25,22 +25,7 @@ class SQLiteService {
    * Initialize and open a connection to the SQLite database.
    * @returns {Promise<void>}
    */
-  async initDb(): Promise<void> {
-    try {
-      if (!this.sqlite) throw new Error('SQLite plugin is not initialized');
-
-      // Open the database connection
-      this.db = await this.sqlite.createConnection(this.dbName, false, 'no-encryption', 1, false);
-      if (!this.db) throw new Error('Failed to create the SQLite connection');
-
-      await this.db.open();
-      console.log('Database connection opened');
-
-      await this.createTable(); // Create the table
-    } catch (err) {
-      console.error('Failed to initialize the database:', err);
-    }
-  }
+  async initDb(): Promise<void> {}
 
   /**
    * Create a table if it does not exist.

@@ -1,36 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import sqliteService from 'service/sqlite-service';
+import { Card, Container, Stack, TextInput, Title } from '@mantine/core';
+
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSettingsContext } from 'service/settings-service';
 
 export default function SettingsPage() {
-  const [settings, setSettings] = useState();
+  const { onChangeBabyName } = useSettingsContext();
+  const { t } = useTranslation();
 
   useEffect(() => {}, []);
 
-  // // Initialize the database on component mount
-  // useEffect(() => {
-  //   const initDb = async () => {
-  //     await sqliteService.initDb();
-  //     loadItems();
-  //   };
-  //   initDb();
+  const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChangeBabyName(event.target.value);
+  };
 
-  //   // Close the database on component unmount
-  //   return () => {
-  //     sqliteService.closeDb();
-  //   };
-  // }, []);
-
-  // const loadItems = async () => {
-  //   const loadedItems = await sqliteService.loadItems();
-  //   setSettings(loadedItems);
-  // };
-
-  // const addItem = async () => {
-  //   await sqliteService.insertItem(name, value);
-  //   setName('');
-  //   setValue('');
-  //   loadItems();
-  // };
-
-  return <div>settings.page</div>;
+  return (
+    <Container fluid h="100%" w="100%">
+      <Stack align="start" gap="" h="100%" w="100%">
+        <Title order={5}>{t('settings-page-title')}</Title>
+        <Card shadow="xs" w="100%">
+          <TextInput label={t('settings-page-input-label-name')} onChange={onChangeName} />
+        </Card>
+      </Stack>
+    </Container>
+  );
 }

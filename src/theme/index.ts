@@ -45,6 +45,11 @@ const theme: MantineThemeOverride = createTheme({
         mah: 'calc(100dvh - var(--app-shell-footer-height))',
       },
     },
+    InputText: {
+      defaultProps: {
+        size: 'md',
+      },
+    },
   },
 });
 

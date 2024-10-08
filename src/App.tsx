@@ -14,6 +14,7 @@ import { Capacitor } from '@capacitor/core';
 import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
 import SettingsPage from 'pages/settings/settings.page';
 import { SettingsProvider } from 'service/settings-service';
+import { SQLiteProvider } from 'service/sqlite/sqlite-provider';
 
 function AppFrame() {
   return (
@@ -35,49 +36,29 @@ export default function App() {
   const [items, setItems] = useState<any[]>([]);
   const [name, setName] = useState('');
   const [value, setValue] = useState('');
-  const [databaseLoading, setDatabaseLoading] = useState(true);
-
-  useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
-      jeepSqlite(window);
-    }
-  }, []);
-
-  // Initialize the database on component mount
-  useEffect(() => {
-    const initDb = async () => {
-      await sqliteService.initDb();
-      setDatabaseLoading(false);
-      SplashScreen.hide();
-    };
-    initDb();
-
-    // Close the database on component unmount
-    return () => {
-      sqliteService.closeDb();
-    };
-  }, []);
 
   return (
     <MantineProvider theme={theme}>
-      <FeedingProvider>
-        <SettingsProvider databaseReady={!databaseLoading}>
-          <Container p={0} maw="500px">
-            <BrowserRouter>
-              <Routes>
-                <Route path="*" element={<AppFrame />}>
-                  <Route path="feed" element={<FeedTracker />} />
-                  <Route path="poop" element={<div>Poop tracker</div>} />
-                  <Route path="statistics" element={<div>Statistics</div>} />
-                  <Route path="sleep" element={<div>Sleep</div>} />
-                  <Route path="settings" element={<SettingsPage />} />
-                  <Route path="*" element={<Navigate to="/feed" replace />} />
-                </Route>
-              </Routes>
-            </BrowserRouter>
-          </Container>
-        </SettingsProvider>
-      </FeedingProvider>
+      <SQLiteProvider>
+        <FeedingProvider>
+          <SettingsProvider databaseReady>
+            <Container p={0} maw="500px">
+              <BrowserRouter>
+                <Routes>
+                  <Route path="*" element={<AppFrame />}>
+                    <Route path="feed" element={<FeedTracker />} />
+                    <Route path="poop" element={<div>Poop tracker</div>} />
+                    <Route path="statistics" element={<div>Statistics</div>} />
+                    <Route path="sleep" element={<div>Sleep</div>} />
+                    <Route path="settings" element={<SettingsPage />} />
+                    <Route path="*" element={<Navigate to="/feed" replace />} />
+                  </Route>
+                </Routes>
+              </BrowserRouter>
+            </Container>
+          </SettingsProvider>
+        </FeedingProvider>
+      </SQLiteProvider>
     </MantineProvider>
   );
 }
