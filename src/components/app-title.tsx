@@ -2,7 +2,7 @@ import { ActionIcon, Box, Flex, Title } from '@mantine/core';
 import { IconSettings } from '@tabler/icons-react';
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { useSettingsContext } from 'service/settings-service';
+import { useSettingsContext } from 'service/settings.service';
 
 export default function AppTitle() {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import { Card, Container, Stack, TextInput, Title } from '@mantine/core';
 
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSettingsContext } from 'service/settings-service';
+import { useSettingsContext } from 'service/settings.service';
 
 export default function SettingsPage() {
   const { onChangeBabyName } = useSettingsContext();

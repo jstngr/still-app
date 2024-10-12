@@ -1,11 +1,16 @@
-import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacitor-community/sqlite';
-import { Capacitor } from '@capacitor/core';
-import { SplashScreen } from '@capacitor/splash-screen';
-import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
-import sqliteService from 'service/sqlite-service';
+import sqliteService from './sqlite-service';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 
-interface ISQLiteContextType {}
+interface ISQLiteProviderProps {
+  children: ReactNode;
+}
+
+interface ISQLiteContextType {
+  db?: SQLiteDBConnection;
+  sqlReady: boolean;
+}
 
 const SQLiteContext = createContext<ISQLiteContextType | undefined>(undefined);
 
@@ -15,84 +20,57 @@ interface ISQLiteProviderProps {
 
 export const SQLiteProvider: React.FC<ISQLiteProviderProps> = ({ children }) => {
   const [databaseLoading, setDatabaseLoading] = useState(true);
-  const [sqlite, setSqlite] = useState<SQLiteConnection>();
-  const [db, setDb] = useState<SQLiteDBConnection>();
-
   const dbName = 'still-app-database';
   const readonly = false;
+  const [db, setDb] = useState<SQLiteDBConnection>();
+  const [sqlReady, setSqlReady] = useState(false);
 
   useEffect(() => {
-    if (!Capacitor.isNativePlatform()) {
-      jeepSqlite(window);
-    }
-
     const initDb = async () => {
-      // Initialize and open a connection to the SQLite database.
       try {
-        const initialSqlite = new SQLiteConnection(CapacitorSQLite);
-        setSqlite(initialSqlite);
+        // Get or create a database connection using the singleton service
+        const db = await sqliteService.getConnection(dbName, readonly);
+        setDb(db);
 
-        if (!initialSqlite) throw new Error('SQLite plugin is not initialized');
-
-        const isConnected = await initialSqlite.isConnection(dbName, readonly);
-
-        console.log(isConnected);
-        const bla = await initialSqlite.retrieveAllConnections();
-        console.log('bla', bla);
-
-        let initialDB;
-        if (isConnected.result) {
-          console.log('CONNECTION FOUND');
-
-          initialDB = await initialSqlite.retrieveConnection(dbName, readonly);
-        } else {
-          console.log('NO CONNECTION FOUND');
-
-          initialDB = await initialSqlite.createConnection(
-            dbName,
-            false,
-            'no-encryption',
-            1,
-            readonly
-          );
-        }
-
-        if (!initialDB) throw new Error('Failed to create the SQLite connection');
-
-        await initialDB.open();
-
-        setDb(initialDB);
-        // await this.createTable(); // Create the table
-
+        setSqlReady(true);
         SplashScreen.hide();
       } catch (err) {
         console.error('Failed to initialize the database:', err);
       }
     };
+
     initDb();
 
-    // Detect hot module reloading and close the connection to avoid issues
-    if (module.hot) {
-      module.hot.dispose(() => {
-        sqlite?.closeConnection(dbName, readonly);
-        console.log('Hot reload detected. SQLite connection closed.');
-      });
-    }
-
-    // Close connection on dismount
+    // Cleanup on unmount: close the connection
     return () => {
-      sqliteService.closeDb();
-      db?.close();
+      sqliteService.closeConnection(dbName);
     };
-  }, []);
+  }, [dbName, readonly]);
 
-  return <SQLiteContext.Provider value={{}}>{children}</SQLiteContext.Provider>;
+  // Detect hot module reloading and close the connection to avoid issues
+  if (module.hot) {
+    module.hot.dispose(() => {
+      sqliteService.closeConnection(dbName);
+      console.log('Hot reload detected. SQLite connection closed.');
+    });
+  }
+
+  return (
+    <SQLiteContext.Provider
+      value={{
+        db,
+        sqlReady,
+      }}
+    >
+      {children}
+    </SQLiteContext.Provider>
+  );
 };
 
 export const useSQLiteContext = () => {
   const context = useContext(SQLiteContext);
   if (context === undefined) {
-    throw new Error('useSQLiteContext must be used within a SettingProvider');
+    throw new Error('useSQLiteContext must be used within a SQLiteProvider');
   }
   return context;
 };

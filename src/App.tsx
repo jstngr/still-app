@@ -1,19 +1,15 @@
 import { AppShell, Container, MantineProvider, Stack } from '@mantine/core';
-import React, { useEffect, useState } from 'react';
-import theme from 'theme';
-import { SplashScreen } from '@capacitor/splash-screen';
 import AppTitle from 'components/app-title';
 import Navigation from 'components/navigation/navigation';
 import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
+import React, { useState } from 'react';
 import { Navigate, Outlet, Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { FeedingProvider } from 'service/feeding.service';
-import sqliteService from 'service/sqlite-service';
+import theme from 'theme';
 
-import { Capacitor } from '@capacitor/core';
-import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
 import SettingsPage from 'pages/settings/settings.page';
-import { SettingsProvider } from 'service/settings-service';
+import { SettingsProvider } from 'service/settings.service';
 import { SQLiteProvider } from 'service/sqlite/sqlite-provider';
 
 function AppFrame() {
@@ -41,7 +37,7 @@ export default function App() {
     <MantineProvider theme={theme}>
       <SQLiteProvider>
         <FeedingProvider>
-          <SettingsProvider databaseReady>
+          <SettingsProvider>
             <Container p={0} maw="500px">
               <BrowserRouter>
                 <Routes>
