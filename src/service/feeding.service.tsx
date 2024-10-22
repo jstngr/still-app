@@ -3,6 +3,14 @@ import { IBoob, IFeedingEntry } from 'shared/types/types';
 import FeedingEntry from '../classes/feeding-entry.class';
 import mockData from './mock-data';
 import { useDisclosure } from '@mantine/hooks';
+import { useSQLiteContext } from './sqlite/sqlite-provider';
+import {
+  addFeedingEntryToDB,
+  deleteFeedingEntryFromDB,
+  getFeedingsFromDB,
+  initFeedingDB,
+  updateFeedingEntryInDB,
+} from './sqlite/feeding-database.helpers';
 
 interface IFeedingContextType {
   activeFeeding?: IFeedingEntry;
@@ -28,11 +36,24 @@ interface IFeedingProviderProps {
 export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) => {
   const [feedingEntries, setFeedingEntries] = useState<IFeedingEntry[]>(mockData);
   const [activeFeeding, setActiveFeeding] = useState<IFeedingEntry>();
-  const lastId = useMemo(() => feedingEntries[0]?.id || 0, [feedingEntries]);
   const [boobSwitchModalOpened, { open: openBoobSwitchModal, close: closeBoobSwitchModal }] =
     useDisclosure(false);
+  const { db, sqlReady } = useSQLiteContext();
 
-  const updateFeedingEntry = (updateWith: FeedingEntry) => {
+  useEffect(() => {
+    async function loadData() {
+      await initFeedingDB(db);
+      const data = await getFeedingsFromDB(db);
+      setFeedingEntries(data);
+      if (!data[0]?.stopped) {
+        setActiveFeeding(data[0]);
+      }
+    }
+
+    loadData();
+  }, [sqlReady]);
+
+  const updateFeedingEntry = async (updateWith: FeedingEntry) => {
     setFeedingEntries((current) =>
       current.map((entry) => {
         if (entry.id === updateWith.getId()) {
@@ -41,9 +62,12 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
         return entry;
       })
     );
+    if (db) {
+      await updateFeedingEntryInDB(db, updateWith.toObject());
+    }
   };
 
-  const stopFeeding = () => {
+  const stopFeeding = async () => {
     if (!activeFeeding) {
       return;
     }
@@ -51,6 +75,9 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     currentFeeding.stop();
     if (currentFeeding.getDuration() < 2000) {
       setFeedingEntries((current) => current.filter(({ id }) => id !== currentFeeding.getId()));
+      if (db) {
+        await deleteFeedingEntryFromDB(db, currentFeeding.toObject());
+      }
     } else {
       updateFeedingEntry(currentFeeding);
     }
@@ -63,13 +90,19 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
    * @param force Boolean to indicate if it should check for boob switch
    * @returns void
    */
-  const startFeeding = (boob: IBoob, force?: boolean) => {
+  const startFeeding = async (boob: IBoob, force?: boolean) => {
     if (activeFeeding && !force) {
       openBoobSwitchModal();
       return;
     }
     stopFeeding();
-    const newFeeding = new FeedingEntry({ id: lastId + 1, boob });
+    const newFeeding = new FeedingEntry({ boob });
+    if (db) {
+      const id = await addFeedingEntryToDB(db, newFeeding.toObject());
+      if (id) {
+        newFeeding.setId(id);
+      }
+    }
     setActiveFeeding(newFeeding.toObject());
     setFeedingEntries((current) => [newFeeding.toObject(), ...current]);
   };

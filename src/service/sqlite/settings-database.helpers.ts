@@ -108,4 +108,25 @@ async function saveBabyNameToDB(
   }
 }
 
-export { initSettingsDB, getSettingsFromDB, saveBabyNameToDB };
+/**
+ * Updates the 'language' field in the 'settings' table with the provided language value.
+ *
+ * @param db - The SQLiteDBConnection instance to execute the SQL query.
+ * @param language - The new language to be saved to the settings table.
+ *
+ * @returns A promise that resolves when the language is successfully saved.
+ *
+ * @throws Will log an error to the console if the database query fails.
+ */
+async function saveLanguageToDB(
+  db: SQLiteDBConnection,
+  language: ISettingsObject['babyName'] // Assuming language field uses the same type as babyName in ISettingsObject
+): Promise<void> {
+  try {
+    await db.query(`UPDATE settings SET language = "${language}";`);
+  } catch (err) {
+    console.error('[SettingsDatabase] Error updating language:', err);
+  }
+}
+
+export { initSettingsDB, getSettingsFromDB, saveBabyNameToDB, saveLanguageToDB };

@@ -29,10 +29,6 @@ function AppFrame() {
 }
 
 export default function App() {
-  const [items, setItems] = useState<any[]>([]);
-  const [name, setName] = useState('');
-  const [value, setValue] = useState('');
-
   return (
     <MantineProvider theme={theme}>
       <SQLiteProvider>

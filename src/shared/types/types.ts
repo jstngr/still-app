@@ -1,7 +1,7 @@
 type IBoob = 'Left' | 'Right';
 
 interface IFeedingEntry {
-  id: number;
+  id?: number;
   created: number;
   stopped?: number;
   boob: IBoob;

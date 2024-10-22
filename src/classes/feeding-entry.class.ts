@@ -1,15 +1,15 @@
 import { IBoob, IFeedingEntry } from 'shared/types/types';
 
 export default class FeedingEntry {
-  private id: number = 0;
+  private id: number | undefined;
   private created: number = 0;
   private stopped: number = 0;
   private boob: IBoob = 'Left';
   private pauseStart: number = 0;
   private pauseDuration: number = 0;
 
-  constructor(feedingObject: Pick<IFeedingEntry, 'id' | 'boob'> & Partial<IFeedingEntry>) {
-    this.id = feedingObject.id;
+  constructor(feedingObject: Pick<IFeedingEntry, 'boob'> & Partial<IFeedingEntry>) {
+    this.id = feedingObject.id || undefined;
     this.created = feedingObject.created || new Date().getTime();
     this.stopped = feedingObject.stopped || 0;
     this.boob = feedingObject.boob;
@@ -74,5 +74,9 @@ export default class FeedingEntry {
 
   getStopped() {
     return this.stopped;
+  }
+
+  setId(id: number) {
+    this.id = id;
   }
 }

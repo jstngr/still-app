@@ -7,12 +7,13 @@ import {
   getSettingsFromDB,
   initSettingsDB,
   saveBabyNameToDB,
+  saveLanguageToDB,
 } from './sqlite/settings-database.helpers';
 
 interface ISettingsContextType {
   language: TLanguage;
   babyName: string;
-  setLanguage: (language: TLanguage) => void;
+  onChangeLanguage: (language: TLanguage) => void;
   onChangeBabyName: (name: string) => void;
 }
 
@@ -57,7 +58,6 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
     if (db) {
       await saveBabyNameToDB(db, name);
     }
-    console.log('🚀 ~ saveNameToDatabase ~ db:', db);
   }, 500);
 
   const onChangeBabyName = (name: string) => {
@@ -65,12 +65,19 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
     setBabyName(name);
   };
 
+  const onChangeLanguage = async (language: TLanguage) => {
+    if (db) {
+      await saveLanguageToDB(db, language);
+    }
+    setLanguage(language);
+  };
+
   return (
     <SettingsContext.Provider
       value={{
         language,
         babyName,
-        setLanguage,
+        onChangeLanguage,
         onChangeBabyName,
       }}
     >

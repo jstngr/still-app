@@ -14,12 +14,18 @@
   "history-card-label-hours-ago": "hours ago",
   "history-card-label-min-ago": "min ago",
   "history-card-label-to": "to",
+  "language_not_translated_de": "Deutsch",
+  "language_not_translated_en": "English",
   "left": "Left",
   "navigation-button-label-feed-tracker": "Feed",
   "navigation-button-label-poop-tracker": "Poop",
   "navigation-button-label-sleep-tracker": "Sleep",
   "navigation-button-label-statistics": "Statistics",
   "right": "Right",
+  "settings-page-alert-title-reset": "Reset History",
+  "settings-page-button-label-reset": "Reset",
+  "settings-page-input-label-language": "Language",
   "settings-page-input-label-name": "Name of your little one",
-  "settings-page-title": "Settings"
+  "settings-page-title": "Settings",
+  "settings-page-warning-text-reset": "This action will permanently delete all your data and reset everything to its original state. This process cannot be undone."
 }
