@@ -7,6 +7,7 @@ import { useSQLiteContext } from './sqlite/sqlite-provider';
 import {
   addFeedingEntryToDB,
   deleteFeedingEntryFromDB,
+  deleteFeedingsFromDB,
   getFeedingsFromDB,
   initFeedingDB,
   updateFeedingEntryInDB,
@@ -23,6 +24,7 @@ interface IFeedingContextType {
   deleteFeeding: (id: number) => void;
   updateFeedingEntry: (entry: FeedingEntry) => void;
   addFeedingEntry: () => void;
+  deleteHistory: () => Promise<void>;
   boobSwitchModal: {
     boobSwitchModalOpened: boolean;
     openBoobSwitchModal: () => void;
@@ -173,9 +175,16 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     setFeedingEntryDrawerEntryId(newEntry.getId());
   };
 
+  const deleteHistory = async () => {
+    if (db) {
+      await deleteFeedingsFromDB(db);
+    }
+  };
+
   return (
     <FeedingContext.Provider
       value={{
+        deleteHistory,
         feedingEntries,
         startFeeding,
         stopFeeding,

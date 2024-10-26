@@ -13,11 +13,14 @@ import {
 import { IconAlertTriangle } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFeedingContext } from 'service/feeding.service';
 import { useSettingsContext } from 'service/settings.service';
 import { TLanguage } from 'translations/react-i18next';
 
 export default function SettingsPage() {
-  const { onChangeBabyName, language, onChangeLanguage } = useSettingsContext();
+  const { onChangeBabyName, language, onChangeLanguage, deleteSettings, babyName } =
+    useSettingsContext();
+  const { deleteHistory } = useFeedingContext();
   const { t } = useTranslation();
 
   useEffect(() => {}, []);
@@ -26,13 +29,21 @@ export default function SettingsPage() {
     onChangeBabyName(event.target.value);
   };
 
+  const onDeleteHistory = async () => {
+    await deleteHistory();
+    await deleteSettings();
+  };
   return (
     <Container fluid h="100%" w="100%">
       <Stack align="start" gap="" h="100%" w="100%">
         <Title order={5}>{t('settings-page-title')}</Title>
         <Card shadow="xs" w="100%">
           <Stack>
-            <TextInput label={t('settings-page-input-label-name')} onChange={onChangeName} />
+            <TextInput
+              label={t('settings-page-input-label-name')}
+              onChange={onChangeName}
+              value={babyName}
+            />
             <Select
               checkIconPosition="left"
               data={[
@@ -56,7 +67,7 @@ export default function SettingsPage() {
             <Stack gap="xs">
               <Text size="sm">{t('settings-page-warning-text-reset')}</Text>
               <Flex justify="end">
-                <Button>{t('settings-page-button-label-reset')}</Button>
+                <Button onClick={onDeleteHistory}>{t('settings-page-button-label-reset')}</Button>
               </Flex>
             </Stack>
           </Alert>

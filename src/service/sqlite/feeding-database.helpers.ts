@@ -150,7 +150,17 @@ async function deleteFeedingEntryFromDB(db: SQLiteDBConnection, id?: number): Pr
   }
 }
 
+async function deleteFeedingsFromDB(db: SQLiteDBConnection): Promise<void> {
+  try {
+    await db.query(`DELETE FROM feeding;`);
+    await db.query(`DELETE FROM sqlite_sequence WHERE name = 'feeding';`);
+  } catch (err) {
+    console.error('[FeedingDatabase] Error clearing table:', err);
+  }
+}
+
 export {
+  deleteFeedingsFromDB,
   addFeedingEntryToDB,
   deleteFeedingEntryFromDB,
   getFeedingsFromDB,

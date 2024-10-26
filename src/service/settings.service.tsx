@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { TLanguage } from 'translations/react-i18next';
 import { useSQLiteContext } from './sqlite/sqlite-provider';
 import {
+  deleteSettingsFromDB,
   getSettingsFromDB,
   initSettingsDB,
   saveBabyNameToDB,
@@ -15,6 +16,7 @@ interface ISettingsContextType {
   babyName: string;
   onChangeLanguage: (language: TLanguage) => void;
   onChangeBabyName: (name: string) => void;
+  deleteSettings: () => Promise<void>;
 }
 
 export interface ISettingsObject {
@@ -72,6 +74,12 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
     setLanguage(language);
   };
 
+  const deleteSettings = async () => {
+    if (db) {
+      await deleteSettingsFromDB(db);
+    }
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -79,6 +87,7 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
         babyName,
         onChangeLanguage,
         onChangeBabyName,
+        deleteSettings,
       }}
     >
       {children}

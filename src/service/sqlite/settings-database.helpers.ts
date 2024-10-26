@@ -129,4 +129,19 @@ async function saveLanguageToDB(
   }
 }
 
-export { initSettingsDB, getSettingsFromDB, saveBabyNameToDB, saveLanguageToDB };
+async function deleteSettingsFromDB(db: SQLiteDBConnection): Promise<void> {
+  try {
+    await db.query(`DELETE FROM settings;`);
+    await db.query(`DELETE FROM sqlite_sequence WHERE name = 'settings';`);
+  } catch (err) {
+    console.error('[SettingsDatabase] Error clearing table:', err);
+  }
+}
+
+export {
+  deleteSettingsFromDB,
+  initSettingsDB,
+  getSettingsFromDB,
+  saveBabyNameToDB,
+  saveLanguageToDB,
+};

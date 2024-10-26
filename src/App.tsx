@@ -2,7 +2,7 @@ import { AppShell, Container, MantineProvider, Stack } from '@mantine/core';
 import AppTitle from 'components/app-title';
 import Navigation from 'components/navigation/navigation';
 import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
-import React, { useState } from 'react';
+import React from 'react';
 import { Navigate, Outlet, Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { FeedingProvider } from 'service/feeding.service';
