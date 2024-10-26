@@ -134,20 +134,17 @@ async function updateFeedingEntryInDB(db: SQLiteDBConnection, entry: IFeedingEnt
  *
  * @throws Will log an error if the database instance is not found, if the entry has no id, or if there's an error during the deletion.
  */
-async function deleteFeedingEntryFromDB(
-  db: SQLiteDBConnection,
-  entry: IFeedingEntry
-): Promise<void> {
+async function deleteFeedingEntryFromDB(db: SQLiteDBConnection, id?: number): Promise<void> {
   if (!db) {
     console.error('[FeedingDatabase] No db instance found on delete feeding');
     return;
   }
-  if (!entry.id) {
+  if (!id) {
     console.error('[FeedingDatabase] No id passed');
     return;
   }
   try {
-    await db.run(`DELETE FROM feeding WHERE id = ${entry.id};`);
+    await db.run(`DELETE FROM feeding WHERE id = ${id};`);
   } catch (err) {
     console.error('[FeedingDatabase] Error deleting feeding:', err);
   }

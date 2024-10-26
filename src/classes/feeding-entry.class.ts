@@ -1,3 +1,4 @@
+import roundMillisecondsToLastMinute from 'shared/helpers/round-milliseconds-to-last-minute';
 import { IBoob, IFeedingEntry } from 'shared/types/types';
 
 export default class FeedingEntry {
@@ -21,6 +22,10 @@ export default class FeedingEntry {
     if (this.pauseStart !== 0) {
       this.continue();
     }
+    if (this.pauseDuration < 60000) {
+      this.pauseDuration = 0;
+    }
+    this.pauseDuration = roundMillisecondsToLastMinute(this.pauseDuration);
     this.stopped = new Date().getTime();
   }
 
@@ -58,6 +63,10 @@ export default class FeedingEntry {
 
   getCurrentPauseDuration() {
     return new Date().getTime() - this.pauseStart;
+  }
+
+  getPauseDuration() {
+    return this.pauseDuration;
   }
 
   getId() {

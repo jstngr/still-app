@@ -1,6 +1,8 @@
 import App from 'App';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
+import { Capacitor } from '@capacitor/core';
 
 import 'normalize.css';
 import '@fontsource/poppins';
@@ -13,5 +15,10 @@ import '@mantine/core/styles.css';
 
 const domNode = document.getElementById('root');
 const root = createRoot(domNode);
+
+// Initialize custom elements
+if (!Capacitor.isNativePlatform()) {
+  jeepSqlite(window);
+}
 
 root.render(<App />);

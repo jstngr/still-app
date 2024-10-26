@@ -1,4 +1,4 @@
-import { Badge, Card, Grid, Group, Stack, Text } from '@mantine/core';
+import { ActionIcon, Badge, Box, Card, Flex, Grid, Group, Stack, Text } from '@mantine/core';
 import FeedingEntry from 'classes/feeding-entry.class';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import monoStyles from 'shared/styles/mono-styles.module.css';
 import { IFeedingEntry } from 'shared/types/types';
 import Timer from '../timer';
 import styles from './history-card.module.css';
+import { IconPencil } from '@tabler/icons-react';
 
 interface IHistoryCardProps {
   entry: IFeedingEntry;
@@ -21,7 +22,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
   const { entry, index } = props;
   const { t } = useTranslation();
 
-  const { feedingEntries } = useFeedingContext();
+  const { feedingEntries, editFeedingEntryDrawer, activeFeeding } = useFeedingContext();
 
   const showDateLabel = useMemo(() => {
     const prevEntry = feedingEntries[index - 1];
@@ -42,8 +43,16 @@ export default function HistoryCard(props: IHistoryCardProps) {
     };
   }, [entry]);
 
-  const showTimeAgo = useMemo(() => !isRunning && !isPaused, [isPaused, isRunning]);
-  const showTimeAgoPlaceholder = useMemo(() => props.index > 2, [props.index]);
+  const showTimeAgo = useMemo(
+    () => !isRunning && !isPaused && props.index < 2,
+    [isPaused, isRunning]
+  );
+
+  const onClickEdit = () => {
+    if (entry?.id !== undefined) {
+      editFeedingEntryDrawer.openFeedingEntryDrawer(entry.id);
+    }
+  };
 
   return (
     <>
@@ -54,58 +63,52 @@ export default function HistoryCard(props: IHistoryCardProps) {
       )}
       <Card key={`card_${entry.id}`} shadow="xs">
         {isRunning && <div className={styles.activeCardIndicator} />}
-        <Grid gutter={'4px'}>
-          <Grid.Col span={6}>
-            <Group align="center" h="100%">
-              <Badge variant="outline" size="lg" className={monoStyles.monoFont}>
-                {entry.boob === 'Left' ? 'L' : 'R'}
-              </Badge>
-              <Stack gap={'xxs'} align="start">
-                <Group gap={'xs'} justify="end" grow>
-                  <Text size="12px" c="dimmed">
-                    {t('history-card-label-from')}
-                  </Text>
-                  <Text size="12px" className={monoStyles.monoFont}>
-                    {timeFrom}
-                  </Text>
-                </Group>
-                <Group gap={'xs'} justify="end" w="100%" grow>
-                  <Text size="12px" c="dimmed">
-                    {t('history-card-label-to')}
-                  </Text>
-                  <Text size="12px" className={monoStyles.monoFont}>
-                    {timeTo}
-                  </Text>
-                </Group>
-              </Stack>
-            </Group>
-          </Grid.Col>
-          <Grid.Col span={3}>
-            <Stack gap="0" align="end">
-              <Timer
-                isRunning={!!(isRunning && !isPaused)}
-                isStopped={false}
-                startingSeconds={Math.floor(new FeedingEntry(entry).getDuration() / 1000)}
-              >
-                {(timer) => (
-                  <Text className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}>
-                    {formatTime(timer.seconds)}
-                  </Text>
-                )}
-              </Timer>
-              <Text size="12px" c="dimmed">
-                {t('history-card-label-duration')}
-              </Text>
+        <Group justify="space-between" gap="xs">
+          <Group align="center" h="100%">
+            <Badge variant="outline" size="lg" className={monoStyles.monoFont}>
+              {entry.boob === 'Left' ? 'L' : 'R'}
+            </Badge>
+            <Stack gap={'xxs'} align="start">
+              <Group gap={'xs'} justify="end" grow>
+                <Text size="12px" c="dimmed">
+                  {t('history-card-label-from')}
+                </Text>
+                <Text size="12px" className={monoStyles.monoFont}>
+                  {timeFrom}
+                </Text>
+              </Group>
+              <Group gap={'xs'} justify="end" w="100%" grow>
+                <Text size="12px" c="dimmed">
+                  {t('history-card-label-to')}
+                </Text>
+                <Text size="12px" className={monoStyles.monoFont}>
+                  {timeTo}
+                </Text>
+              </Group>
             </Stack>
-          </Grid.Col>
-          <Grid.Col span={3}>
-            {showTimeAgo && (
-              <Stack
-                gap="0"
-                align="end"
-                className={showTimeAgoPlaceholder ? styles.timeAgoPlaceholder : ''}
-              >
-                {!showTimeAgoPlaceholder && (
+          </Group>
+          <Grid gutter="4px" flex="1">
+            <Grid.Col span={6}>
+              <Stack gap="0" align="end">
+                <Timer
+                  isRunning={!!(isRunning && !isPaused)}
+                  isStopped={false}
+                  startingSeconds={Math.floor(new FeedingEntry(entry).getDuration() / 1000)}
+                >
+                  {(timer) => (
+                    <Text className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}>
+                      {formatTime(timer.seconds)}
+                    </Text>
+                  )}
+                </Timer>
+                <Text size="12px" c="dimmed">
+                  {t('history-card-label-duration')}
+                </Text>
+              </Stack>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              {showTimeAgo ? (
+                <Stack gap="0" align="end">
                   <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
                     {(timer) => (
                       <>
@@ -120,12 +123,22 @@ export default function HistoryCard(props: IHistoryCardProps) {
                       </>
                     )}
                   </Timer>
-                )}
-              </Stack>
-            )}
-          </Grid.Col>
-        </Grid>
-        <Group justify="space-between"></Group>
+                </Stack>
+              ) : (
+                <span></span>
+              )}
+            </Grid.Col>
+          </Grid>
+
+          <ActionIcon
+            disabled={activeFeeding?.id === entry.id}
+            variant="subtle"
+            size="md"
+            onClick={onClickEdit}
+          >
+            <IconPencil stroke="1" size="20" />
+          </ActionIcon>
+        </Group>
       </Card>
     </>
   );

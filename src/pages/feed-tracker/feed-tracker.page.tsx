@@ -1,6 +1,7 @@
 import { Container, Group, Stack, Text, Title } from '@mantine/core';
 import BoobButton from 'components/boob-button/boob-button';
 import BoobSwitchModal from 'components/boob-button/boob-switch-modal';
+import EditFeedingEntryDrawer from 'components/edit-feeding-entry-drawer';
 import FeedTimer from 'components/feed-timer';
 import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
 import React from 'react';
@@ -38,6 +39,7 @@ export default function FeedTracker() {
         </Stack>
       </Stack>
       <BoobSwitchModal />
+      <EditFeedingEntryDrawer />
     </Container>
   );
 }

@@ -20,10 +20,18 @@ interface IFeedingContextType {
   pauseFeeding: () => void;
   continueFeeding: () => void;
   switchBoob: () => void;
+  deleteFeeding: (id: number) => void;
+  updateFeedingEntry: (entry: FeedingEntry) => void;
   boobSwitchModal: {
     boobSwitchModalOpened: boolean;
     openBoobSwitchModal: () => void;
     closeBoobSwitchModal: () => void;
+  };
+  editFeedingEntryDrawer: {
+    feedingEntryDrawerOpened: boolean;
+    openFeedingEntryDrawer: (id: number) => void;
+    closeFeedingEntryDrawer: () => void;
+    feedingEntryDrawerEntryId?: number;
   };
 }
 
@@ -38,6 +46,12 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
   const [activeFeeding, setActiveFeeding] = useState<IFeedingEntry>();
   const [boobSwitchModalOpened, { open: openBoobSwitchModal, close: closeBoobSwitchModal }] =
     useDisclosure(false);
+
+  const [feedingEntryDrawerEntryId, setFeedingEntryDrawerEntryId] = useState<number>();
+  const feedingEntryDrawerOpened = !!feedingEntryDrawerEntryId;
+  const openFeedingEntryDrawer = (id: number) => setFeedingEntryDrawerEntryId(id);
+  const closeFeedingEntryDrawer = () => setFeedingEntryDrawerEntryId(undefined);
+
   const { db, sqlReady } = useSQLiteContext();
 
   useEffect(() => {
@@ -67,6 +81,15 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     }
   };
 
+  const deleteFeeding = async (idToDelete?: number) => {
+    if (idToDelete) {
+      setFeedingEntries((current) => current.filter(({ id }) => id !== idToDelete));
+      if (db) {
+        await deleteFeedingEntryFromDB(db, idToDelete);
+      }
+    }
+  };
+
   const stopFeeding = async () => {
     if (!activeFeeding) {
       return;
@@ -74,10 +97,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     const currentFeeding = new FeedingEntry(activeFeeding);
     currentFeeding.stop();
     if (currentFeeding.getDuration() < 2000) {
-      setFeedingEntries((current) => current.filter(({ id }) => id !== currentFeeding.getId()));
-      if (db) {
-        await deleteFeedingEntryFromDB(db, currentFeeding.toObject());
-      }
+      await deleteFeeding(currentFeeding.getId());
     } else {
       updateFeedingEntry(currentFeeding);
     }
@@ -146,10 +166,18 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
         pauseFeeding,
         continueFeeding,
         switchBoob,
+        deleteFeeding,
+        updateFeedingEntry,
         boobSwitchModal: {
           boobSwitchModalOpened,
           openBoobSwitchModal,
           closeBoobSwitchModal,
+        },
+        editFeedingEntryDrawer: {
+          feedingEntryDrawerOpened,
+          openFeedingEntryDrawer,
+          closeFeedingEntryDrawer,
+          feedingEntryDrawerEntryId,
         },
       }}
     >
