@@ -22,6 +22,7 @@ interface IFeedingContextType {
   switchBoob: () => void;
   deleteFeeding: (id: number) => void;
   updateFeedingEntry: (entry: FeedingEntry) => void;
+  addFeedingEntry: () => void;
   boobSwitchModal: {
     boobSwitchModalOpened: boolean;
     openBoobSwitchModal: () => void;
@@ -54,16 +55,15 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
 
   const { db, sqlReady } = useSQLiteContext();
 
-  useEffect(() => {
-    async function loadData() {
-      await initFeedingDB(db);
-      const data = await getFeedingsFromDB(db);
-      setFeedingEntries(data);
-      if (!data[0]?.stopped) {
-        setActiveFeeding(data[0]);
-      }
+  async function loadData() {
+    await initFeedingDB(db);
+    const data = await getFeedingsFromDB(db);
+    setFeedingEntries(data);
+    if (!data[0]?.stopped) {
+      setActiveFeeding(data[0]);
     }
-
+  }
+  useEffect(() => {
     loadData();
   }, [sqlReady]);
 
@@ -79,6 +79,8 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     if (db) {
       await updateFeedingEntryInDB(db, updateWith.toObject());
     }
+    // get again from DB to have sorted list
+    loadData();
   };
 
   const deleteFeeding = async (idToDelete?: number) => {
@@ -156,6 +158,21 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     updateFeedingEntry(currentFeeding);
   };
 
+  const addFeedingEntry = async () => {
+    const newEntry = new FeedingEntry({
+      boob: 'Left',
+      stopped: new Date().getTime(),
+    });
+    if (db) {
+      const id = await addFeedingEntryToDB(db, newEntry.toObject());
+      if (id) {
+        newEntry.setId(id);
+      }
+    }
+    setFeedingEntries((current) => [newEntry.toObject(), ...current]);
+    setFeedingEntryDrawerEntryId(newEntry.getId());
+  };
+
   return (
     <FeedingContext.Provider
       value={{
@@ -168,6 +185,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
         switchBoob,
         deleteFeeding,
         updateFeedingEntry,
+        addFeedingEntry,
         boobSwitchModal: {
           boobSwitchModalOpened,
           openBoobSwitchModal,

@@ -1,4 +1,5 @@
-import { Container, Group, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 import BoobButton from 'components/boob-button/boob-button';
 import BoobSwitchModal from 'components/boob-button/boob-switch-modal';
 import EditFeedingEntryDrawer from 'components/edit-feeding-entry-drawer';
@@ -9,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 
 export default function FeedTracker() {
-  const { feedingEntries } = useFeedingContext();
+  const { feedingEntries, addFeedingEntry } = useFeedingContext();
   const { t } = useTranslation();
 
   return (
@@ -23,7 +24,12 @@ export default function FeedTracker() {
         <FeedTimer />
 
         <Stack flex="1 0 0" w="100%" gap="xs">
-          <Title order={5}>{t('feeding-history-title')}</Title>
+          <Group justify="space-between" align="center">
+            <Title order={5}>{t('feeding-history-title')}</Title>
+            <ActionIcon variant="subtle" onClick={addFeedingEntry}>
+              <IconPlus stroke="1.5" />
+            </ActionIcon>
+          </Group>
           {feedingEntries?.length ? (
             <HistoryInfiniteScrollList data={feedingEntries} ItemComponent={<></>} />
           ) : (

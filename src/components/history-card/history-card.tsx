@@ -12,6 +12,7 @@ import { IFeedingEntry } from 'shared/types/types';
 import Timer from '../timer';
 import styles from './history-card.module.css';
 import { IconPencil } from '@tabler/icons-react';
+import formatSecondsToMinutesSeconds from 'shared/helpers/format-seconds-to-minutes-seconds';
 
 interface IHistoryCardProps {
   entry: IFeedingEntry;
@@ -97,7 +98,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
                 >
                   {(timer) => (
                     <Text className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}>
-                      {formatTime(timer.seconds)}
+                      {formatSecondsToMinutesSeconds(timer.seconds)}
                     </Text>
                   )}
                 </Timer>
