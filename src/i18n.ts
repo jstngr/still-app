@@ -6,10 +6,9 @@ import translations from './translations/index';
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
-  // for all options read: https://www.i18next.com/overview/configuration-options
   .init(
     {
-      debug: true,
+      debug: false,
       fallbackLng: 'en-GB',
       resources: {
         ...translations,

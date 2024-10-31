@@ -35,5 +35,6 @@
   "settings-page-input-label-language": "Sprache",
   "settings-page-input-label-name": "Name deines Babies",
   "settings-page-title": "Einstellungen",
-  "settings-page-warning-text-reset": "Diese Aktion wird alle deine Daten dauerhaft löschen und alles auf den ursprünglichen Zustand zurücksetzen. Dieser Vorgang kann nicht rückgängig gemacht werden."
+  "settings-page-warning-text-reset": "Diese Aktion wird alle deine Daten dauerhaft löschen und alles auf den ursprünglichen Zustand zurücksetzen. Dieser Vorgang kann nicht rückgängig gemacht werden.",
+  "timeline-chart-label": ""
 }

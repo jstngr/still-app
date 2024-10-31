@@ -11,6 +11,7 @@ import theme from 'theme';
 import SettingsPage from 'pages/settings/settings.page';
 import { SettingsProvider } from 'service/settings.service';
 import { SQLiteProvider } from 'service/sqlite/sqlite-provider';
+import StatisticsPage from 'pages/statistics/statistics.page';
 
 function AppFrame() {
   return (
@@ -40,8 +41,8 @@ export default function App() {
                   <Route path="*" element={<AppFrame />}>
                     <Route path="feed" element={<FeedTracker />} />
                     <Route path="poop" element={<div>Poop tracker</div>} />
-                    <Route path="statistics" element={<div>Statistics</div>} />
                     <Route path="sleep" element={<div>Sleep</div>} />
+                    <Route path="statistics" element={<StatisticsPage />} />
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="*" element={<Navigate to="/feed" replace />} />
                   </Route>

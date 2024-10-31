@@ -45,6 +45,7 @@ export default function SettingsPage() {
               value={babyName}
             />
             <Select
+              allowDeselect={false}
               checkIconPosition="left"
               data={[
                 { value: 'de', label: t('language_not_translated_de') },

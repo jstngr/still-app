@@ -1,138 +1,105 @@
+import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import { IFeedingEntry } from 'shared/types/types';
 
-const mockData: IFeedingEntry[] = [
-  {
-    id: 5,
-    created: new Date().getTime() - 60 * 5 * 1000,
-    stopped: new Date().getTime() - 60 * 1 * 1000,
-    boob: 'Left',
-  },
-  {
-    id: 7,
-    created: new Date().getTime() - 60 * 10 * 1000,
-    stopped: new Date().getTime() - 60 * 5 * 1000,
-    boob: 'Left',
-    pauseStart: 0,
-    pauseDuration: 0,
-  },
-  {
-    id: 6,
-    created: new Date().getTime() - 60 * 65 * 1000,
-    stopped: new Date().getTime() - 60 * 62 * 1000,
-    boob: 'Right',
-  },
-  {
-    id: 14,
-    created: 1694043123158,
-    stopped: 1694045523158,
-    boob: 'Right',
-  },
-  {
-    id: 4,
-    created: 1694056129845,
-    stopped: 1694058729845,
-    boob: 'Right',
-  },
-  {
-    id: 8,
-    created: 1694081128572,
-    stopped: 1694083513572,
-    boob: 'Right',
-  },
-  {
-    id: 12,
-    created: 1694099123516,
-    stopped: 1694101323516,
-    boob: 'Right',
-    pauseStart: 0,
-    pauseDuration: 600000,
-  },
-  {
-    id: 16,
-    created: 1694121125123,
-    stopped: 1694123515123,
-    boob: 'Right',
-    pauseStart: 0,
-    pauseDuration: 840000,
-  },
-  {
-    id: 9,
-    created: 1694141523956,
-    stopped: 1694143927956,
-    boob: 'Left',
-  },
-  {
-    id: 15,
-    created: 1694158123742,
-    stopped: 1694160723742,
-    boob: 'Left',
-  },
-  {
-    id: 3,
-    created: 1694179526845,
-    stopped: 1694181811845,
-    boob: 'Left',
-    pauseStart: 0,
-    pauseDuration: 540000,
-  },
-  {
-    id: 13,
-    created: 1694183521689,
-    stopped: 1694186211689,
-    boob: 'Left',
-  },
-  {
-    id: 2,
-    created: 1694217429873,
-    stopped: 1694220511873,
-    boob: 'Right',
-  },
-  {
-    id: 10,
-    created: 1694211125812,
-    stopped: 1694213820812,
-    boob: 'Right',
-  },
-  {
-    id: 20,
-    created: 1694231127814,
-    stopped: 1694233517814,
-    boob: 'Right',
-  },
-  {
-    id: 17,
-    created: 1694301523625,
-    stopped: 1694304323625,
-    boob: 'Left',
-  },
-  {
-    id: 18,
-    created: 1694329121515,
-    stopped: 1694331721515,
-    boob: 'Right',
-    pauseStart: 0,
-    pauseDuration: 720000,
-  },
-  {
-    id: 19,
-    created: 1694355125841,
-    stopped: 1694357725841,
-    boob: 'Left',
-  },
-  {
-    id: 11,
-    created: 1694373827318,
-    stopped: 1694376217318,
-    boob: 'Left',
-  },
-  {
-    id: 1,
-    created: 1694398126157,
-    stopped: 1694400120657,
-    boob: 'Left',
-    pauseStart: 0,
-    pauseDuration: 720000,
-  },
-];
+const startNumber =
+  Math.floor(new Date().getTime() / 1000000000) * 1000000000 + 60 * 60 * 1000 * 10;
+console.log(startNumber);
 
-export default mockData;
+const hour = 60 * 60 * 1000;
+const day = 24 * hour;
+
+function timeToStamp(time: string, offset: number) {
+  const today = new Date();
+  const todayStamp = today.getTime();
+  const newDayStamp = todayStamp - offset * day;
+  const newDay = new Date(newDayStamp);
+  const hours = parseInt(time.split(':')[0], 10);
+  const minutes = parseInt(time.split(':')[1], 10);
+  newDay.setHours(hours);
+  newDay.setMinutes(minutes);
+  return newDay.getTime();
+}
+
+function getStartAndEnd(startTime: string, durationMinutes: number, dayOffset: number) {
+  const startStamp = timeToStamp(startTime, dayOffset);
+  const stoppedStamp = startStamp + durationMinutes * 1000 * 60;
+  return `${startStamp}, ${stoppedStamp}`;
+}
+
+function getRandomInterval(): number {
+  return Math.floor(Math.random() * 30) + 1; // Generates a random interval between 1 and 30 minutes
+}
+
+export default function inserMok(db) {
+  db.query(`
+  INSERT INTO feeding (created, stopped, boob) VALUES
+(${getStartAndEnd('00:15', getRandomInterval(), 0)}, 'Left'), 
+(${getStartAndEnd('01:45', getRandomInterval(), 0)}, 'Right'), 
+(${getStartAndEnd('03:30', getRandomInterval(), 0)}, 'Left'), 
+(${getStartAndEnd('04:00', getRandomInterval(), 0)}, 'Right'), 
+(${getStartAndEnd('04:30', getRandomInterval(), 0)}, 'Left'), 
+(${getStartAndEnd('08:00', getRandomInterval(), 0)}, 'Right'), 
+(${getStartAndEnd('09:45', getRandomInterval(), 0)}, 'Left'), 
+(${getStartAndEnd('11:15', getRandomInterval(), 0)}, 'Right'), 
+(${getStartAndEnd('00:15', getRandomInterval(), 1)}, 'Left'), 
+(${getStartAndEnd('01:45', getRandomInterval(), 1)}, 'Right'), 
+(${getStartAndEnd('03:30', getRandomInterval(), 1)}, 'Left'), 
+(${getStartAndEnd('04:00', getRandomInterval(), 1)}, 'Right'), 
+(${getStartAndEnd('04:30', getRandomInterval(), 1)}, 'Left'), 
+(${getStartAndEnd('08:00', getRandomInterval(), 1)}, 'Right'), 
+(${getStartAndEnd('09:45', getRandomInterval(), 1)}, 'Left'), 
+(${getStartAndEnd('11:15', getRandomInterval(), 1)}, 'Right'), 
+(${getStartAndEnd('12:45', getRandomInterval(), 1)}, 'Left'), 
+(${getStartAndEnd('13:30', getRandomInterval(), 1)}, 'Right'), 
+(${getStartAndEnd('14:15', getRandomInterval(), 1)}, 'Left'), 
+(${getStartAndEnd('15:30', getRandomInterval(), 1)}, 'Right'), 
+(${getStartAndEnd('16:45', getRandomInterval(), 1)}, 'Left'), 
+(${getStartAndEnd('17:15', getRandomInterval(), 1)}, 'Right'), 
+(${getStartAndEnd('18:00', getRandomInterval(), 1)}, 'Left'), 
+(${getStartAndEnd('19:30', getRandomInterval(), 1)}, 'Right'), 
+(${getStartAndEnd('20:15', getRandomInterval(), 1)}, 'Left'), 
+(${getStartAndEnd('21:45', getRandomInterval(), 1)}, 'Right'), 
+(${getStartAndEnd('23:00', getRandomInterval(), 1)}, 'Left'), 
+(${getStartAndEnd('23:45', getRandomInterval(), 1)}, 'Right'), 
+(${getStartAndEnd('00:15', getRandomInterval(), 2)}, 'Left'), 
+(${getStartAndEnd('01:45', getRandomInterval(), 2)}, 'Right'), 
+(${getStartAndEnd('03:30', getRandomInterval(), 2)}, 'Left'), 
+(${getStartAndEnd('05:00', getRandomInterval(), 2)}, 'Right'), 
+(${getStartAndEnd('06:30', getRandomInterval(), 2)}, 'Left'), 
+(${getStartAndEnd('08:00', getRandomInterval(), 2)}, 'Right'), 
+(${getStartAndEnd('09:45', getRandomInterval(), 2)}, 'Left'), 
+(${getStartAndEnd('11:15', getRandomInterval(), 2)}, 'Right'), 
+(${getStartAndEnd('12:45', getRandomInterval(), 2)}, 'Left'), 
+(${getStartAndEnd('13:30', getRandomInterval(), 2)}, 'Right'), 
+(${getStartAndEnd('14:15', getRandomInterval(), 2)}, 'Left'), 
+(${getStartAndEnd('15:30', getRandomInterval(), 2)}, 'Right'), 
+(${getStartAndEnd('16:45', getRandomInterval(), 2)}, 'Left'), 
+(${getStartAndEnd('17:15', getRandomInterval(), 2)}, 'Right'), 
+(${getStartAndEnd('18:00', getRandomInterval(), 2)}, 'Left'), 
+(${getStartAndEnd('19:30', getRandomInterval(), 2)}, 'Right'), 
+(${getStartAndEnd('20:15', getRandomInterval(), 2)}, 'Left'), 
+(${getStartAndEnd('21:45', getRandomInterval(), 2)}, 'Right'), 
+(${getStartAndEnd('23:00', getRandomInterval(), 2)}, 'Left'), 
+(${getStartAndEnd('23:45', getRandomInterval(), 2)}, 'Right'),
+(${getStartAndEnd('00:15', getRandomInterval(), 3)}, 'Left'), 
+(${getStartAndEnd('01:45', getRandomInterval(), 3)}, 'Right'), 
+(${getStartAndEnd('03:30', getRandomInterval(), 3)}, 'Left'), 
+(${getStartAndEnd('05:00', getRandomInterval(), 3)}, 'Right'), 
+(${getStartAndEnd('06:30', getRandomInterval(), 3)}, 'Left'), 
+(${getStartAndEnd('08:00', getRandomInterval(), 3)}, 'Right'), 
+(${getStartAndEnd('09:45', getRandomInterval(), 3)}, 'Left'), 
+(${getStartAndEnd('11:15', getRandomInterval(), 3)}, 'Right'), 
+(${getStartAndEnd('12:45', getRandomInterval(), 3)}, 'Left'), 
+(${getStartAndEnd('13:30', getRandomInterval(), 3)}, 'Right'), 
+(${getStartAndEnd('14:15', getRandomInterval(), 3)}, 'Left'), 
+(${getStartAndEnd('15:30', getRandomInterval(), 3)}, 'Right'), 
+(${getStartAndEnd('16:45', getRandomInterval(), 3)}, 'Left'), 
+(${getStartAndEnd('17:15', getRandomInterval(), 3)}, 'Right'), 
+(${getStartAndEnd('18:00', getRandomInterval(), 3)}, 'Left'), 
+(${getStartAndEnd('19:30', getRandomInterval(), 3)}, 'Right'), 
+(${getStartAndEnd('20:15', getRandomInterval(), 3)}, 'Left'), 
+(${getStartAndEnd('21:45', getRandomInterval(), 3)}, 'Right'), 
+(${getStartAndEnd('23:00', getRandomInterval(), 3)}, 'Left'), 
+(${getStartAndEnd('23:45', getRandomInterval(), 3)}, 'Right');
+`);
+}

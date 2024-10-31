@@ -1,7 +1,6 @@
 import React, { createContext, useState, ReactNode, useContext, useMemo, useEffect } from 'react';
 import { IBoob, IFeedingEntry } from 'shared/types/types';
 import FeedingEntry from '../classes/feeding-entry.class';
-import mockData from './mock-data';
 import { useDisclosure } from '@mantine/hooks';
 import { useSQLiteContext } from './sqlite/sqlite-provider';
 import {
@@ -12,6 +11,7 @@ import {
   initFeedingDB,
   updateFeedingEntryInDB,
 } from './sqlite/feeding-database.helpers';
+import inserMok from './mock-data';
 
 interface IFeedingContextType {
   activeFeeding?: IFeedingEntry;
@@ -45,7 +45,7 @@ interface IFeedingProviderProps {
 }
 
 export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) => {
-  const [feedingEntries, setFeedingEntries] = useState<IFeedingEntry[]>(mockData);
+  const [feedingEntries, setFeedingEntries] = useState<IFeedingEntry[]>([]);
   const [activeFeeding, setActiveFeeding] = useState<IFeedingEntry>();
   const [boobSwitchModalOpened, { open: openBoobSwitchModal, close: closeBoobSwitchModal }] =
     useDisclosure(false);
@@ -64,6 +64,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     if (!data[0]?.stopped) {
       setActiveFeeding(data[0]);
     }
+    // inserMok(db);
   }
   useEffect(() => {
     loadData();

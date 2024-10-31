@@ -35,5 +35,6 @@
   "settings-page-input-label-language": "Language",
   "settings-page-input-label-name": "Name of your little one",
   "settings-page-title": "Settings",
-  "settings-page-warning-text-reset": "This action will permanently delete all your data and reset everything to its original state. This process cannot be undone."
+  "settings-page-warning-text-reset": "This action will permanently delete all your data and reset everything to its original state. This process cannot be undone.",
+  "timeline-chart-label": "Feeding history for the last 24 hours"
 }
