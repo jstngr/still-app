@@ -1,27 +1,14 @@
-import { Card, Container, ScrollArea, Stack, Text } from '@mantine/core';
+import { Card, Container, Stack } from '@mantine/core';
+
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
-import { Bar } from 'react-chartjs-2';
-import KpiCard from 'components/kpi-card';
-import { countEntriesChunksInLast24Hours } from 'service/sqlite/statistics-database.helper';
 import { useSQLiteContext } from 'service/sqlite/sqlite-provider';
+import { countEntriesChunksInLast24Hours } from 'service/sqlite/statistics-database.helper';
 import { IFeedingEntry } from 'shared/types/types';
-import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
-import monoStyles from 'shared/styles/mono-styles.module.css';
-import 'chartjs-adapter-moment';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  TimeScale,
-} from 'chart.js';
+import BoobCompareKpiCard from './components/boob-compare-kpi-card';
+import FeedingLastTwentyFourKpiCard from './components/feeding-last-twenty-four-kpi-card';
 import TimelineChart from './components/timeline-chart';
-
-ChartJS.register(CategoryScale, TimeScale, BarElement, Title, Tooltip, Legend);
 
 export default function StatisticsPage() {
   const { feedingEntries, addFeedingEntry } = useFeedingContext();
@@ -47,18 +34,16 @@ export default function StatisticsPage() {
     }
   }, [sqlReady]);
 
-  if (!entries?.length) return <></>;
-
-  const twentyFourHoursAgo = Date.now() - 25 * 60 * 60 * 1000 + 80000000;
-  const twentyforAgoDate = new Date(twentyFourHoursAgo);
-
   return (
     <Container fluid h="100%" w="100%">
-      <Stack align="center" gap="xl" h="100%" w="100%">
-        <KpiCard amount={chunksAmount} text="Since last 24h" title="Feedings" />
+      <Stack align="center" h="100%" w="100%">
+        <FeedingLastTwentyFourKpiCard value={chunksAmount} />
+
         <Card w="100%" shadow="xs">
           <TimelineChart chunks={chunks} />
         </Card>
+
+        <BoobCompareKpiCard left={10} right={8} />
       </Stack>
     </Container>
   );

@@ -11,7 +11,7 @@ import {
   initFeedingDB,
   updateFeedingEntryInDB,
 } from './sqlite/feeding-database.helpers';
-import inserMok from './mock-data';
+import inserMok, { WebMock } from './mock-data';
 
 interface IFeedingContextType {
   activeFeeding?: IFeedingEntry;
@@ -65,6 +65,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
       setActiveFeeding(data[0]);
     }
     // inserMok(db);
+    setFeedingEntries(WebMock());
   }
   useEffect(() => {
     loadData();
