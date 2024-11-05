@@ -13,6 +13,10 @@ interface IBoobCompareKpiCardProps {
 export default function BoobCompareKpiCard(props: IBoobCompareKpiCardProps) {
   const { left = 0, right = 0 } = props;
   const { t } = useTranslation();
+  let fallbackLeft = 0;
+  if (left === right && left === 0) {
+    fallbackLeft = 1;
+  }
 
   return (
     <Card w="100%" shadow="xs">
@@ -25,8 +29,8 @@ export default function BoobCompareKpiCard(props: IBoobCompareKpiCardProps) {
             w={56}
             h={56}
             data={[
-              { name: 'Left', value: left, color: 'blue.2' },
-              { name: 'Right', value: right, color: 'primary.2' },
+              { name: 'Left', value: fallbackLeft || left, color: 'primary.2' },
+              { name: 'Right', value: right, color: 'blue.2' },
             ]}
             tooltipProps={{
               active: false,

@@ -10,6 +10,7 @@ import {
   saveBabyNameToDB,
   saveLanguageToDB,
 } from './sqlite/settings-database.helpers';
+import { getBoobDistributionFromDB } from './sqlite/statistics-database.helper';
 
 interface ISettingsContextType {
   language: TLanguage;

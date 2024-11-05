@@ -65,7 +65,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
       setActiveFeeding(data[0]);
     }
     // inserMok(db);
-    setFeedingEntries(WebMock());
+    // setFeedingEntries(WebMock());
   }
   useEffect(() => {
     loadData();

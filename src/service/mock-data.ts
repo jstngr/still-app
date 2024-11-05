@@ -3,7 +3,6 @@ import { IFeedingEntry } from 'shared/types/types';
 
 const startNumber =
   Math.floor(new Date().getTime() / 1000000000) * 1000000000 + 60 * 60 * 1000 * 10;
-console.log(startNumber);
 
 const hour = 60 * 60 * 1000;
 const day = 24 * hour;

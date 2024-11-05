@@ -1,10 +1,10 @@
 import { Flex, Text } from '@mantine/core';
 import FeedingEntry from 'classes/feeding-entry.class';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useFeedingContext } from 'service/feeding.service';
 
-import monoStyles from 'shared/styles/mono-styles.module.css';
 import formatTime from 'shared/helpers/format-time';
+import monoStyles from 'shared/styles/mono-styles.module.css';
 import Timer from './timer';
 
 export default function FeedTimer() {

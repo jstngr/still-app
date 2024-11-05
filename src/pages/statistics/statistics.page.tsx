@@ -1,11 +1,14 @@
-import { Card, Container, Stack } from '@mantine/core';
+import { Card, Container, Stack, Title } from '@mantine/core';
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 import { useSQLiteContext } from 'service/sqlite/sqlite-provider';
-import { countEntriesChunksInLast24Hours } from 'service/sqlite/statistics-database.helper';
-import { IFeedingEntry } from 'shared/types/types';
+import {
+  countEntriesChunksInLast24Hours,
+  getBoobDistributionFromDB,
+} from 'service/sqlite/statistics-database.helper';
+import { IBoobDistribution, IFeedingEntry } from 'shared/types/types';
 import BoobCompareKpiCard from './components/boob-compare-kpi-card';
 import FeedingLastTwentyFourKpiCard from './components/feeding-last-twenty-four-kpi-card';
 import TimelineChart from './components/timeline-chart';
@@ -19,6 +22,10 @@ export default function StatisticsPage() {
   const [chunksAmount, setChunksAmount] = useState(0);
   const [entries, setentries] = useState<IFeedingEntry[]>([]);
   const [chunks, setChunks] = useState<IFeedingEntry[][]>([]);
+  const [boobDistribution, setBoobDistribution] = useState<IBoobDistribution>({
+    Left: 0,
+    Right: 0,
+  });
 
   useEffect(() => {
     async function loadChunks() {
@@ -27,6 +34,9 @@ export default function StatisticsPage() {
         setChunksAmount(result.count);
         setentries(result.entries);
         setChunks(result.chunks);
+
+        const boobDistributionResult = await getBoobDistributionFromDB(db);
+        setBoobDistribution(boobDistributionResult);
       }
     }
     if (sqlReady) {
@@ -36,14 +46,23 @@ export default function StatisticsPage() {
 
   return (
     <Container fluid h="100%" w="100%">
-      <Stack align="center" h="100%" w="100%">
-        <FeedingLastTwentyFourKpiCard value={chunksAmount} />
+      <Stack gap="lg">
+        <Stack align="left" h="100%" w="100%">
+          <Title order={5}>Feeding Statistics</Title>
+          <FeedingLastTwentyFourKpiCard value={chunksAmount} />
 
-        <Card w="100%" shadow="xs">
-          <TimelineChart chunks={chunks} />
-        </Card>
+          <Card w="100%" shadow="xs">
+            <TimelineChart chunks={chunks} />
+          </Card>
 
-        <BoobCompareKpiCard left={10} right={8} />
+          <BoobCompareKpiCard left={boobDistribution.Left} right={boobDistribution.Right} />
+        </Stack>
+        <Stack align="left" h="100%" w="100%">
+          <Title order={5}>Poop Statistics</Title>
+        </Stack>
+        <Stack align="left" h="100%" w="100%">
+          <Title order={5}>Sleep Statistics</Title>
+        </Stack>
       </Stack>
     </Container>
   );

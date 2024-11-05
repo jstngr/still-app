@@ -12,6 +12,8 @@ import SettingsPage from 'pages/settings/settings.page';
 import { SettingsProvider } from 'service/settings.service';
 import { SQLiteProvider } from 'service/sqlite/sqlite-provider';
 import StatisticsPage from 'pages/statistics/statistics.page';
+import PoopPage from 'pages/poop/poop.page';
+import { PoopProvider } from 'service/poop.service';
 
 function AppFrame() {
   return (
@@ -35,20 +37,22 @@ export default function App() {
       <SQLiteProvider>
         <FeedingProvider>
           <SettingsProvider>
-            <Container p={0} maw="500px">
-              <BrowserRouter>
-                <Routes>
-                  <Route path="*" element={<AppFrame />}>
-                    <Route path="feed" element={<FeedTracker />} />
-                    <Route path="poop" element={<div>Poop tracker</div>} />
-                    <Route path="sleep" element={<div>Sleep</div>} />
-                    <Route path="statistics" element={<StatisticsPage />} />
-                    <Route path="settings" element={<SettingsPage />} />
-                    <Route path="*" element={<Navigate to="/feed" replace />} />
-                  </Route>
-                </Routes>
-              </BrowserRouter>
-            </Container>
+            <PoopProvider>
+              <Container p={0} maw="500px">
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="*" element={<AppFrame />}>
+                      <Route path="feed" element={<FeedTracker />} />
+                      <Route path="poop" element={<PoopPage />} />
+                      <Route path="sleep" element={<div>Sleep</div>} />
+                      <Route path="statistics" element={<StatisticsPage />} />
+                      <Route path="settings" element={<SettingsPage />} />
+                      <Route path="*" element={<Navigate to="/feed" replace />} />
+                    </Route>
+                  </Routes>
+                </BrowserRouter>
+              </Container>
+            </PoopProvider>
           </SettingsProvider>
         </FeedingProvider>
       </SQLiteProvider>

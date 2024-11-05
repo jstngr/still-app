@@ -9,4 +9,14 @@ interface IFeedingEntry {
   pauseDuration?: number;
 }
 
-export type { IBoob, IFeedingEntry };
+interface IPoopEntry {
+  id?: number;
+  created: number;
+}
+
+interface IBoobDistribution {
+  Left: number;
+  Right: number;
+}
+
+export type { IBoob, IFeedingEntry, IPoopEntry, IBoobDistribution };

@@ -4,10 +4,12 @@ import BoobButton from 'components/boob-button/boob-button';
 import BoobSwitchModal from 'components/boob-button/boob-switch-modal';
 import EditFeedingEntryDrawer from 'components/edit-feeding-entry-drawer';
 import FeedTimer from 'components/feed-timer';
+import FeedingHistoryItem from 'components/feeding-history-item';
 import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
+import { IFeedingEntry } from 'shared/types/types';
 
 export default function FeedTracker() {
   const { feedingEntries, addFeedingEntry } = useFeedingContext();
@@ -31,7 +33,10 @@ export default function FeedTracker() {
             </ActionIcon>
           </Group>
           {feedingEntries?.length ? (
-            <HistoryInfiniteScrollList data={feedingEntries} ItemComponent={<></>} />
+            <HistoryInfiniteScrollList<IFeedingEntry>
+              data={feedingEntries}
+              ItemComponent={FeedingHistoryItem}
+            />
           ) : (
             <Stack gap="xxs" align="center" mt="xl">
               <Text size="sm" c={'dimmed'}>

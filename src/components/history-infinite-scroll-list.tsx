@@ -1,48 +1,35 @@
+import { Box, CSSProperties } from '@mantine/core';
 import React, { useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { VariableSizeList as List } from 'react-window';
-import { IFeedingEntry } from 'shared/types/types';
-import HistoryCard from './history-card/history-card';
-import { Box, Flex, Stack } from '@mantine/core';
-import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
 import AutoSizer from 'react-virtualized-auto-sizer';
+import { VariableSizeList as List } from 'react-window';
+import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
 
-interface IInfiniteScrollListProps {
-  data: IFeedingEntry[];
-  ItemComponent: React.ReactNode;
+interface IInfiniteScrollListProps<T> {
+  data: T[];
+  ItemComponent: ({
+    index,
+    style,
+    data,
+  }: {
+    index: number;
+    style: CSSProperties;
+    data: T[];
+  }) => React.ReactNode;
+}
+
+interface Entry {
+  created: number;
 }
 
 const SIZE_WITH_LABEL = 69 + 20 + 8;
 const SIZE_WITHOUT_LABEL = 69 + 8;
 
-const Item = ({
-  index,
-  style,
-  data,
-}: {
-  index: number;
-  style: React.CSSProperties;
-  data: IFeedingEntry[];
-}) => {
-  return (
-    <Flex
-      key={`wrapper_${data[index].id}`}
-      align="center"
-      style={style}
-      py={'4px'}
-      px="4px"
-      flex="1 0 0"
-    >
-      <Stack gap="8px" flex="1 0 0">
-        <HistoryCard entry={data[index]} index={index} />
-      </Stack>
-    </Flex>
-  );
-};
-
-export default function HistoryInfiniteScrollList(props: IInfiniteScrollListProps) {
+export default function HistoryInfiniteScrollList<T extends Entry>(
+  props: IInfiniteScrollListProps<T>
+) {
   const {} = useInView();
-  const { data } = props;
+  const { data, ItemComponent } = props;
   const listRef = useRef<List>(null);
 
   const getItemSize = (index: number) => {
@@ -74,7 +61,7 @@ export default function HistoryInfiniteScrollList(props: IInfiniteScrollListProp
             itemSize={getItemSize}
             itemData={data}
           >
-            {Item}
+            {ItemComponent}
           </List>
         )}
       </AutoSizer>

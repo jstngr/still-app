@@ -1,7 +1,7 @@
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
 import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
-import { IFeedingEntry } from 'shared/types/types';
+import { IBoobDistribution, IFeedingEntry } from 'shared/types/types';
 
 /**
  * Counts the number of feeding chunks within the last 24 hours, grouping feeding entries
@@ -63,4 +63,25 @@ async function countEntriesChunksInLast24Hours(
   }
 }
 
-export { countEntriesChunksInLast24Hours };
+async function getBoobDistributionFromDB(db?: SQLiteDBConnection): Promise<IBoobDistribution> {
+  if (!db) {
+    console.error('[FeedingDatabase] No db instance found on get boob distribution');
+    return { Left: 0, Right: 0 };
+  }
+  const twentyFourHoursAgo = Date.now() - 25 * 60 * 60 * 1000;
+  try {
+    const selectResult = await db.query(`
+      SELECT 
+        SUM(CASE WHEN boob = 'Left' THEN 1 ELSE 0 END) AS Left,
+        SUM(CASE WHEN boob = 'Right' THEN 1 ELSE 0 END) AS Right
+      FROM feeding
+      WHERE created >= ${twentyFourHoursAgo};
+    `);
+    return (selectResult?.values?.[0] as IBoobDistribution) || { Left: 0, Right: 0 };
+  } catch (err) {
+    console.error('[FeedingDatabase] Error getting boob distribution:', err);
+  }
+  return { Left: 0, Right: 0 };
+}
+
+export { countEntriesChunksInLast24Hours, getBoobDistributionFromDB };
