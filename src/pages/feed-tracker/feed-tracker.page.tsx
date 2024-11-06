@@ -36,6 +36,7 @@ export default function FeedTracker() {
             <HistoryInfiniteScrollList<IFeedingEntry>
               data={feedingEntries}
               ItemComponent={FeedingHistoryItem}
+              cardBaseSize={77}
             />
           ) : (
             <Stack gap="xxs" align="center" mt="xl">

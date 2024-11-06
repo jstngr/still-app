@@ -1,6 +1,6 @@
-import { ActionIcon, Card, Container, Group, Stack, Text, Title } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
+import { Container, Stack, Text, Title } from '@mantine/core';
 import BigAddButton from 'components/big-add-button';
+import EditPoopEntryDrawer from 'components/edit-poop-entry-drawer';
 import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
 import PoopHistoryItem from 'components/poop-history-item';
 import { t } from 'i18next';
@@ -16,12 +16,13 @@ export default function PoopPage() {
       <Stack align="center" gap="xl" h="100%" w="100%">
         <BigAddButton onClick={addPoopEntry} label="Add" />
         <Stack flex="1 0 0" w="100%" gap="xs">
-          <Title order={5}>Poop history</Title>
+          <Title order={5}>{t('poop-page-title-history')}</Title>
 
           {poopEntries?.length ? (
             <HistoryInfiniteScrollList<IPoopEntry>
               data={poopEntries}
               ItemComponent={PoopHistoryItem}
+              cardBaseSize={58}
             />
           ) : (
             <Stack gap="xxs" align="center" mt="xl">
@@ -35,6 +36,7 @@ export default function PoopPage() {
           )}
         </Stack>
       </Stack>
+      <EditPoopEntryDrawer />
     </Container>
   );
 }

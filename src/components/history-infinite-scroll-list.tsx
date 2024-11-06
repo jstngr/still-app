@@ -7,6 +7,7 @@ import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
 
 interface IInfiniteScrollListProps<T> {
   data: T[];
+  cardBaseSize: number;
   ItemComponent: ({
     index,
     style,
@@ -22,15 +23,15 @@ interface Entry {
   created: number;
 }
 
-const SIZE_WITH_LABEL = 69 + 20 + 8;
-const SIZE_WITHOUT_LABEL = 69 + 8;
-
 export default function HistoryInfiniteScrollList<T extends Entry>(
   props: IInfiniteScrollListProps<T>
 ) {
   const {} = useInView();
-  const { data, ItemComponent } = props;
+  const { data, ItemComponent, cardBaseSize } = props;
   const listRef = useRef<List>(null);
+
+  const SIZE_WITH_LABEL = cardBaseSize + 20;
+  const SIZE_WITHOUT_LABEL = cardBaseSize;
 
   const getItemSize = (index: number) => {
     const prevEntry = data[index - 1];

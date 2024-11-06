@@ -43,6 +43,7 @@ export const PoopProvider: React.FC<IPoopProviderProps> = ({ children }) => {
   async function loadData() {
     await initPoopDB(db);
     const data = await getPoopsFromDB(db);
+
     setPoopEntries(data);
   }
   useEffect(() => {
