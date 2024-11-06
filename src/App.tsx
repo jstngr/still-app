@@ -9,7 +9,7 @@ import { FeedingProvider } from 'service/feeding.service';
 import theme from 'theme';
 
 import SettingsPage from 'pages/settings/settings.page';
-import { SettingsProvider } from 'service/settings.service';
+import { SettingsContext, SettingsProvider } from 'service/settings.service';
 import { SQLiteProvider } from 'service/sqlite/sqlite-provider';
 import StatisticsPage from 'pages/statistics/statistics.page';
 import PoopPage from 'pages/poop/poop.page';
@@ -37,22 +37,30 @@ export default function App() {
       <SQLiteProvider>
         <FeedingProvider>
           <SettingsProvider>
-            <PoopProvider>
-              <Container p={0} maw="500px">
-                <BrowserRouter>
-                  <Routes>
-                    <Route path="*" element={<AppFrame />}>
-                      <Route path="feed" element={<FeedTracker />} />
-                      <Route path="poop" element={<PoopPage />} />
-                      <Route path="sleep" element={<div>Sleep</div>} />
-                      <Route path="statistics" element={<StatisticsPage />} />
-                      <Route path="settings" element={<SettingsPage />} />
-                      <Route path="*" element={<Navigate to="/feed" replace />} />
-                    </Route>
-                  </Routes>
-                </BrowserRouter>
-              </Container>
-            </PoopProvider>
+            <SettingsContext.Consumer>
+              {(settings) => (
+                <PoopProvider>
+                  <Container p={0} maw="500px">
+                    <BrowserRouter>
+                      <Routes>
+                        <Route path="*" element={<AppFrame />}>
+                          <Route path="feed" element={<FeedTracker />} />
+                          {settings?.poopTrackerEnabled && (
+                            <Route path="poop" element={<PoopPage />} />
+                          )}
+                          {settings?.sleepTrackerEnabled && (
+                            <Route path="sleep" element={<div>Sleep</div>} />
+                          )}
+                          <Route path="statistics" element={<StatisticsPage />} />
+                          <Route path="settings" element={<SettingsPage />} />
+                          <Route path="*" element={<Navigate to="/feed" replace />} />
+                        </Route>
+                      </Routes>
+                    </BrowserRouter>
+                  </Container>
+                </PoopProvider>
+              )}
+            </SettingsContext.Consumer>
           </SettingsProvider>
         </FeedingProvider>
       </SQLiteProvider>

@@ -12,7 +12,9 @@ async function createTable(db: SQLiteDBConnection): Promise<boolean> {
       CREATE TABLE IF NOT EXISTS settings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         babyName TEXT,
-        language TEXT NOT NULL
+        language TEXT NOT NULL,
+        poopTracker BOOLEAN NOT NULL,
+        sleepTracker BOOLEAN NOT NULL
       );
     `;
   try {
@@ -39,7 +41,12 @@ async function addSettingsRowIfNotExist(db: SQLiteDBConnection): Promise<void> {
 
     if (!selectResult?.values?.length) {
       const language = await getSystemLanguage();
-      await db.run(`INSERT INTO settings (babyName, language) VALUES ("", "${language}");`);
+      await db.run(`
+      INSERT INTO settings 
+        (babyName, language, poopTracker, sleepTracker) 
+      VALUES 
+        ("", "${language}", true, true)
+      ;`);
     }
   } catch (err) {
     console.error('[SettingsDatabase] Error setting row: ', err);
@@ -82,7 +89,12 @@ async function getSettingsFromDB(db?: SQLiteDBConnection): Promise<ISettingsObje
   }
   try {
     const selectResult = await db.query(`SELECT * FROM settings`);
-    return (selectResult?.values?.[0] as ISettingsObject) || null;
+    const data = selectResult?.values?.[0];
+    if (data) {
+      data.sleepTracker = !!data.sleepTracker;
+      data.poopTracker = !!data.poopTracker;
+    }
+    return (data as ISettingsObject) || null;
   } catch (err) {
     console.error('[SettingsDatabase] Error getting settings:', err);
   }
@@ -129,6 +141,48 @@ async function saveLanguageToDB(
   }
 }
 
+/**
+ * Updates the "poopTracker" setting in the database.
+ *
+ * @param db - The SQLiteDBConnection instance used to execute the update query.
+ * @param poopTracker - The new value for the poop tracker setting.
+ * @returns A promise that resolves when the update is complete.
+ * @throws Logs an error message if the query fails.
+ */
+async function savePoopTrackerEnabledToDB(
+  db: SQLiteDBConnection,
+  poopTracker: ISettingsObject['poopTracker']
+): Promise<boolean | null> {
+  try {
+    await db.query(`UPDATE settings SET poopTracker = ${poopTracker};`);
+    return poopTracker;
+  } catch (err) {
+    console.error('[SettingsDatabase] Error updating poopTracker:', err);
+  }
+  return null;
+}
+
+/**
+ * Updates the "sleepTracker" setting in the database.
+ *
+ * @param db - The SQLiteDBConnection instance used to execute the update query.
+ * @param sleepTracker - The new value for the sleep tracker setting.
+ * @returns A promise that resolves when the update is complete.
+ * @throws Logs an error message if the query fails.
+ */
+async function saveSleepTrackerEnabledToDB(
+  db: SQLiteDBConnection,
+  sleepTracker: ISettingsObject['sleepTracker']
+): Promise<boolean | null> {
+  try {
+    await db.query(`UPDATE settings SET sleepTracker = ${sleepTracker};`);
+    return sleepTracker;
+  } catch (err) {
+    console.error('[SettingsDatabase] Error updating sleepTracker:', err);
+  }
+  return null;
+}
+
 async function deleteSettingsFromDB(db: SQLiteDBConnection): Promise<void> {
   try {
     await db.query(`DELETE FROM settings;`);
@@ -144,4 +198,6 @@ export {
   getSettingsFromDB,
   saveBabyNameToDB,
   saveLanguageToDB,
+  savePoopTrackerEnabledToDB,
+  saveSleepTrackerEnabledToDB,
 };
