@@ -1,6 +1,4 @@
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
-import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
-import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import { IBoobDistribution, IFeedingEntry } from 'shared/types/types';
 
 /**
@@ -23,11 +21,11 @@ async function countEntriesChunksInLast24Hours(
   }
 
   try {
-    const twentyFourHoursAgo = Date.now() - 25 * 60 * 60 * 1000;
+    const twentyFiveHoursAgo = Date.now() - 25 * 60 * 60 * 1000;
     const result = await db.query(`
       SELECT *
       FROM feeding
-      WHERE created >= ${twentyFourHoursAgo}
+      WHERE created >= ${twentyFiveHoursAgo}
       ORDER BY created ASC
     `);
     const entries = result.values || [];
@@ -62,25 +60,43 @@ async function countEntriesChunksInLast24Hours(
     return { count: 0, entries: [], chunks: [] };
   }
 }
-
+/**
+ * Retrieves the distribution of feeding entries where the "boob" column
+ * is either 'Left' or 'Right' within the last 24 hours.
+ *
+ * @param db - An optional instance of `SQLiteDBConnection` to execute the query.
+ * @returns A promise that resolves to an object with the count of 'Left' and 'Right' entries
+ *          for the last 24 hours.
+ *          - `Left`: The count of entries where `boob` is 'Left'.
+ *          - `Right`: The count of entries where `boob` is 'Right'.
+ *
+ * @remarks
+ * - If the `db` parameter is not provided, the function logs an error and returns a default object.
+ * - In case of a database query error, it logs the error and returns default counts of zero.
+ */
 async function getBoobDistributionFromDB(db?: SQLiteDBConnection): Promise<IBoobDistribution> {
   if (!db) {
     console.error('[FeedingDatabase] No db instance found on get boob distribution');
     return { Left: 0, Right: 0 };
   }
-  const twentyFourHoursAgo = Date.now() - 25 * 60 * 60 * 1000;
+
+  const twentyFiveHoursAgo = Date.now() - 25 * 60 * 60 * 1000;
+
   try {
     const selectResult = await db.query(`
       SELECT 
         SUM(CASE WHEN boob = 'Left' THEN 1 ELSE 0 END) AS Left,
         SUM(CASE WHEN boob = 'Right' THEN 1 ELSE 0 END) AS Right
       FROM feeding
-      WHERE created >= ${twentyFourHoursAgo};
+      WHERE created >= ${twentyFiveHoursAgo};
     `);
-    return (selectResult?.values?.[0] as IBoobDistribution) || { Left: 0, Right: 0 };
+
+    const result = selectResult?.values?.[0] as IBoobDistribution;
+    return { Left: result.Left || 0, Right: result.Right || 0 };
   } catch (err) {
     console.error('[FeedingDatabase] Error getting boob distribution:', err);
   }
+
   return { Left: 0, Right: 0 };
 }
 

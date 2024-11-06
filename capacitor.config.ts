@@ -7,7 +7,7 @@ const config: CapacitorConfig = {
   server: {
     // hot reload
     // url: 'http://192.168.178.22:3000',
-    url: 'http://172.20.17.102:3000',
+    url: 'http://172.18.160.225:3000',
     cleartext: true,
   },
   plugins: {

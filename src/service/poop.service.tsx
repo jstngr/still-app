@@ -1,15 +1,15 @@
+import PoopEntry from 'classes/poop-entry.class';
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { IPoopEntry } from 'shared/types/types';
-import FeedingEntry from '../classes/feeding-entry.class';
 import {
-  addFeedingEntryToDB,
-  deleteFeedingEntryFromDB,
-  getFeedingsFromDB,
-  initFeedingDB,
-  updateFeedingEntryInDB,
-} from './sqlite/feeding-database.helpers';
+  addPoopEntryToDB,
+  deletePoopEntryFromDB,
+  deletePoopsFromDB,
+  getPoopsFromDB,
+  initPoopDB,
+  updatePoopEntryInDB,
+} from './sqlite/poop-database.helpers';
 import { useSQLiteContext } from './sqlite/sqlite-provider';
-import PoopEntry from 'classes/poop-entry.class';
 
 interface IPoopContextType {
   poopEntries: IPoopEntry[];
@@ -41,9 +41,9 @@ export const PoopProvider: React.FC<IPoopProviderProps> = ({ children }) => {
   const { db, sqlReady } = useSQLiteContext();
 
   async function loadData() {
-    // await initFeedingDB(db);
-    // const data = await getFeedingsFromDB(db);
-    // setPoopEntries(data);
+    await initPoopDB(db);
+    const data = await getPoopsFromDB(db);
+    setPoopEntries(data);
   }
   useEffect(() => {
     loadData();
@@ -59,7 +59,7 @@ export const PoopProvider: React.FC<IPoopProviderProps> = ({ children }) => {
       })
     );
     if (db) {
-      // await updateFeedingEntryInDB(db, updateWith.toObject());
+      await updatePoopEntryInDB(db, updateWith.toObject());
     }
     // get again from DB to have sorted list
     loadData();
@@ -69,24 +69,24 @@ export const PoopProvider: React.FC<IPoopProviderProps> = ({ children }) => {
     if (idToDelete) {
       setPoopEntries((current) => current.filter(({ id }) => id !== idToDelete));
       if (db) {
-        // await deleteFeedingEntryFromDB(db, idToDelete);
+        await deletePoopEntryFromDB(db, idToDelete);
       }
     }
   };
   const addPoopEntry = async () => {
     const newEntry = new PoopEntry({});
     if (db) {
-      // const id = await addFeedingEntryToDB(db, newEntry.toObject());
-      // if (id) {
-      //   newEntry.setId(id);
-      // }
+      const id = await addPoopEntryToDB(db, newEntry.toObject());
+      if (id) {
+        newEntry.setId(id);
+      }
     }
     setPoopEntries((current) => [newEntry.toObject(), ...current]);
   };
 
   const deleteHistory = async () => {
     if (db) {
-      // await deleteFeedingsFromDB(db);
+      await deletePoopsFromDB(db);
     }
   };
 
