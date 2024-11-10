@@ -1,6 +1,5 @@
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { ISettingsObject } from 'service/settings.service';
-import { Device } from '@capacitor/device';
 import getSystemLanguage from 'shared/helpers/get-system-language';
 
 /**
@@ -14,7 +13,8 @@ async function createTable(db: SQLiteDBConnection): Promise<boolean> {
         babyName TEXT,
         language TEXT NOT NULL,
         poopTracker BOOLEAN NOT NULL,
-        sleepTracker BOOLEAN NOT NULL
+        sleepTracker BOOLEAN NOT NULL,
+        initialized BOOLEAN NOT NULL
       );
     `;
   try {
@@ -43,9 +43,9 @@ async function addSettingsRowIfNotExist(db: SQLiteDBConnection): Promise<void> {
       const language = await getSystemLanguage();
       await db.run(`
       INSERT INTO settings 
-        (babyName, language, poopTracker, sleepTracker) 
+        (babyName, language, poopTracker, sleepTracker, initialized) 
       VALUES 
-        ("", "${language}", true, true)
+        ("", "${language}", true, true, false)
       ;`);
     }
   } catch (err) {

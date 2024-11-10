@@ -1,9 +1,18 @@
-import { AppShell, Container, MantineProvider, Stack } from '@mantine/core';
+import {
+  AppShell,
+  Button,
+  Container,
+  Flex,
+  Loader,
+  MantineProvider,
+  Stack,
+  Title,
+} from '@mantine/core';
 import AppTitle from 'components/app-title';
 import Navigation from 'components/navigation/navigation';
 import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
-import React from 'react';
-import { Navigate, Outlet, Route, Routes } from 'react-router';
+import React, { useEffect } from 'react';
+import { Navigate, Outlet, Route, Routes, useNavigate } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { FeedingProvider } from 'service/feeding.service';
 import theme from 'theme';
@@ -14,6 +23,9 @@ import { SQLiteProvider } from 'service/sqlite/sqlite-provider';
 import StatisticsPage from 'pages/statistics/statistics.page';
 import PoopPage from 'pages/poop/poop.page';
 import { PoopProvider } from 'service/poop.service';
+import WelcomeFrame from 'pages/welcome/welcome-frame';
+import AppRoutes from 'shared/constants/app-routes';
+import RoutingGuard from 'service/routing-provider';
 
 function AppFrame() {
   return (
@@ -31,6 +43,21 @@ function AppFrame() {
   );
 }
 
+function Bla({ to }) {
+  const navigate = useNavigate();
+  return (
+    <>
+      <Button
+        onClick={() => {
+          navigate(to);
+        }}
+      >
+        {to}
+      </Button>
+    </>
+  );
+}
+
 export default function App() {
   return (
     <MantineProvider theme={theme}>
@@ -40,24 +67,67 @@ export default function App() {
             <SettingsContext.Consumer>
               {(settings) => (
                 <PoopProvider>
-                  <Container p={0} maw="500px">
-                    <BrowserRouter>
+                  <RoutingGuard>
+                    <Container p={0} maw="500px">
                       <Routes>
-                        <Route path="*" element={<AppFrame />}>
-                          <Route path="feed" element={<FeedTracker />} />
-                          {settings?.poopTrackerEnabled && (
-                            <Route path="poop" element={<PoopPage />} />
-                          )}
-                          {settings?.sleepTrackerEnabled && (
-                            <Route path="sleep" element={<div>Sleep</div>} />
-                          )}
-                          <Route path="statistics" element={<StatisticsPage />} />
-                          <Route path="settings" element={<SettingsPage />} />
-                          <Route path="*" element={<Navigate to="/feed" replace />} />
+                        <Route path={AppRoutes.welcome.relative} element={<WelcomeFrame />}>
+                          {/* Nested routes */}
+                          <Route
+                            path=""
+                            element={
+                              <>
+                                On ""
+                                <Bla to="/welcome/test2" />
+                              </>
+                            }
+                          />
+                          {/* For /welcome base */}
+                          <Route
+                            path="test2"
+                            element={
+                              <div>
+                                on Test2
+                                <Bla to="/welcome/test3" />
+                              </div>
+                            }
+                          />
+                          <Route
+                            path="test3"
+                            element={
+                              <div>
+                                Test3 <Bla to="/" />
+                              </div>
+                            }
+                          />
                         </Route>
+                        {settings?.initialized && (
+                          <Route path={AppRoutes.app.relative} element={<AppFrame />}>
+                            <Route path={AppRoutes.feeding.relative} element={<FeedTracker />} />
+                            {settings?.poopTrackerEnabled && (
+                              <Route path={AppRoutes.poop.relative} element={<PoopPage />} />
+                            )}
+                            {settings?.sleepTrackerEnabled && (
+                              <Route path={AppRoutes.sleep.relative} element={<div>Sleep</div>} />
+                            )}
+                            <Route
+                              path={AppRoutes.statistics.relative}
+                              element={<StatisticsPage />}
+                            />
+                            <Route path={AppRoutes.settings.relative} element={<SettingsPage />} />
+                            <Route path="*" element={<Navigate to="/feed" replace />} />
+                          </Route>
+                        )}
+                        <Route
+                          path="*"
+                          element={
+                            <Flex align="center" justify="center" h="100dvh">
+                              <Loader />
+                            </Flex>
+                          }
+                        />
                       </Routes>
-                    </BrowserRouter>
-                  </Container>
+                    </Container>
+                  </RoutingGuard>
                 </PoopProvider>
               )}
             </SettingsContext.Consumer>

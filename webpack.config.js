@@ -25,7 +25,8 @@ module.exports = {
   //   publicPath: '/'
   // },
   output: {
-    path: path.resolve(__dirname, 'build'), // Make sure it's 'build'
+    // path: path.resolve(__dirname, 'build'), // Make sure it's 'build'
+    publicPath: '/',
     filename: 'bundle.js',
   },
   devServer: {

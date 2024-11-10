@@ -5,7 +5,7 @@
   "main": "index.tsx",
   "author": "Tobias Justinger",
   "license": "MIT",
-  "homepage": "mini-genie.de/still-app",
+  "homepage": ".",
   "private": true,
   "browserslist": {
     "production": [

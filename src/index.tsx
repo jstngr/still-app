@@ -12,6 +12,7 @@ import './index.css';
 import './i18n';
 
 import '@mantine/core/styles.css';
+import { BrowserRouter } from 'react-router-dom';
 
 const domNode = document.getElementById('root');
 const root = createRoot(domNode);
@@ -21,4 +22,8 @@ if (!Capacitor.isNativePlatform()) {
   jeepSqlite(window);
 }
 
-root.render(<App />);
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);

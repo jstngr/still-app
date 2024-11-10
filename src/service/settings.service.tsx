@@ -21,8 +21,10 @@ interface ISettingsContextType {
   deleteSettings: () => Promise<void>;
   poopTrackerEnabled: boolean;
   sleepTrackerEnabled: boolean;
+  initialized: boolean;
   onChangePoopTrackerEnabled: (value: boolean) => Promise<void>;
   onChangeSleepTrackerEnabled: (value: boolean) => Promise<void>;
+  settingsLoaded: boolean;
 }
 
 export interface ISettingsObject {
@@ -31,6 +33,7 @@ export interface ISettingsObject {
   babyName: string;
   sleepTracker: boolean;
   poopTracker: boolean;
+  initialized: boolean;
 }
 
 const SettingsContext = createContext<ISettingsContextType | undefined>(undefined);
@@ -45,6 +48,8 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
   const [babyName, setBabyName] = useState('Nina');
   const [poopTrackerEnabled, setPoopTrackerEnabled] = useState(false);
   const [sleepTrackerEnabled, setSleepTrackerEnabled] = useState(false);
+  const [initialized, setInitialized] = useState(false);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   const { db, sqlReady } = useSQLiteContext();
 
@@ -59,6 +64,8 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
         setBabyName(data.babyName);
         setSleepTrackerEnabled(data.sleepTracker);
         setPoopTrackerEnabled(data.poopTracker);
+        setInitialized(data.initialized);
+        setSettingsLoaded(true);
       }
     }
 
@@ -115,6 +122,7 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
       value={{
         language,
         babyName,
+        initialized,
         onChangeLanguage,
         onChangeBabyName,
         deleteSettings,
@@ -122,6 +130,7 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
         sleepTrackerEnabled,
         onChangePoopTrackerEnabled,
         onChangeSleepTrackerEnabled,
+        settingsLoaded,
       }}
     >
       {children}

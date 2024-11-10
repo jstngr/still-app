@@ -1,6 +1,5 @@
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import sqliteService from './sqlite-service';
-import { SplashScreen } from '@capacitor/splash-screen';
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 
 interface ISQLiteProviderProps {
@@ -33,7 +32,6 @@ export const SQLiteProvider: React.FC<ISQLiteProviderProps> = ({ children }) => 
         setDb(db);
 
         setSqlReady(true);
-        SplashScreen.hide();
       } catch (err) {
         console.error('Failed to initialize the database:', err);
       }

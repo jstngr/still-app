@@ -6,8 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'build',
   server: {
     // hot reload
-    // url: 'http://192.168.178.22:3000',
-    url: 'http://172.18.160.225:3000',
+    url: 'http://192.168.178.22:3000',
     cleartext: true,
   },
   plugins: {
