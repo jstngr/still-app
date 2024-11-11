@@ -9,3 +9,8 @@ declare var module: {
     dispose(callback: (data?: any) => void): void;
   };
 };
+
+declare module '*.jpg' {
+  const value: string;
+  export default value;
+}

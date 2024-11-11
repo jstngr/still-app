@@ -1,31 +1,21 @@
-import {
-  AppShell,
-  Button,
-  Container,
-  Flex,
-  Loader,
-  MantineProvider,
-  Stack,
-  Title,
-} from '@mantine/core';
+import { AppShell, Button, Container, Flex, Loader, MantineProvider, Stack } from '@mantine/core';
 import AppTitle from 'components/app-title';
 import Navigation from 'components/navigation/navigation';
 import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate, Outlet, Route, Routes, useNavigate } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
 import { FeedingProvider } from 'service/feeding.service';
 import theme from 'theme';
 
+import PoopPage from 'pages/poop/poop.page';
 import SettingsPage from 'pages/settings/settings.page';
+import StatisticsPage from 'pages/statistics/statistics.page';
+import WelcomePage from 'pages/welcome/welcome.page';
+import { PoopProvider } from 'service/poop.service';
+import RoutingGuard from 'service/routing-provider';
 import { SettingsContext, SettingsProvider } from 'service/settings.service';
 import { SQLiteProvider } from 'service/sqlite/sqlite-provider';
-import StatisticsPage from 'pages/statistics/statistics.page';
-import PoopPage from 'pages/poop/poop.page';
-import { PoopProvider } from 'service/poop.service';
-import WelcomeFrame from 'pages/welcome/welcome-frame';
 import AppRoutes from 'shared/constants/app-routes';
-import RoutingGuard from 'service/routing-provider';
 
 function AppFrame() {
   return (
@@ -70,36 +60,7 @@ export default function App() {
                   <RoutingGuard>
                     <Container p={0} maw="500px">
                       <Routes>
-                        <Route path={AppRoutes.welcome.relative} element={<WelcomeFrame />}>
-                          {/* Nested routes */}
-                          <Route
-                            path=""
-                            element={
-                              <>
-                                On ""
-                                <Bla to="/welcome/test2" />
-                              </>
-                            }
-                          />
-                          {/* For /welcome base */}
-                          <Route
-                            path="test2"
-                            element={
-                              <div>
-                                on Test2
-                                <Bla to="/welcome/test3" />
-                              </div>
-                            }
-                          />
-                          <Route
-                            path="test3"
-                            element={
-                              <div>
-                                Test3 <Bla to="/" />
-                              </div>
-                            }
-                          />
-                        </Route>
+                        <Route path={AppRoutes.welcome.relative} element={<WelcomePage />} />
                         {settings?.initialized && (
                           <Route path={AppRoutes.app.relative} element={<AppFrame />}>
                             <Route path={AppRoutes.feeding.relative} element={<FeedTracker />} />

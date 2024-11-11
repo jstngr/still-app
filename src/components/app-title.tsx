@@ -9,7 +9,7 @@ export default function AppTitle() {
   const { babyName } = useSettingsContext();
   return (
     <Flex justify="center" pos={'relative'}>
-      <Title order={1} size={'h1'} ff={'Dancing Script'} c="primary">
+      <Title order={1} ff={'Dancing Script'} c="primary">
         {babyName || '-'}
       </Title>
       <Box pos={'absolute'} right="1rem">

@@ -23,7 +23,10 @@ export default function RoutingGuard({ children }: IRoutingGuardProps) {
 
   useEffect(() => {
     if (!settingsLoaded) return;
-    SplashScreen.hide();
+
+    window.setTimeout(() => {
+      SplashScreen.hide();
+    }, 400);
 
     if (initialized && !pathname.includes(AppRoutes.app.absolute)) {
       navigate(AppRoutes.app.absolute);
