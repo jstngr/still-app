@@ -20,6 +20,7 @@ import WelcomeViewWelcome from './welcome-view-welcome';
 import AppRoutes from 'shared/constants/app-routes';
 import WelcomeViewName from './welcome-view-name';
 import WelcomeViewSettings from './welcome-view-settings';
+import WelcomeViewFinish from './welcome-view-finish';
 
 export default function WelcomePage() {
   return (
@@ -35,6 +36,7 @@ export default function WelcomePage() {
               <Route path="" element={<WelcomeViewWelcome />} />
               <Route path={AppRoutes.welcomeName.relative} element={<WelcomeViewName />} />
               <Route path={AppRoutes.welcomeSettings.relative} element={<WelcomeViewSettings />} />
+              <Route path={AppRoutes.welcomeFinish.relative} element={<WelcomeViewFinish />} />
             </Routes>
           </Flex>
         </Container>

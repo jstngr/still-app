@@ -1,8 +1,6 @@
 import { createTheme, MantineThemeOverride } from '@mantine/core';
 import themeColors from './colors';
 
-import AppShellStyles from './AppShell.module.css';
-
 const theme: MantineThemeOverride = createTheme({
   fontFamily: 'Poppins',
   ...themeColors,
@@ -22,7 +20,6 @@ const theme: MantineThemeOverride = createTheme({
 
   components: {
     AppShell: {
-      classNames: AppShellStyles,
       defaultProps: {
         style: {
           overflow: 'hidden',
@@ -48,6 +45,13 @@ const theme: MantineThemeOverride = createTheme({
     InputText: {
       defaultProps: {
         size: 'md',
+      },
+    },
+    Switch: {
+      defaultProps: {
+        styles: {
+          WebkitTapHighlightColor: 'transparent',
+        },
       },
     },
   },

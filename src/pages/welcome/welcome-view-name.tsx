@@ -1,25 +1,11 @@
-import {
-  AppShell,
-  Box,
-  Button,
-  Container,
-  Flex,
-  Group,
-  Image,
-  Stack,
-  Text,
-  TextInput,
-  ThemeIcon,
-  Title,
-} from '@mantine/core';
-import React from 'react';
+import { Button, Flex, Image, Stack, Text, TextInput, Title } from '@mantine/core';
 import Baby2 from 'assets/images/Baby2.png';
-import styles from './welcome.module.css';
-import { IconPointFilled } from '@tabler/icons-react';
-import { useSettingsContext } from 'service/settings.service';
-import Pagination from './pagination';
+import React from 'react';
 import { useNavigate } from 'react-router';
+import { useSettingsContext } from 'service/settings.service';
 import AppRoutes from 'shared/constants/app-routes';
+import Pagination from './pagination';
+import styles from './welcome.module.css';
 
 export default function WelcomeViewName() {
   const navigate = useNavigate();

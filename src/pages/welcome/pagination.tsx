@@ -15,6 +15,9 @@ export default function Pagination({ active }: { active: number }) {
       <ThemeIcon c={getColor(2)} variant="transparent">
         <IconPointFilled size="16px" />
       </ThemeIcon>
+      <ThemeIcon c={getColor(3)} variant="transparent">
+        <IconPointFilled size="16px" />
+      </ThemeIcon>
     </Group>
   );
 }

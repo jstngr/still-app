@@ -23,3 +23,8 @@ body {
   -webkit-overflow-scrolling: touch; /* For iOS momentum scrolling */
   overflow: overlay;
 }
+
+/* Fix mantine mobile switch background */
+.mantine-Switch-root {
+  -webkit-tap-highlight-color: transparent;
+}
