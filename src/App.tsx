@@ -1,4 +1,4 @@
-import { AppShell, Button, Container, Flex, Loader, MantineProvider, Stack } from '@mantine/core';
+import { AppShell, Button, Container, MantineProvider, Stack } from '@mantine/core';
 import AppTitle from 'components/app-title';
 import Navigation from 'components/navigation/navigation';
 import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
@@ -6,7 +6,6 @@ import React from 'react';
 import { Navigate, Outlet, Route, Routes, useNavigate } from 'react-router';
 import { FeedingProvider } from 'service/feeding.service';
 import theme from 'theme';
-
 import PoopPage from 'pages/poop/poop.page';
 import SettingsPage from 'pages/settings/settings.page';
 import StatisticsPage from 'pages/statistics/statistics.page';

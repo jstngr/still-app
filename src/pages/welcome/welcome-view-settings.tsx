@@ -12,13 +12,13 @@ import {
 } from '@mantine/core';
 import { IconCircleDashedCheck } from '@tabler/icons-react';
 import Breastfeeding5 from 'assets/images/breastfeeding5.png';
-import React, { useState } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useSettingsContext } from 'service/settings.service';
+import AppRoutes from 'shared/constants/app-routes';
 import Pagination from './pagination';
 import styles from './welcome.module.css';
-import AppRoutes from 'shared/constants/app-routes';
-import { useTranslation } from 'react-i18next';
 
 export default function WelcomeViewSettings() {
   const { t } = useTranslation();

@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.minigenie.stillapp',
-  appName: 'MiniGenie - Still App',
+  appName: 'Still App',
   webDir: 'build',
   server: {
     // hot reload
