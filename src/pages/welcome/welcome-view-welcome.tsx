@@ -18,8 +18,10 @@ import { IconPointFilled } from '@tabler/icons-react';
 import { useNavigate } from 'react-router';
 import AppRoutes from 'shared/constants/app-routes';
 import Pagination from './pagination';
+import { Trans, useTranslation } from 'react-i18next';
 
 export default function WelcomeViewWelcome() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const next = () => {
     navigate(AppRoutes.welcomeName.absolute);
@@ -40,13 +42,18 @@ export default function WelcomeViewWelcome() {
       <Flex flex="1 0 33%">
         <Stack align="center">
           <Title ff={'Dancing Script'} c="primary" size="3rem">
-            Welcome
+            {t('welcome-view-welcome-title')}
           </Title>
           <Stack gap="lg" align="center">
             <Text ta="center">
-              A few settings to personalize things, <br /> then it's all yours!
+              <Trans
+                i18nKey="welcome-view-welcome-description"
+                components={{
+                  Nl: <br />,
+                }}
+              />
             </Text>
-            <Button onClick={next}>Let's get started!</Button>
+            <Button onClick={next}>{t('welcome-view-welcome-button-label')}</Button>
           </Stack>
         </Stack>
       </Flex>

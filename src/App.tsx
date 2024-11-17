@@ -12,7 +12,7 @@ import SettingsPage from 'pages/settings/settings.page';
 import StatisticsPage from 'pages/statistics/statistics.page';
 import WelcomePage from 'pages/welcome/welcome.page';
 import { PoopProvider } from 'service/poop.service';
-import RoutingGuard from 'service/routing-provider';
+import RoutingGuard from 'service/routing-guard';
 import { SettingsContext, SettingsProvider } from 'service/settings.service';
 import { SQLiteProvider } from 'service/sqlite/sqlite-provider';
 import AppRoutes from 'shared/constants/app-routes';
@@ -60,32 +60,44 @@ export default function App() {
                   <RoutingGuard>
                     <Container p={0} maw="500px">
                       <Routes>
-                        <Route path={AppRoutes.welcome.relative} element={<WelcomePage />} />
-                        {settings?.initialized && (
-                          <Route path={AppRoutes.app.relative} element={<AppFrame />}>
-                            <Route path={AppRoutes.feeding.relative} element={<FeedTracker />} />
-                            {settings?.poopTrackerEnabled && (
-                              <Route path={AppRoutes.poop.relative} element={<PoopPage />} />
-                            )}
-                            {settings?.sleepTrackerEnabled && (
-                              <Route path={AppRoutes.sleep.relative} element={<div>Sleep</div>} />
-                            )}
+                        {!settings?.initialized && (
+                          <>
+                            <Route path={AppRoutes.welcome.relative} element={<WelcomePage />} />
                             <Route
-                              path={AppRoutes.statistics.relative}
-                              element={<StatisticsPage />}
+                              index
+                              element={<Navigate to={AppRoutes.welcome.absolute} replace />}
                             />
-                            <Route path={AppRoutes.settings.relative} element={<SettingsPage />} />
-                            <Route path="*" element={<Navigate to="/feed" replace />} />
-                          </Route>
+                          </>
                         )}
-                        <Route
-                          path="*"
-                          element={
-                            <Flex align="center" justify="center" h="100dvh">
-                              <Loader />
-                            </Flex>
-                          }
-                        />
+                        {settings?.initialized && (
+                          <>
+                            <Route path={AppRoutes.app.relative} element={<AppFrame />}>
+                              <Route path={AppRoutes.feeding.relative} element={<FeedTracker />} />
+                              {settings?.poopTrackerEnabled && (
+                                <Route path={AppRoutes.poop.relative} element={<PoopPage />} />
+                              )}
+                              {settings?.sleepTrackerEnabled && (
+                                <Route path={AppRoutes.sleep.relative} element={<div>Sleep</div>} />
+                              )}
+                              <Route
+                                path={AppRoutes.statistics.relative}
+                                element={<StatisticsPage />}
+                              />
+                              <Route
+                                path={AppRoutes.settings.relative}
+                                element={<SettingsPage />}
+                              />
+                              <Route
+                                index
+                                element={<Navigate to={AppRoutes.feeding.absolute} replace />}
+                              />
+                            </Route>
+                            <Route
+                              index
+                              element={<Navigate to={AppRoutes.app.absolute} replace />}
+                            />
+                          </>
+                        )}
                       </Routes>
                     </Container>
                   </RoutingGuard>

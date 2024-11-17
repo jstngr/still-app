@@ -18,8 +18,10 @@ import { useSettingsContext } from 'service/settings.service';
 import Pagination from './pagination';
 import styles from './welcome.module.css';
 import AppRoutes from 'shared/constants/app-routes';
+import { useTranslation } from 'react-i18next';
 
 export default function WelcomeViewSettings() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     poopTrackerEnabled,
@@ -47,10 +49,10 @@ export default function WelcomeViewSettings() {
       <Flex flex="1 0 33%">
         <Stack align="center">
           <Title ff={'Dancing Script'} c="primary" size="3rem">
-            Features
+            {t('welcome-view-settings-title')}
           </Title>
           <Stack gap="lg" align="center">
-            <Text ta="center">What do you want to do?</Text>
+            <Text ta="center">{t('welcome-view-settings-description')}</Text>
             <Stack gap="sm">
               <Group gap="sm">
                 <Flex w="38px" h="18px" justify="center">
@@ -58,20 +60,20 @@ export default function WelcomeViewSettings() {
                     <IconCircleDashedCheck />
                   </ThemeIcon>
                 </Flex>
-                <InputLabel>Track feeding</InputLabel>
+                <InputLabel>{t('welcome-view-settings-input-label-feeding')}</InputLabel>
               </Group>
               <Switch
-                label="Track pooping"
+                label={t('welcome-view-settings-input-label-pooping')}
                 checked={poopTrackerEnabled}
                 onChange={(event) => onChangePoopTrackerEnabled(event.currentTarget.checked)}
               />
               <Switch
-                label="Track sleeping"
+                label={t('welcome-view-settings-input-label-sleeping')}
                 checked={sleepTrackerEnabled}
                 onChange={(event) => onChangeSleepTrackerEnabled(event.currentTarget.checked)}
               />
             </Stack>
-            <Button onClick={next}>Continue</Button>
+            <Button onClick={next}>{t('welcome-view-settings-button-lable')}</Button>
           </Stack>
         </Stack>
       </Flex>

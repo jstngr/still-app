@@ -7,6 +7,7 @@ import {
   getSettingsFromDB,
   initSettingsDB,
   saveBabyNameToDB,
+  saveInitializedToDb,
   saveLanguageToDB,
   savePoopTrackerEnabledToDB,
   saveSleepTrackerEnabledToDB,
@@ -24,6 +25,7 @@ interface ISettingsContextType {
   initialized: boolean;
   onChangePoopTrackerEnabled: (value: boolean) => Promise<void>;
   onChangeSleepTrackerEnabled: (value: boolean) => Promise<void>;
+  onInitialized: () => Promise<void>;
   settingsLoaded: boolean;
 }
 
@@ -117,6 +119,13 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
     }
   };
 
+  const onInitialized = async () => {
+    if (db) {
+      await saveInitializedToDb(db);
+      setInitialized(true);
+    }
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -131,6 +140,7 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
         onChangePoopTrackerEnabled,
         onChangeSleepTrackerEnabled,
         settingsLoaded,
+        onInitialized,
       }}
     >
       {children}

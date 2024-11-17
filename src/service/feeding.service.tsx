@@ -78,7 +78,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
           return updateWith.toObject();
         }
         return entry;
-      })
+      }),
     );
     if (db) {
       await updateFeedingEntryInDB(db, updateWith.toObject());

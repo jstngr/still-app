@@ -5,6 +5,7 @@ const AppRoutes = {
   statistics: { absolute: '/app/statistics', relative: 'statistics' },
   sleep: { absolute: '/app/sleep', relative: 'sleep' },
   settings: { absolute: '/app/settings', relative: 'settings' },
+
   welcome: { absolute: '/welcome', relative: 'welcome/*' },
   welcomeName: { absolute: '/welcome/name', relative: 'name' },
   welcomeSettings: { absolute: '/welcome/settings', relative: 'settings' },

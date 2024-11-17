@@ -6,8 +6,10 @@ import { useSettingsContext } from 'service/settings.service';
 import AppRoutes from 'shared/constants/app-routes';
 import Pagination from './pagination';
 import styles from './welcome.module.css';
+import { useTranslation } from 'react-i18next';
 
 export default function WelcomeViewName() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { onChangeBabyName, babyName } = useSettingsContext();
 
@@ -33,13 +35,13 @@ export default function WelcomeViewName() {
       <Flex flex="1 0 33%">
         <Stack align="center">
           <Title ff={'Dancing Script'} c="primary" size="3rem">
-            Name
+            {t('welcome-view-name-title')}
           </Title>
           <Stack gap="lg" align="center">
-            <Text ta="center">Please provide the name of your little angel.</Text>
+            <Text ta="center">{t('welcome-view-name-description')}</Text>
             <TextInput onChange={onChangeName} value={babyName} />
             <Button disabled={!babyName} onClick={next}>
-              Continue
+              {t('welcome-view-name-button-label')}
             </Button>
           </Stack>
         </Stack>

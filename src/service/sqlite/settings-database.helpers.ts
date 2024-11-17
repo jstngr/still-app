@@ -93,6 +93,7 @@ async function getSettingsFromDB(db?: SQLiteDBConnection): Promise<ISettingsObje
     if (data) {
       data.sleepTracker = !!data.sleepTracker;
       data.poopTracker = !!data.poopTracker;
+      data.initialized = !!data.initialized;
     }
     return (data as ISettingsObject) || null;
   } catch (err) {
@@ -111,7 +112,7 @@ async function getSettingsFromDB(db?: SQLiteDBConnection): Promise<ISettingsObje
  */
 async function saveBabyNameToDB(
   db: SQLiteDBConnection,
-  name: ISettingsObject['babyName']
+  name: ISettingsObject['babyName'],
 ): Promise<void> {
   try {
     await db.query(`UPDATE settings SET babyName = "${name}";`);
@@ -132,7 +133,7 @@ async function saveBabyNameToDB(
  */
 async function saveLanguageToDB(
   db: SQLiteDBConnection,
-  language: ISettingsObject['babyName'] // Assuming language field uses the same type as babyName in ISettingsObject
+  language: ISettingsObject['babyName'], // Assuming language field uses the same type as babyName in ISettingsObject
 ): Promise<void> {
   try {
     await db.query(`UPDATE settings SET language = "${language}";`);
@@ -151,7 +152,7 @@ async function saveLanguageToDB(
  */
 async function savePoopTrackerEnabledToDB(
   db: SQLiteDBConnection,
-  poopTracker: ISettingsObject['poopTracker']
+  poopTracker: ISettingsObject['poopTracker'],
 ): Promise<boolean | null> {
   try {
     await db.query(`UPDATE settings SET poopTracker = ${poopTracker};`);
@@ -172,7 +173,7 @@ async function savePoopTrackerEnabledToDB(
  */
 async function saveSleepTrackerEnabledToDB(
   db: SQLiteDBConnection,
-  sleepTracker: ISettingsObject['sleepTracker']
+  sleepTracker: ISettingsObject['sleepTracker'],
 ): Promise<boolean | null> {
   try {
     await db.query(`UPDATE settings SET sleepTracker = ${sleepTracker};`);
@@ -181,6 +182,23 @@ async function saveSleepTrackerEnabledToDB(
     console.error('[SettingsDatabase] Error updating sleepTracker:', err);
   }
   return null;
+}
+
+/**
+ * Updates the "initialized" boolean in the database.
+ *
+ * @param db - The SQLiteDBConnection instance used to execute the update query.
+ * @returns A promise that resolves when the update is complete to boolean.
+ * @throws Logs an error message if the query fails.
+ */
+async function saveInitializedToDb(db: SQLiteDBConnection): Promise<boolean | null> {
+  try {
+    await db.query(`UPDATE settings SET initialized = true;`);
+    return true;
+  } catch (err) {
+    console.error('[SettingsDatabase] Error updating sleepTracker:', err);
+  }
+  return false;
 }
 
 async function deleteSettingsFromDB(db: SQLiteDBConnection): Promise<void> {
@@ -200,4 +218,5 @@ export {
   saveLanguageToDB,
   savePoopTrackerEnabledToDB,
   saveSleepTrackerEnabledToDB,
+  saveInitializedToDb,
 };

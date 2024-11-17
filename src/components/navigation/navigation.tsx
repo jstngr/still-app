@@ -21,13 +21,13 @@ export default function Navigation() {
   const settings = useSettingsContext();
 
   const tabsAmount = [true, settings.poopTrackerEnabled, settings.sleepTrackerEnabled, true].filter(
-    (entry) => entry
+    (entry) => entry,
   )?.length;
 
   return (
     <SimpleGrid cols={tabsAmount} maw="500px" m="0 auto 0 auto" px="20px">
       <NavButton
-        to="feed"
+        to="feeding"
         active={pathname.includes('feed')}
         label={t('navigation-button-label-feed-tracker')}
         Icon={IconBabyBottle}

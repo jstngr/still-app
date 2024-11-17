@@ -48,5 +48,20 @@
   "settings-page-input-label-name": "Name of your little one",
   "settings-page-title": "Settings",
   "settings-page-warning-text-reset": "This action will permanently delete all your data and reset everything to its original state. This process cannot be undone.",
-  "timeline-chart-label": "Feeding history for the last 24 hours"
+  "timeline-chart-label": "Feeding history for the last 24 hours",
+  "welcome-view-finish-button-lable": "Finish",
+  "welcome-view-finish-description": "You're all set! <Nl /> Enjoy exploring the app.",
+  "welcome-view-finish-title": "All done!",
+  "welcome-view-name-button-label": "Continue",
+  "welcome-view-name-description": "Please provide the name of your little angel.",
+  "welcome-view-name-title": "Name",
+  "welcome-view-settings-button-lable": "Continue",
+  "welcome-view-settings-description": "What do you want to do?",
+  "welcome-view-settings-input-label-feeding": "Track feeding",
+  "welcome-view-settings-input-label-pooping": "Track pooping",
+  "welcome-view-settings-input-label-sleeping": "Track sleeping",
+  "welcome-view-settings-title": "Features",
+  "welcome-view-welcome-button-label": "Let's get started!",
+  "welcome-view-welcome-description": "A few settings to personalize things, <Nl /> then it's all yours!",
+  "welcome-view-welcome-title": "Welcome"
 }

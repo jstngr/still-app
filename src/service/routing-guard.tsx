@@ -28,10 +28,12 @@ export default function RoutingGuard({ children }: IRoutingGuardProps) {
       SplashScreen.hide();
     }, 400);
 
+    if (!initialized && !pathname.includes(AppRoutes.welcome.absolute)) {
+      navigate(AppRoutes.welcome.absolute);
+    }
+
     if (initialized && !pathname.includes(AppRoutes.app.absolute)) {
       navigate(AppRoutes.app.absolute);
-    } else if (!pathname.includes(AppRoutes.welcome.absolute)) {
-      navigate(AppRoutes.welcome.absolute);
     }
   }, [settingsLoaded, initialized, pathname]);
 
