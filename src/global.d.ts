@@ -3,7 +3,7 @@ declare module '*.module.css' {
   export default classes;
 }
 
-declare var module: {
+declare let module: {
   hot?: {
     accept(path?: string, callback?: () => void): void;
     dispose(callback: (data?: any) => void): void;

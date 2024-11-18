@@ -1,4 +1,3 @@
-import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import { IFeedingEntry } from 'shared/types/types';
 
 const startNumber =

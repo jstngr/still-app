@@ -1,17 +1,13 @@
-import { Button, SimpleGrid, Stack, Text, Title } from '@mantine/core';
-import React, { ForwardRefExoticComponent, RefAttributes } from 'react';
-import styles from './nav-button.module.css';
+import { SimpleGrid } from '@mantine/core';
+import React from 'react';
 import {
-  Icon,
   IconBabyBottle,
-  IconBed,
   IconBedFlat,
   IconChartBar,
   IconPoo,
-  IconProps,
 } from '@tabler/icons-react';
 import NavButton from './nav-button';
-import { useLocation, useMatches, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useSettingsContext } from 'service/settings.service';
 

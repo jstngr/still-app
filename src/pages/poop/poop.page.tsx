@@ -22,7 +22,7 @@ export default function PoopPage() {
             <HistoryInfiniteScrollList<IPoopEntry>
               data={poopEntries}
               ItemComponent={PoopHistoryItem}
-              cardBaseSize={58}
+              cardBaseSize={50}
             />
           ) : (
             <Stack gap="xxs" align="center" mt="xl">

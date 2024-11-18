@@ -1,5 +1,5 @@
 import { SplashScreen } from '@capacitor/splash-screen';
-import React, { ReactNode, createContext, useEffect } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import AppRoutes from 'shared/constants/app-routes';
 import { useSettingsContext } from './settings.service';

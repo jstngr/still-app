@@ -1,4 +1,4 @@
-import { Button, Stack, Text, Title } from '@mantine/core';
+import { Button, Stack, Text } from '@mantine/core';
 import React, { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { Icon, IconProps } from '@tabler/icons-react';
 import { useNavigate } from 'react-router';

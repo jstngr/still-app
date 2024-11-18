@@ -1,20 +1,9 @@
 import {
   AppShell,
-  Box,
-  Button,
   Container,
   Flex,
-  Group,
-  Image,
-  Stack,
-  Text,
-  ThemeIcon,
-  Title,
 } from '@mantine/core';
 import React from 'react';
-import BreastFeeding2 from 'assets/images/breastfeeding2.jpg';
-import styles from './welcome.module.css';
-import { IconPointFilled } from '@tabler/icons-react';
 import { Route, Routes } from 'react-router';
 import WelcomeViewWelcome from './welcome-view-welcome';
 import AppRoutes from 'shared/constants/app-routes';

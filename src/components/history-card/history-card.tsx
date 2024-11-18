@@ -1,4 +1,4 @@
-import { ActionIcon, Badge, Box, Card, Flex, Grid, Group, Stack, Text } from '@mantine/core';
+import { ActionIcon, Badge, Box, Card, Grid, Group, Stack, Text } from '@mantine/core';
 import FeedingEntry from 'classes/feeding-entry.class';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import Timer from '../timer';
 import styles from './history-card.module.css';
 import { IconPencil } from '@tabler/icons-react';
 import formatSecondsToMinutesSeconds from 'shared/helpers/format-seconds-to-minutes-seconds';
+import listItemStyles from '../list-item.module.css';
 
 interface IHistoryCardProps {
   entry: IFeedingEntry;
@@ -46,7 +47,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
 
   const showTimeAgo = useMemo(
     () => !isRunning && !isPaused && props.index < 2,
-    [isPaused, isRunning]
+    [isPaused, isRunning],
   );
 
   const onClickEdit = () => {
@@ -58,11 +59,20 @@ export default function HistoryCard(props: IHistoryCardProps) {
   return (
     <>
       {showDateLabel && (
-        <Text c="dimmed" size="12px" key={`label_${entry.id}`}>
-          {formatDateLocaleFromTimestamp(entry.created)}
-        </Text>
+        <Box bg="background.1" p="4px">
+          <Text c="dimmed" size="12px" key={`label_${entry.id}`}>
+            {formatDateLocaleFromTimestamp(entry.created)}
+          </Text>
+        </Box>
       )}
-      <Card key={`card_${entry.id}`} shadow="xs">
+      <Card
+        radius={0}
+        py="xs"
+        px="xxs"
+        key={`card_${entry.id}`}
+        bg="background.0"
+        className={showDateLabel ? '' : listItemStyles.dashedBorderTop}
+      >
         {isRunning && <div className={styles.activeCardIndicator} />}
         <Group justify="space-between" gap="xs">
           <Group align="center" h="100%">

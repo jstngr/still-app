@@ -18,7 +18,6 @@ interface ISQLiteProviderProps {
 }
 
 export const SQLiteProvider: React.FC<ISQLiteProviderProps> = ({ children }) => {
-  const [databaseLoading, setDatabaseLoading] = useState(true);
   const dbName = 'still-app-database';
   const readonly = false;
   const [db, setDb] = useState<SQLiteDBConnection>();

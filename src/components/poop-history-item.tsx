@@ -1,4 +1,4 @@
-import { ActionIcon, Badge, Card, Flex, Group, Stack, Text } from '@mantine/core';
+import { ActionIcon, Box, Card, Flex, Group, Stack, Text } from '@mantine/core';
 import { IconPencil, IconPoo } from '@tabler/icons-react';
 import { t } from 'i18next';
 import React, { useMemo } from 'react';
@@ -8,6 +8,7 @@ import formatDateLocaleFromTimestamp from 'shared/helpers/format-date-locale-fro
 import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import monoStyles from 'shared/styles/mono-styles.module.css';
 import { IPoopEntry } from 'shared/types/types';
+import listItemStyles from './list-item.module.css';
 
 export default function PoopHistoryItem({
   index,
@@ -37,13 +38,21 @@ export default function PoopHistoryItem({
 
   return (
     <Flex key={`wrapper_${data[index].id}`} align="center" style={style} p="4px" flex="1 0 0">
-      <Stack gap="8px" flex="1 0 0">
+      <Stack gap="0" flex="1 0 0">
         {showDateLabel && (
-          <Text c="dimmed" size="12px" key={`label_${entry.id}`}>
-            {formatDateLocaleFromTimestamp(entry.created)}
-          </Text>
+          <Box bg="background.1" p="4px">
+            <Text c="dimmed" size="12px" key={`label_${entry.id}`}>
+              {formatDateLocaleFromTimestamp(entry.created)}
+            </Text>
+          </Box>
         )}
-        <Card key={`card_${entry.id}`} shadow="xs" py="xs">
+        <Card
+          key={`card_${entry.id}`}
+          py="xs"
+          px="xxs"
+          bg="background.2"
+          className={showDateLabel ? '' : listItemStyles.dashedBorderTop}
+        >
           <Group justify="space-between" gap="xs">
             <ActionIcon variant="outline" size="sm" onClick={onClickEdit}>
               <IconPoo stroke="1" size="20" />

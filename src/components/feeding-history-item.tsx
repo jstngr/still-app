@@ -13,15 +13,8 @@ export default function FeedingHistoryItem({
   data: IFeedingEntry[];
 }): React.ReactNode {
   return (
-    <Flex
-      key={`wrapper_${data[index].id}`}
-      align="center"
-      style={style}
-      py={'4px'}
-      px="4px"
-      flex="1 0 0"
-    >
-      <Stack gap="8px" flex="1 0 0">
+    <Flex key={`wrapper_${data[index].id}`} align="center" style={style} px="4px" flex="1 0 0">
+      <Stack gap="0" flex="1 0 0">
         <HistoryCard entry={data[index]} index={index} />
       </Stack>
     </Flex>

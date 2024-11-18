@@ -4,7 +4,6 @@ import {
   Card,
   Container,
   Flex,
-  Group,
   ScrollArea,
   Select,
   Stack,
@@ -13,7 +12,7 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { IconAlertTriangle, IconPoo } from '@tabler/icons-react';
+import { IconAlertTriangle } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';

@@ -1,20 +1,14 @@
 import {
-  AppShell,
-  Box,
   Button,
-  Container,
   Flex,
-  Group,
   Image,
   Stack,
   Text,
-  ThemeIcon,
   Title,
 } from '@mantine/core';
 import React from 'react';
 import BreastFeeding2 from 'assets/images/breastfeeding2.jpg';
 import styles from './welcome.module.css';
-import { IconPointFilled } from '@tabler/icons-react';
 import { useNavigate } from 'react-router';
 import AppRoutes from 'shared/constants/app-routes';
 import Pagination from './pagination';

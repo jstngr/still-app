@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, useContext, useMemo, useEffect } from 'react';
+import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
 import { IBoob, IFeedingEntry } from 'shared/types/types';
 import FeedingEntry from '../classes/feeding-entry.class';
 import { useDisclosure } from '@mantine/hooks';
@@ -11,7 +11,6 @@ import {
   initFeedingDB,
   updateFeedingEntryInDB,
 } from './sqlite/feeding-database.helpers';
-import inserMok, { WebMock } from './mock-data';
 
 interface IFeedingContextType {
   activeFeeding?: IFeedingEntry;

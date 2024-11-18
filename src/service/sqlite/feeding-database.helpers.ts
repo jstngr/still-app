@@ -1,7 +1,4 @@
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
-import { ISettingsObject } from 'service/settings.service';
-import { Device } from '@capacitor/device';
-import getSystemLanguage from 'shared/helpers/get-system-language';
 import { IFeedingEntry } from 'shared/types/types';
 
 /**
