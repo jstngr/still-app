@@ -19,7 +19,7 @@ interface IRoutingGuardProps {
 export default function RoutingGuard({ children }: IRoutingGuardProps) {
   const { settingsLoaded, initialized } = useSettingsContext();
   const navigate = useNavigate();
-  const { pathname, key } = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (!settingsLoaded) return;

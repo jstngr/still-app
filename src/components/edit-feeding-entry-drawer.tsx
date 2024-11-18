@@ -44,7 +44,7 @@ function EditFeedingEntryDrawer() {
 
   const entry = useMemo(
     () => feedingEntries.find(({ id }) => id === feedingEntryDrawerEntryId),
-    [feedingEntries, feedingEntryDrawerEntryId]
+    [feedingEntries, feedingEntryDrawerEntryId],
   );
 
   const [formData, setformData] = useState(entry);
@@ -54,7 +54,7 @@ function EditFeedingEntryDrawer() {
         ({
           ...current,
           [key]: value,
-        } as IFeedingEntry)
+        }) as IFeedingEntry,
     );
   };
 
@@ -76,17 +76,9 @@ function EditFeedingEntryDrawer() {
     closeFeedingEntryDrawer();
   };
 
-  const getPause = () => {
-    if (formData) {
-      const entryInstance = new FeedingEntry(formData);
-      return formatMillisecondsToMinutesSeconds(entryInstance.getPauseDuration());
-    }
-    return '00:00';
-  };
-
   const maxPause = useMemo(
     () => formatMillisecondsToMinutesSeconds((formData?.stopped || 0) - (formData?.created || 0)),
-    [formData?.created, formData?.stopped]
+    [formData?.created, formData?.stopped],
   );
 
   const removePause = () => {
@@ -134,7 +126,7 @@ function EditFeedingEntryDrawer() {
               onChange={(event) =>
                 updateForm(
                   'created',
-                  timeToTimeStamp(formData?.created || 0, event.currentTarget.value)
+                  timeToTimeStamp(formData?.created || 0, event.currentTarget.value),
                 )
               }
               maxTime={timeStampToTime(formData?.stopped || 0)}
@@ -146,7 +138,7 @@ function EditFeedingEntryDrawer() {
               onChange={(event) =>
                 updateForm(
                   'stopped',
-                  timeToTimeStamp(formData?.stopped || 0, event.currentTarget.value)
+                  timeToTimeStamp(formData?.stopped || 0, event.currentTarget.value),
                 )
               }
               minTime={timeStampToTime(formData?.created || 0)}
@@ -161,7 +153,7 @@ function EditFeedingEntryDrawer() {
               onChange={(event) =>
                 updateForm(
                   'pauseDuration',
-                  formatMinutesSecondsToMilliseconds(event.currentTarget.value)
+                  formatMinutesSecondsToMilliseconds(event.currentTarget.value),
                 )
               }
               maxTime={maxPause}

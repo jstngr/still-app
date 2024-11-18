@@ -6,7 +6,7 @@ declare module '*.module.css' {
 declare let module: {
   hot?: {
     accept(path?: string, callback?: () => void): void;
-    dispose(callback: (data?: any) => void): void;
+    dispose(callback: (data?: unknown) => void): void;
   };
 };
 

@@ -4,7 +4,7 @@ export default async function getSystemLanguage() {
   try {
     const info = await Device.getLanguageCode();
     return info?.value || 'en';
-  } catch (error) {
+  } catch {
     return navigator.language || 'en';
   }
 }

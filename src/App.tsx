@@ -1,9 +1,9 @@
-import { AppShell, Button, Container, MantineProvider, Stack } from '@mantine/core';
+import { AppShell, Container, MantineProvider, Stack } from '@mantine/core';
 import AppTitle from 'components/app-title';
 import Navigation from 'components/navigation/navigation';
 import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
 import React from 'react';
-import { Navigate, Outlet, Route, Routes, useNavigate } from 'react-router';
+import { Navigate, Outlet, Route, Routes } from 'react-router';
 import { FeedingProvider } from 'service/feeding.service';
 import theme from 'theme';
 import PoopPage from 'pages/poop/poop.page';
@@ -29,21 +29,6 @@ function AppFrame() {
         <Navigation />
       </AppShell.Footer>
     </AppShell>
-  );
-}
-
-function Bla({ to }) {
-  const navigate = useNavigate();
-  return (
-    <>
-      <Button
-        onClick={() => {
-          navigate(to);
-        }}
-      >
-        {to}
-      </Button>
-    </>
   );
 }
 

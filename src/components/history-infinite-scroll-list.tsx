@@ -1,6 +1,5 @@
 import { Box, CSSProperties } from '@mantine/core';
 import React, { useEffect, useRef } from 'react';
-import { useInView } from 'react-intersection-observer';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { VariableSizeList as List } from 'react-window';
 import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
@@ -24,9 +23,8 @@ interface Entry {
 }
 
 export default function HistoryInfiniteScrollList<T extends Entry>(
-  props: IInfiniteScrollListProps<T>
+  props: IInfiniteScrollListProps<T>,
 ) {
-  const {} = useInView();
   const { data, ItemComponent, cardBaseSize } = props;
   const listRef = useRef<List>(null);
 

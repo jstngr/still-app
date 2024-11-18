@@ -50,7 +50,7 @@ export default function PoopHistoryItem({
           key={`card_${entry.id}`}
           py="xs"
           px="xxs"
-          bg="background.2"
+          bg="background.0"
           className={showDateLabel ? '' : listItemStyles.dashedBorderTop}
         >
           <Group justify="space-between" gap="xs">
