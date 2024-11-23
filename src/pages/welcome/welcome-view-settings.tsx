@@ -11,7 +11,7 @@ import {
   Title,
 } from '@mantine/core';
 import { IconCircleDashedCheck } from '@tabler/icons-react';
-import Breastfeeding5 from 'assets/images/breastfeeding5.png';
+import BreastFeeding5 from 'assets/images/breastfeeding5.png';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
@@ -31,7 +31,7 @@ export default function WelcomeViewSettings() {
   } = useSettingsContext();
 
   const next = () => {
-    navigate(AppRoutes.welcomeFinish.absolute);
+    navigate(AppRoutes.welcomeFeeding.absolute);
   };
   return (
     <>
@@ -41,7 +41,7 @@ export default function WelcomeViewSettings() {
           radius="99999px"
           w="50dvw"
           maw="200px"
-          src={Breastfeeding5}
+          src={BreastFeeding5}
           h="50dvw"
           mah="200px"
         />

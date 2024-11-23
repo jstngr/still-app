@@ -7,6 +7,8 @@ import {
   getSettingsFromDB,
   initSettingsDB,
   saveBabyNameToDB,
+  saveFeedByBoobToDB,
+  saveFeedByBottleToDB,
   saveInitializedToDb,
   saveLanguageToDB,
   savePoopTrackerEnabledToDB,
@@ -17,6 +19,8 @@ import { useSQLiteContext } from './sqlite/sqlite-provider';
 interface ISettingsContextType {
   language: TLanguage;
   babyName: string;
+  feedByBoob: boolean;
+  feedByBottle: boolean;
   onChangeLanguage: (language: TLanguage) => void;
   onChangeBabyName: (name: string) => void;
   deleteSettings: () => Promise<void>;
@@ -25,6 +29,8 @@ interface ISettingsContextType {
   initialized: boolean;
   onChangePoopTrackerEnabled: (value: boolean) => Promise<void>;
   onChangeSleepTrackerEnabled: (value: boolean) => Promise<void>;
+  onChangeFeedByBoob: (value: boolean) => Promise<void>;
+  onChangeFeedByBottle: (value: boolean) => Promise<void>;
   onInitialized: () => Promise<void>;
   settingsLoaded: boolean;
 }
@@ -36,6 +42,8 @@ export interface ISettingsObject {
   sleepTracker: boolean;
   poopTracker: boolean;
   initialized: boolean;
+  feedByBoob: boolean;
+  feedByBottle: boolean;
 }
 
 const SettingsContext = createContext<ISettingsContextType | undefined>(undefined);
@@ -52,25 +60,29 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
   const [sleepTrackerEnabled, setSleepTrackerEnabled] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [feedByBoob, setFeedByBoob] = useState(true);
+  const [feedByBottle, setFeedByBottle] = useState(false);
 
   const { db, sqlReady } = useSQLiteContext();
 
-  useEffect(() => {
-    async function loadData() {
-      await initSettingsDB(db);
+  async function loadData() {
+    await initSettingsDB(db);
 
-      const data = await getSettingsFromDB(db);
+    const data = await getSettingsFromDB(db);
 
-      if (data) {
-        setLanguage(data.language);
-        setBabyName(data.babyName);
-        setSleepTrackerEnabled(data.sleepTracker);
-        setPoopTrackerEnabled(data.poopTracker);
-        setInitialized(data.initialized);
-        setSettingsLoaded(true);
-      }
+    if (data) {
+      setLanguage(data.language);
+      setBabyName(data.babyName);
+      setSleepTrackerEnabled(data.sleepTracker);
+      setPoopTrackerEnabled(data.poopTracker);
+      setInitialized(data.initialized);
+      setFeedByBoob(data.feedByBoob);
+      setFeedByBottle(data.feedByBottle);
+      setSettingsLoaded(true);
     }
+  }
 
+  useEffect(() => {
     loadData();
   }, [sqlReady]);
 
@@ -99,6 +111,7 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
   const deleteSettings = async () => {
     if (db) {
       await deleteSettingsFromDB(db);
+      await loadData();
     }
   };
 
@@ -110,11 +123,30 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
       }
     }
   };
+
   const onChangeSleepTrackerEnabled = async (value: boolean) => {
     if (db) {
       const result = await saveSleepTrackerEnabledToDB(db, value);
       if (result !== null) {
         setSleepTrackerEnabled(result);
+      }
+    }
+  };
+
+  const onChangeFeedByBoob = async (value: boolean) => {
+    if (db) {
+      const result = await saveFeedByBoobToDB(db, value);
+      if (result !== null) {
+        setFeedByBoob(result);
+      }
+    }
+  };
+
+  const onChangeFeedByBottle = async (value: boolean) => {
+    if (db) {
+      const result = await saveFeedByBottleToDB(db, value);
+      if (result !== null) {
+        setFeedByBottle(result);
       }
     }
   };
@@ -132,6 +164,10 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
         language,
         babyName,
         initialized,
+        feedByBoob,
+        feedByBottle,
+        onChangeFeedByBoob,
+        onChangeFeedByBottle,
         onChangeLanguage,
         onChangeBabyName,
         deleteSettings,

@@ -4,10 +4,11 @@ import React, { useMemo } from 'react';
 import { useFeedingContext } from 'service/feeding.service';
 import { IBoob } from 'shared/types/types';
 import styles from './boob-button.module.css';
-import { DefaultTFuncReturn } from 'i18next';
+import { DefaultTReturn } from 'i18next';
 import { useTranslation } from 'react-i18next';
+import { $Dictionary } from 'i18next/typescript/helpers';
 interface IBoobButtonProps {
-  label: DefaultTFuncReturn;
+  label: DefaultTReturn<$Dictionary>;
   orientation: IBoob;
 }
 
@@ -29,7 +30,7 @@ export default function BoobButton(props: IBoobButtonProps) {
   const markAsNext = useMemo(
     () =>
       !activeFeeding && !!feedingEntries?.length && feedingEntries[0]?.boob !== props.orientation,
-    [props.orientation, feedingEntries, activeFeeding]
+    [props.orientation, feedingEntries, activeFeeding],
   );
 
   if (isActive) {

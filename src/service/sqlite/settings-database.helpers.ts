@@ -14,6 +14,8 @@ async function createTable(db: SQLiteDBConnection): Promise<boolean> {
         language TEXT NOT NULL,
         poopTracker BOOLEAN NOT NULL,
         sleepTracker BOOLEAN NOT NULL,
+        feedByBoob BOOLEAN NOT NULL,
+        feedByBottle BOOLEAN NOT NULL,
         initialized BOOLEAN NOT NULL
       );
     `;
@@ -43,9 +45,9 @@ async function addSettingsRowIfNotExist(db: SQLiteDBConnection): Promise<void> {
       const language = await getSystemLanguage();
       await db.run(`
       INSERT INTO settings 
-        (babyName, language, poopTracker, sleepTracker, initialized) 
+        (babyName, language, poopTracker, sleepTracker, initialized, feedByBoob, feedByBottle) 
       VALUES 
-        ("", "${language}", true, true, false)
+        ("", "${language}", true, true, false, true, false)
       ;`);
     }
   } catch (err) {
@@ -94,6 +96,8 @@ async function getSettingsFromDB(db?: SQLiteDBConnection): Promise<ISettingsObje
       data.sleepTracker = !!data.sleepTracker;
       data.poopTracker = !!data.poopTracker;
       data.initialized = !!data.initialized;
+      data.feedByBoob = !!data.feedByBoob;
+      data.feedByBottle = !!data.feedByBottle;
     }
     return (data as ISettingsObject) || null;
   } catch (err) {
@@ -185,6 +189,48 @@ async function saveSleepTrackerEnabledToDB(
 }
 
 /**
+ * Updates the "feedByBoob" setting in the database.
+ *
+ * @param db - The SQLiteDBConnection instance used to execute the update query.
+ * @param feedByBoob - The new value for the sleep tracker setting.
+ * @returns A promise that resolves when the update is complete.
+ * @throws Logs an error message if the query fails.
+ */
+async function saveFeedByBoobToDB(
+  db: SQLiteDBConnection,
+  feedByBoob: ISettingsObject['feedByBoob'],
+): Promise<boolean | null> {
+  try {
+    await db.query(`UPDATE settings SET feedByBoob = ${feedByBoob};`);
+    return feedByBoob;
+  } catch (err) {
+    console.error('[SettingsDatabase] Error updating feedByBoob:', err);
+  }
+  return null;
+}
+
+/**
+ * Updates the "feedByBottle" setting in the database.
+ *
+ * @param db - The SQLiteDBConnection instance used to execute the update query.
+ * @param feedByBottle - The new value for the sleep tracker setting.
+ * @returns A promise that resolves when the update is complete.
+ * @throws Logs an error message if the query fails.
+ */
+async function saveFeedByBottleToDB(
+  db: SQLiteDBConnection,
+  feedByBottle: ISettingsObject['feedByBottle'],
+): Promise<boolean | null> {
+  try {
+    await db.query(`UPDATE settings SET feedByBottle = ${feedByBottle};`);
+    return feedByBottle;
+  } catch (err) {
+    console.error('[SettingsDatabase] Error updating feedByBottle:', err);
+  }
+  return null;
+}
+
+/**
  * Updates the "initialized" boolean in the database.
  *
  * @param db - The SQLiteDBConnection instance used to execute the update query.
@@ -201,12 +247,14 @@ async function saveInitializedToDb(db: SQLiteDBConnection): Promise<boolean | nu
   return false;
 }
 
-async function deleteSettingsFromDB(db: SQLiteDBConnection): Promise<void> {
+async function deleteSettingsFromDB(db: SQLiteDBConnection): Promise<boolean> {
   try {
     await db.query(`DELETE FROM settings;`);
     await db.query(`DELETE FROM sqlite_sequence WHERE name = 'settings';`);
+    return true;
   } catch (err) {
     console.error('[SettingsDatabase] Error clearing table:', err);
+    return false;
   }
 }
 
@@ -219,4 +267,6 @@ export {
   savePoopTrackerEnabledToDB,
   saveSleepTrackerEnabledToDB,
   saveInitializedToDb,
+  saveFeedByBoobToDB,
+  saveFeedByBottleToDB,
 };
