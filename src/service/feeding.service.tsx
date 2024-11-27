@@ -1,5 +1,5 @@
 import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
-import { IBoob, IFeedingEntry } from 'shared/types/types';
+import { IFeedingType, IFeedingEntry } from 'shared/types/types';
 import FeedingEntry from '../classes/feeding-entry.class';
 import { useDisclosure } from '@mantine/hooks';
 import { useSQLiteContext } from './sqlite/sqlite-provider';
@@ -15,7 +15,7 @@ import {
 interface IFeedingContextType {
   activeFeeding?: IFeedingEntry;
   feedingEntries: IFeedingEntry[];
-  startFeeding: (boob: IBoob) => void;
+  startFeeding: (type: IFeedingType) => void;
   stopFeeding: () => void;
   pauseFeeding: () => void;
   continueFeeding: () => void;
@@ -24,6 +24,7 @@ interface IFeedingContextType {
   updateFeedingEntry: (entry: FeedingEntry) => void;
   addFeedingEntry: () => void;
   deleteHistory: () => Promise<void>;
+  addBottleFeedingEntry: () => Promise<void>;
   boobSwitchModal: {
     boobSwitchModalOpened: boolean;
     openBoobSwitchModal: () => void;
@@ -34,6 +35,12 @@ interface IFeedingContextType {
     openFeedingEntryDrawer: (id: number) => void;
     closeFeedingEntryDrawer: () => void;
     feedingEntryDrawerEntryId?: number;
+  };
+  editBottleFeedingEntryDrawer: {
+    bottleFeedingEntryDrawerOpened: boolean;
+    openBottleFeedingEntryDrawer: (id: number) => void;
+    closeBottleFeedingEntryDrawer: () => void;
+    bottleFeedingEntryDrawerEntryId?: number;
   };
 }
 
@@ -53,6 +60,11 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
   const feedingEntryDrawerOpened = !!feedingEntryDrawerEntryId;
   const openFeedingEntryDrawer = (id: number) => setFeedingEntryDrawerEntryId(id);
   const closeFeedingEntryDrawer = () => setFeedingEntryDrawerEntryId(undefined);
+
+  const [bottleFeedingEntryDrawerEntryId, setBottleFeedingEntryDrawerEntryId] = useState<number>();
+  const bottleFeedingEntryDrawerOpened = !!bottleFeedingEntryDrawerEntryId;
+  const openBottleFeedingEntryDrawer = (id: number) => setBottleFeedingEntryDrawerEntryId(id);
+  const closeBottleFeedingEntryDrawer = () => setBottleFeedingEntryDrawerEntryId(undefined);
 
   const { db, sqlReady } = useSQLiteContext();
 
@@ -115,13 +127,13 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
    * @param force Boolean to indicate if it should check for boob switch
    * @returns void
    */
-  const startFeeding = async (boob: IBoob, force?: boolean) => {
+  const startFeeding = async (type: IFeedingType, force?: boolean) => {
     if (activeFeeding && !force) {
       openBoobSwitchModal();
       return;
     }
     stopFeeding();
-    const newFeeding = new FeedingEntry({ boob });
+    const newFeeding = new FeedingEntry({ type });
     if (db) {
       const id = await addFeedingEntryToDB(db, newFeeding.toObject());
       if (id) {
@@ -133,7 +145,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
   };
 
   const switchBoob = () => {
-    const currentBoob = activeFeeding?.boob;
+    const currentBoob = activeFeeding?.type;
     if (currentBoob === 'Left') {
       startFeeding('Right', true);
     } else {
@@ -163,7 +175,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
 
   const addFeedingEntry = async () => {
     const newEntry = new FeedingEntry({
-      boob: 'Left',
+      type: 'Left',
       stopped: new Date().getTime(),
     });
     if (db) {
@@ -174,6 +186,21 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     }
     setFeedingEntries((current) => [newEntry.toObject(), ...current]);
     setFeedingEntryDrawerEntryId(newEntry.getId());
+  };
+
+  const addBottleFeedingEntry = async () => {
+    const newEntry = new FeedingEntry({
+      type: 'Bottle',
+      stopped: new Date().getTime(),
+    });
+    if (db) {
+      const id = await addFeedingEntryToDB(db, newEntry.toObject());
+      if (id) {
+        newEntry.setId(id);
+      }
+    }
+    setFeedingEntries((current) => [newEntry.toObject(), ...current]);
+    setBottleFeedingEntryDrawerEntryId(newEntry.getId());
   };
 
   const deleteHistory = async () => {
@@ -196,6 +223,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
         deleteFeeding,
         updateFeedingEntry,
         addFeedingEntry,
+        addBottleFeedingEntry,
         boobSwitchModal: {
           boobSwitchModalOpened,
           openBoobSwitchModal,
@@ -206,6 +234,12 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
           openFeedingEntryDrawer,
           closeFeedingEntryDrawer,
           feedingEntryDrawerEntryId,
+        },
+        editBottleFeedingEntryDrawer: {
+          bottleFeedingEntryDrawerOpened,
+          openBottleFeedingEntryDrawer,
+          closeBottleFeedingEntryDrawer,
+          bottleFeedingEntryDrawerEntryId,
         },
       }}
     >

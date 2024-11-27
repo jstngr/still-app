@@ -1,21 +1,23 @@
 import roundMillisecondsToLastMinute from 'shared/helpers/round-milliseconds-to-last-minute';
-import { IBoob, IFeedingEntry } from 'shared/types/types';
+import { IFeedingType, IFeedingEntry } from 'shared/types/types';
 
 export default class FeedingEntry {
   private id: number | undefined;
   private created: number = 0;
   private stopped: number = 0;
-  private boob: IBoob = 'Left';
+  private type: IFeedingType = 'Left';
   private pauseStart: number = 0;
   private pauseDuration: number = 0;
+  private volume: number = 0;
 
-  constructor(feedingObject: Pick<IFeedingEntry, 'boob'> & Partial<IFeedingEntry>) {
+  constructor(feedingObject: Pick<IFeedingEntry, 'type'> & Partial<IFeedingEntry>) {
     this.id = feedingObject.id || undefined;
     this.created = feedingObject.created || new Date().getTime();
     this.stopped = feedingObject.stopped || 0;
-    this.boob = feedingObject.boob;
+    this.type = feedingObject.type;
     this.pauseStart = feedingObject.pauseStart || 0;
     this.pauseDuration = feedingObject.pauseDuration || 0;
+    this.volume = feedingObject.volume || 0;
   }
 
   stop(): void {
@@ -47,9 +49,10 @@ export default class FeedingEntry {
       id: this.id,
       created: this.created,
       stopped: this.stopped,
-      boob: this.boob,
+      type: this.type,
       pauseStart: this.pauseStart,
       pauseDuration: this.pauseDuration,
+      volume: this.volume,
     };
   }
 

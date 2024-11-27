@@ -11,9 +11,10 @@ async function createTable(db: SQLiteDBConnection): Promise<boolean> {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         created INTEGER NOT NULL,
         stopped INTEGER, 
-        boob TEXT NOT NULL,
+        type TEXT NOT NULL,
         pauseStart INTEGER,
-        pauseDuration INTEGER
+        pauseDuration INTEGER,
+        volume INTEGER
       );
     `;
   try {
@@ -73,7 +74,7 @@ async function getFeedingsFromDB(db?: SQLiteDBConnection): Promise<IFeedingEntry
  */
 async function addFeedingEntryToDB(
   db: SQLiteDBConnection,
-  entry: IFeedingEntry
+  entry: IFeedingEntry,
 ): Promise<number | null> {
   if (!db) {
     console.error('[FeedingDatabase] No db instance found on add feeding');
@@ -81,8 +82,8 @@ async function addFeedingEntryToDB(
   }
   try {
     const result = await db.run(
-      `INSERT INTO feeding (created, stopped, boob, pauseStart, pauseDuration)
-      VALUES ("${entry.created}", "${entry.stopped}", "${entry.boob}", "${entry.pauseStart}", "${entry.pauseDuration}")`
+      `INSERT INTO feeding (created, stopped, type, pauseStart, pauseDuration)
+      VALUES ("${entry.created}", "${entry.stopped}", "${entry.type}", "${entry.pauseStart}", "${entry.pauseDuration}")`,
     );
     return result.changes?.lastId || null;
   } catch (err) {
@@ -113,10 +114,10 @@ async function updateFeedingEntryInDB(db: SQLiteDBConnection, entry: IFeedingEnt
       `UPDATE feeding 
        SET created = "${entry.created}", 
            stopped = "${entry.stopped}", 
-           boob = "${entry.boob}", 
+           type = "${entry.type}", 
            pauseStart = "${entry.pauseStart}", 
            pauseDuration = "${entry.pauseDuration}" 
-       WHERE id = ${entry.id};`
+       WHERE id = ${entry.id};`,
     );
   } catch (err) {
     console.error('[FeedingDatabase] Error updating feeding:', err);

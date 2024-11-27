@@ -2,14 +2,14 @@ import { Button, Stack, Text } from '@mantine/core';
 import { IconPlayerPause, IconPlayerPlay, IconPlayerStop } from '@tabler/icons-react';
 import React, { useMemo } from 'react';
 import { useFeedingContext } from 'service/feeding.service';
-import { IBoob } from 'shared/types/types';
+import { IFeedingType } from 'shared/types/types';
 import styles from './boob-button.module.css';
 import { DefaultTReturn } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { $Dictionary } from 'i18next/typescript/helpers';
 interface IBoobButtonProps {
   label: DefaultTReturn<$Dictionary>;
-  orientation: IBoob;
+  orientation: IFeedingType;
 }
 
 const height = '30vw';
@@ -27,12 +27,12 @@ export default function BoobButton(props: IBoobButtonProps) {
     continueFeeding,
   } = useFeedingContext();
 
-  const isActive = useMemo(() => activeFeeding?.boob === props.orientation, [activeFeeding]);
+  const isActive = useMemo(() => activeFeeding?.type === props.orientation, [activeFeeding]);
   const isPause = useMemo(() => isActive && activeFeeding?.pauseStart, [activeFeeding, isActive]);
 
   const markAsNext = useMemo(
     () =>
-      !activeFeeding && !!feedingEntries?.length && feedingEntries[0]?.boob !== props.orientation,
+      !activeFeeding && !!feedingEntries?.length && feedingEntries[0]?.type !== props.orientation,
     [props.orientation, feedingEntries, activeFeeding],
   );
 

@@ -1,8 +1,11 @@
 import { Button } from '@mantine/core';
 import { IconBabyBottle } from '@tabler/icons-react';
 import React from 'react';
+import { useFeedingContext } from 'service/feeding.service';
 
 export default function BottleButton() {
+  const { addBottleFeedingEntry } = useFeedingContext();
+
   return (
     <Button
       styles={{
@@ -17,7 +20,7 @@ export default function BottleButton() {
       maw="4rem"
       w="4rem"
       variant="outline"
-      onClick={() => {}}
+      onClick={addBottleFeedingEntry}
     >
       <IconBabyBottle size={28} />
     </Button>

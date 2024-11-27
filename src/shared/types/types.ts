@@ -1,12 +1,13 @@
-type IBoob = 'Left' | 'Right';
+type IFeedingType = 'Left' | 'Right' | 'Bottle';
 
 interface IFeedingEntry {
   id?: number;
   created: number;
   stopped?: number;
-  boob: IBoob;
+  type: IFeedingType;
   pauseStart?: number;
   pauseDuration?: number;
+  volume?: number;
 }
 
 interface IPoopEntry {
@@ -19,4 +20,4 @@ interface IBoobDistribution {
   Right: number;
 }
 
-export type { IBoob, IFeedingEntry, IPoopEntry, IBoobDistribution };
+export type { IFeedingType, IFeedingEntry, IPoopEntry, IBoobDistribution };

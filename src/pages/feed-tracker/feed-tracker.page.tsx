@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 import { useSettingsContext } from 'service/settings.service';
 import { IFeedingEntry } from 'shared/types/types';
+import EditBottleFeedingEntryDrawer from './components/edit-bottle-feeding-entry-drawer';
 
 export default function FeedTracker() {
   const { feedingEntries, addFeedingEntry } = useFeedingContext();
@@ -56,6 +57,7 @@ export default function FeedTracker() {
       </Stack>
       <BoobSwitchModal />
       <EditFeedingEntryDrawer />
+      <EditBottleFeedingEntryDrawer />
     </Container>
   );
 }

@@ -10,6 +10,8 @@
   "boob-switch-modal-button-action-2": "Cancel",
   "boob-switch-modal-text": "This will start a new Timer.",
   "boob-switch-modal-title": "Change Boob?",
+  "bottle-feeding-entry-drawer-input-label-created": "Feeded at",
+  "bottle-feeding-entry-drawer-input-label-volume": "Volume in {{suffix}}",
   "empty-history-hint-1": "There is no history yet.",
   "empty-history-hint-2": "Start tracking now!",
   "feeding-entry-drawer-button-label-save": "Save changes",
