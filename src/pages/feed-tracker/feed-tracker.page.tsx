@@ -1,26 +1,30 @@
-import { ActionIcon, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Button, Container, Group, Stack, Text, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
-import BoobButton from 'components/boob-button/boob-button';
-import BoobSwitchModal from 'components/boob-button/boob-switch-modal';
-import EditFeedingEntryDrawer from 'components/edit-feeding-entry-drawer';
-import FeedTimer from 'components/feed-timer';
-import FeedingHistoryItem from 'components/feeding-history-item';
+import BoobButton from 'pages/feed-tracker/components/boob-button/boob-button';
+import BoobSwitchModal from 'pages/feed-tracker/components/boob-button/boob-switch-modal';
+import BottleButton from 'pages/feed-tracker/components/bottle-button';
+import EditFeedingEntryDrawer from 'pages/feed-tracker/components/edit-feeding-entry-drawer';
+import FeedTimer from 'pages/feed-tracker/components/feed-timer';
+import FeedingHistoryItem from 'pages/feed-tracker/components/feeding-history-item';
 import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
+import { useSettingsContext } from 'service/settings.service';
 import { IFeedingEntry } from 'shared/types/types';
 
 export default function FeedTracker() {
   const { feedingEntries, addFeedingEntry } = useFeedingContext();
+  const { feedByBoob, feedByBottle } = useSettingsContext();
   const { t } = useTranslation();
 
   return (
     <Container fluid h="100%" w="100%">
       <Stack align="center" gap="xl" h="100%" w="100%">
-        <Group grow gap="lg">
-          <BoobButton label={t('left')} orientation="Left" />
-          <BoobButton label={t('right')} orientation="Right" />
+        <Group grow gap={feedByBottle ? 'md' : 'xl'}>
+          {feedByBoob && <BoobButton label={t('left')} orientation="Left" />}
+          {feedByBottle && <BottleButton />}
+          {feedByBoob && <BoobButton label={t('right')} orientation="Right" />}
         </Group>
 
         <FeedTimer />

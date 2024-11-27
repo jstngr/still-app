@@ -31,6 +31,10 @@ export default function SettingsPage() {
     babyName,
     onChangeSleepTrackerEnabled,
     onChangePoopTrackerEnabled,
+    feedByBoob,
+    feedByBottle,
+    onChangeFeedByBoob,
+    onChangeFeedByBottle,
   } = useSettingsContext();
   const { deleteHistory: deleteFeedingHistory } = useFeedingContext();
   const { deleteHistory: deletePoopHistory } = usePoopContext();
@@ -50,9 +54,9 @@ export default function SettingsPage() {
   return (
     <ScrollArea>
       <Container fluid w="100%" h="calc(100% - 76px)" pb="8px">
-        <Stack align="start" h="100%" w="100%">
+        <Stack gap="xl" align="start" h="100%" w="100%">
           <Title order={5}>{t('settings-page-title')}</Title>
-          <Card shadow="xs" w="100%">
+          <Card withBorder w="100%">
             <Stack>
               <Title order={5}>{t('settings-page-card-title-misc')}</Title>
               <TextInput
@@ -73,9 +77,24 @@ export default function SettingsPage() {
                 aria-autocomplete="none"
                 onChange={(_value, option) => onChangeLanguage(option.value as TLanguage)}
               />
+              <Stack align="left">
+                <Text ta="left">{t('settings-page-feeding-description', { name: babyName })}</Text>
+                <Stack gap="sm">
+                  <Switch
+                    label={t('settings-page-input-label-breast')}
+                    checked={feedByBoob}
+                    onChange={(event) => onChangeFeedByBoob(event.currentTarget.checked)}
+                  />
+                  <Switch
+                    label={t('settings-page-input-label-bottle')}
+                    checked={feedByBottle}
+                    onChange={(event) => onChangeFeedByBottle(event.currentTarget.checked)}
+                  />
+                </Stack>
+              </Stack>
             </Stack>
           </Card>
-          <Card shadow="xs" w="100%">
+          <Card withBorder w="100%">
             <Stack>
               <Title order={5}>{t('settings-page-card-title-app-functions')}</Title>
               <Stack gap="sm">
@@ -92,7 +111,7 @@ export default function SettingsPage() {
               </Stack>
             </Stack>
           </Card>
-          <Card shadow="xs" w="100%">
+          <Card withBorder w="100%" p={0}>
             <Alert
               variant="light"
               title={`${t('settings-page-alert-title-reset')}`}

@@ -9,11 +9,11 @@ import formatTime from 'shared/helpers/format-time';
 import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import monoStyles from 'shared/styles/mono-styles.module.css';
 import { IFeedingEntry } from 'shared/types/types';
-import Timer from '../timer';
+import Timer from '../../../../components/timer';
 import styles from './history-card.module.css';
 import { IconPencil } from '@tabler/icons-react';
 import formatSecondsToMinutesSeconds from 'shared/helpers/format-seconds-to-minutes-seconds';
-import listItemStyles from '../list-item.module.css';
+import listItemStyles from 'components/list-item.module.css';
 
 interface IHistoryCardProps {
   entry: IFeedingEntry;
@@ -68,7 +68,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
       <Card
         radius={0}
         py="xs"
-        px="xxs"
+        px="xs"
         key={`card_${entry.id}`}
         bg="background.0"
         className={showDateLabel ? '' : listItemStyles.dashedBorderTop}

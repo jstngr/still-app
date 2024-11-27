@@ -12,7 +12,7 @@ export default function FeedingLastTwentyFourKpiCard(props: IFeedingLastTwentyFo
   const { t } = useTranslation();
 
   return (
-    <Card w="100%" shadow="xs">
+    <Card w="100%" withBorder>
       <Stack gap="sm">
         <Group align="center">
           <ThemeIcon

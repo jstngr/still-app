@@ -12,9 +12,12 @@ import { IBoobDistribution, IFeedingEntry } from 'shared/types/types';
 import BoobCompareKpiCard from './components/boob-compare-kpi-card';
 import FeedingLastTwentyFourKpiCard from './components/feeding-last-twenty-four-kpi-card';
 import TimelineChart from './components/timeline-chart';
+import { useSettingsContext } from 'service/settings.service';
 
 export default function StatisticsPage() {
   const { feedingEntries, addFeedingEntry } = useFeedingContext();
+  const { feedByBoob, feedByBottle, poopTrackerEnabled, sleepTrackerEnabled } =
+    useSettingsContext();
   const { t } = useTranslation();
 
   const { db, sqlReady } = useSQLiteContext();
@@ -51,18 +54,22 @@ export default function StatisticsPage() {
           <Title order={5}>Feeding Statistics</Title>
           <FeedingLastTwentyFourKpiCard value={chunksAmount} />
 
-          <Card w="100%" shadow="xs">
+          <Card w="100%" withBorder>
             <TimelineChart chunks={chunks} />
           </Card>
 
           <BoobCompareKpiCard left={boobDistribution.Left} right={boobDistribution.Right} />
         </Stack>
-        <Stack align="left" h="100%" w="100%">
-          <Title order={5}>Poop Statistics</Title>
-        </Stack>
-        <Stack align="left" h="100%" w="100%">
-          <Title order={5}>Sleep Statistics</Title>
-        </Stack>
+        {poopTrackerEnabled && (
+          <Stack align="left" h="100%" w="100%">
+            <Title order={5}>Poop Statistics</Title>
+          </Stack>
+        )}
+        {sleepTrackerEnabled && (
+          <Stack align="left" h="100%" w="100%">
+            <Title order={5}>Sleep Statistics</Title>
+          </Stack>
+        )}
       </Stack>
     </Container>
   );

@@ -1,5 +1,6 @@
 {
   "boob-button-label-continue": "Weiter",
+  "boob-button-label-next": "",
   "boob-button-label-pause": "Pause",
   "boob-button-label-stop": "Stopp",
   "boob-compare-kpi-card-subtitle": "* in den letzten 24 Stunden",
@@ -44,6 +45,9 @@
   "settings-page-button-label-reset": "Zurücksetzen",
   "settings-page-card-title-app-functions": "App-Funktionen",
   "settings-page-card-title-misc": "Verschiedenes",
+  "settings-page-feeding-description": "",
+  "settings-page-input-label-bottle": "",
+  "settings-page-input-label-breast": "",
   "settings-page-input-label-language": "Sprache",
   "settings-page-input-label-name": "Name Ihres Kleinen",
   "settings-page-title": "Einstellungen",

@@ -49,7 +49,7 @@ export default function PoopHistoryItem({
         <Card
           key={`card_${entry.id}`}
           py="xs"
-          px="xxs"
+          px="xs"
           bg="background.0"
           className={showDateLabel ? '' : listItemStyles.dashedBorderTop}
         >

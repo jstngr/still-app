@@ -12,6 +12,9 @@ interface IBoobButtonProps {
   orientation: IBoob;
 }
 
+const height = '30vw';
+const maxHeight = '6rem';
+
 export default function BoobButton(props: IBoobButtonProps) {
   const { t } = useTranslation();
   const { label } = props;
@@ -44,21 +47,21 @@ export default function BoobButton(props: IBoobButtonProps) {
             },
           }}
           color="primary"
-          h="calc(4rem - (var(--mantine-spacing-xxs) * 0.5))"
-          mah="calc(15vw - (var(--mantine-spacing-xxs) * 0.5))"
-          w="30vw"
-          maw="8rem"
-          variant={'outline'}
+          h={`calc(${height} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
+          mah={`calc(${maxHeight} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
+          w={height}
+          maw={maxHeight}
+          variant="outline"
           onClick={isPause ? continueFeeding : pauseFeeding}
         >
           {isPause ? (
             <Stack gap="0" align="center">
-              <IconPlayerPlay />
+              <IconPlayerPlay size={20} />
               <Text size="xs">{t('boob-button-label-continue')}</Text>
             </Stack>
           ) : (
             <Stack gap="0" align="center">
-              <IconPlayerPause />
+              <IconPlayerPause size={20} />
               <Text size="xs">{t('boob-button-label-pause')}</Text>
             </Stack>
           )}
@@ -70,15 +73,15 @@ export default function BoobButton(props: IBoobButtonProps) {
               borderBottomRightRadius: '99999px',
             },
           }}
-          color={'primary'}
-          h="calc(4rem - (var(--mantine-spacing-xxs) * 0.5))"
-          mah="calc(15vw - (var(--mantine-spacing-xxs) * 0.5))"
-          w="30vw"
-          maw="8rem"
+          color="primary"
+          h={`calc(${height} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
+          mah={`calc(${maxHeight} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
+          w={height}
+          maw={maxHeight}
           onClick={stopFeeding}
         >
           <Stack gap="0" align="center">
-            <IconPlayerStop />
+            <IconPlayerStop size={20} />
             <Text size="xs">{t('boob-button-label-stop')}</Text>
           </Stack>
         </Button>
@@ -91,19 +94,24 @@ export default function BoobButton(props: IBoobButtonProps) {
       styles={{
         root: {
           borderRadius: '50%',
+          overflow: 'visible',
         },
       }}
-      color={'primary'}
-      h="30vw"
-      mah="8rem"
-      w="30vw"
-      maw="8rem"
+      color="primary"
+      h={height}
+      mah={maxHeight}
+      w={height}
+      maw={maxHeight}
       onClick={() => startFeeding(props.orientation)}
     >
-      {markAsNext && <div className={styles.boobButtonIndicator} />}
+      {markAsNext && (
+        <div className={styles.nextButtonIndicator}>
+          <Text>{t('boob-button-label-next')}</Text>
+        </div>
+      )}
       <Stack gap="xxs" align="center">
-        <IconPlayerPlay />
-        <Text>{label}</Text>
+        <IconPlayerPlay size={20} />
+        <Text size="md">{label}</Text>
       </Stack>
     </Button>
   );

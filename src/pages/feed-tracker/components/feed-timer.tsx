@@ -5,18 +5,18 @@ import { useFeedingContext } from 'service/feeding.service';
 
 import formatTime from 'shared/helpers/format-time';
 import monoStyles from 'shared/styles/mono-styles.module.css';
-import Timer from './timer';
+import Timer from '../../../components/timer';
 
 export default function FeedTimer() {
   const { activeFeeding } = useFeedingContext();
 
   const isRunning = useMemo(
     () => activeFeeding && new FeedingEntry(activeFeeding).isRunning(),
-    [activeFeeding]
+    [activeFeeding],
   );
   const isPaused = useMemo(
     () => activeFeeding && new FeedingEntry(activeFeeding).isPaused(),
-    [activeFeeding]
+    [activeFeeding],
   );
 
   return (
