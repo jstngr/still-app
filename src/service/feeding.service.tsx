@@ -11,6 +11,7 @@ import {
   initFeedingDB,
   updateFeedingEntryInDB,
 } from './sqlite/feeding-database.helpers';
+import { useSettingsContext } from './settings.service';
 
 interface IFeedingContextType {
   activeFeeding?: IFeedingEntry;
@@ -52,6 +53,7 @@ interface IFeedingProviderProps {
 
 export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) => {
   const [feedingEntries, setFeedingEntries] = useState<IFeedingEntry[]>([]);
+  const { defaultVolume } = useSettingsContext();
   const [activeFeeding, setActiveFeeding] = useState<IFeedingEntry>();
   const [boobSwitchModalOpened, { open: openBoobSwitchModal, close: closeBoobSwitchModal }] =
     useDisclosure(false);
@@ -192,6 +194,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     const newEntry = new FeedingEntry({
       type: 'Bottle',
       stopped: new Date().getTime(),
+      volume: defaultVolume,
     });
     if (db) {
       const id = await addFeedingEntryToDB(db, newEntry.toObject());
@@ -207,6 +210,8 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     if (db) {
       await deleteFeedingsFromDB(db);
     }
+    setFeedingEntries([]);
+    setActiveFeeding(undefined);
   };
 
   return (

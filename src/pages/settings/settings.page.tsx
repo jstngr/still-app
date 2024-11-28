@@ -4,6 +4,7 @@ import {
   Card,
   Container,
   Flex,
+  NumberInput,
   ScrollArea,
   Select,
   Stack,
@@ -12,13 +13,19 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { IconAlertTriangle } from '@tabler/icons-react';
+import { IconAlertTriangle, IconDropletHalfFilled, IconRuler2 } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 import { usePoopContext } from 'service/poop.service';
 import { useSettingsContext } from 'service/settings.service';
 import { TLanguage } from 'translations/react-i18next';
+
+const valueToNumber = (value: string | number) => {
+  if (!value) return 0;
+  if (typeof value === 'string') return parseInt(value, 10);
+  return value;
+};
 
 export default function SettingsPage() {
   const {
@@ -35,6 +42,10 @@ export default function SettingsPage() {
     feedByBottle,
     onChangeFeedByBoob,
     onChangeFeedByBottle,
+    feedingUnit,
+    onChangeFeedingUnit,
+    defaultVolume,
+    onChangeDefaultVolume,
   } = useSettingsContext();
   const { deleteHistory: deleteFeedingHistory } = useFeedingContext();
   const { deleteHistory: deletePoopHistory } = usePoopContext();
@@ -44,6 +55,15 @@ export default function SettingsPage() {
 
   const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChangeBabyName(event.target.value);
+  };
+
+  const onChangeUnit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChangeFeedingUnit(event.target.value);
+  };
+
+  const onChangeVolume = (value: number | string | '') => {
+    const actualValue = valueToNumber(value);
+    onChangeDefaultVolume(actualValue);
   };
 
   const onDeleteHistory = async () => {
@@ -90,6 +110,32 @@ export default function SettingsPage() {
                     checked={feedByBottle}
                     onChange={(event) => onChangeFeedByBottle(event.currentTarget.checked)}
                   />
+                  <Card withBorder>
+                    <Stack>
+                      <TextInput
+                        label={t('settings-page-input-label-unit')}
+                        onChange={onChangeUnit}
+                        value={feedingUnit}
+                        disabled={!feedByBottle}
+                        maxLength={5}
+                        leftSection={<IconRuler2 stroke="1" />}
+                      />
+                      <NumberInput
+                        leftSection={<IconDropletHalfFilled stroke="1" />}
+                        label={t('settings-page-input-label-default-volume', {
+                          suffix: feedingUnit,
+                        })}
+                        value={defaultVolume}
+                        onChange={onChangeVolume}
+                        suffix={` ${feedingUnit}`}
+                        allowNegative={false}
+                        allowDecimal={false}
+                        hideControls
+                        max={5000}
+                        disabled={!feedByBottle}
+                      />
+                    </Stack>
+                  </Card>
                 </Stack>
               </Stack>
             </Stack>

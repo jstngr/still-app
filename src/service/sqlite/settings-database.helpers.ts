@@ -16,7 +16,9 @@ async function createTable(db: SQLiteDBConnection): Promise<boolean> {
         sleepTracker BOOLEAN NOT NULL,
         feedByBoob BOOLEAN NOT NULL,
         feedByBottle BOOLEAN NOT NULL,
-        initialized BOOLEAN NOT NULL
+        initialized BOOLEAN NOT NULL,
+        feedingUnit TEXT NOT NULL,
+        defaultVolume INTEGER NOT NULL
       );
     `;
   try {
@@ -45,9 +47,9 @@ async function addSettingsRowIfNotExist(db: SQLiteDBConnection): Promise<void> {
       const language = await getSystemLanguage();
       await db.run(`
       INSERT INTO settings 
-        (babyName, language, poopTracker, sleepTracker, initialized, feedByBoob, feedByBottle) 
+        (babyName, language, poopTracker, sleepTracker, initialized, feedByBoob, feedByBottle, defaultVolume, feedingUnit) 
       VALUES 
-        ("", "${language}", true, true, false, true, false)
+        ("", "${language}", true, true, false, true, false, 100, "ml")
       ;`);
     }
   } catch (err) {
@@ -122,6 +124,44 @@ async function saveBabyNameToDB(
     await db.query(`UPDATE settings SET babyName = "${name}";`);
   } catch (err) {
     console.error('[SettingsDatabase] Error updating baby name:', err);
+  }
+}
+
+/**
+ * Updates the 'feedingUnit' field in the 'settings' table with the provided unit.
+ *
+ * @param db - The SQLiteDBConnection instance to execute the SQL query.
+ * @param unit - The new unit to be saved to the settings table.
+ *
+ * @returns A promise that resolves when the unit is successfully saved.
+ */
+async function saveFeedingUnitToDB(
+  db: SQLiteDBConnection,
+  unit: ISettingsObject['feedingUnit'],
+): Promise<void> {
+  try {
+    await db.query(`UPDATE settings SET feedingUnit = "${unit}";`);
+  } catch (err) {
+    console.error('[SettingsDatabase] Error updating feeding unit:', err);
+  }
+}
+
+/**
+ * Updates the 'defaultVolume' field in the 'settings' table with the provided volume.
+ *
+ * @param db - The SQLiteDBConnection instance to execute the SQL query.
+ * @param volume - The new volume to be saved to the settings table.
+ *
+ * @returns A promise that resolves when the volume is successfully saved.
+ */
+async function saveDefaultVolumeToDB(
+  db: SQLiteDBConnection,
+  volume: ISettingsObject['defaultVolume'],
+): Promise<void> {
+  try {
+    await db.query(`UPDATE settings SET defaultVolume = "${volume}";`);
+  } catch (err) {
+    console.error('[SettingsDatabase] Error updating default volume:', err);
   }
 }
 
@@ -269,4 +309,6 @@ export {
   saveInitializedToDb,
   saveFeedByBoobToDB,
   saveFeedByBottleToDB,
+  saveFeedingUnitToDB,
+  saveDefaultVolumeToDB,
 };

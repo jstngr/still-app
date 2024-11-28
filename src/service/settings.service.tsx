@@ -7,8 +7,10 @@ import {
   getSettingsFromDB,
   initSettingsDB,
   saveBabyNameToDB,
+  saveDefaultVolumeToDB,
   saveFeedByBoobToDB,
   saveFeedByBottleToDB,
+  saveFeedingUnitToDB,
   saveInitializedToDb,
   saveLanguageToDB,
   savePoopTrackerEnabledToDB,
@@ -23,14 +25,18 @@ interface ISettingsContextType {
   feedByBottle: boolean;
   onChangeLanguage: (language: TLanguage) => void;
   onChangeBabyName: (name: string) => void;
+  onChangeFeedingUnit: (unit: string) => void;
   deleteSettings: () => Promise<void>;
   poopTrackerEnabled: boolean;
   sleepTrackerEnabled: boolean;
   initialized: boolean;
+  feedingUnit: string;
+  defaultVolume: number;
   onChangePoopTrackerEnabled: (value: boolean) => Promise<void>;
   onChangeSleepTrackerEnabled: (value: boolean) => Promise<void>;
   onChangeFeedByBoob: (value: boolean) => Promise<void>;
   onChangeFeedByBottle: (value: boolean) => Promise<void>;
+  onChangeDefaultVolume: (value: number) => void;
   onInitialized: () => Promise<void>;
   settingsLoaded: boolean;
 }
@@ -43,6 +49,8 @@ export interface ISettingsObject {
   poopTracker: boolean;
   initialized: boolean;
   feedByBoob: boolean;
+  feedingUnit: string;
+  defaultVolume: number;
   feedByBottle: boolean;
 }
 
@@ -62,6 +70,8 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [feedByBoob, setFeedByBoob] = useState(true);
   const [feedByBottle, setFeedByBottle] = useState(false);
+  const [feedingUnit, setFeedingUnit] = useState('ml');
+  const [defaultVolume, setDefaultVolume] = useState(100);
 
   const { db, sqlReady } = useSQLiteContext();
 
@@ -78,6 +88,8 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
       setInitialized(data.initialized);
       setFeedByBoob(data.feedByBoob);
       setFeedByBottle(data.feedByBottle);
+      setFeedingUnit(data.feedingUnit);
+      setDefaultVolume(data.defaultVolume);
       setSettingsLoaded(true);
     }
   }
@@ -96,9 +108,31 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
     }
   }, 500);
 
+  const saveFeedingUnitToDatabase = useDebouncedCallback(async (unit: string) => {
+    if (db) {
+      await saveFeedingUnitToDB(db, unit);
+    }
+  }, 500);
+
+  const saveDefaultVolumeToDatabase = useDebouncedCallback(async (volume: number) => {
+    if (db) {
+      await saveDefaultVolumeToDB(db, volume);
+    }
+  }, 500);
+
   const onChangeBabyName = (name: string) => {
     saveNameToDatabase(name);
     setBabyName(name);
+  };
+
+  const onChangeFeedingUnit = (unit: string) => {
+    saveFeedingUnitToDatabase(unit);
+    setFeedingUnit(unit);
+  };
+
+  const onChangeDefaultVolume = (volume: number) => {
+    saveDefaultVolumeToDatabase(volume);
+    setDefaultVolume(volume);
   };
 
   const onChangeLanguage = async (language: TLanguage) => {
@@ -166,6 +200,8 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
         initialized,
         feedByBoob,
         feedByBottle,
+        defaultVolume,
+        feedingUnit,
         onChangeFeedByBoob,
         onChangeFeedByBottle,
         onChangeLanguage,
@@ -177,6 +213,8 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
         onChangeSleepTrackerEnabled,
         settingsLoaded,
         onInitialized,
+        onChangeFeedingUnit,
+        onChangeDefaultVolume,
       }}
     >
       {children}

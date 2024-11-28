@@ -36,10 +36,10 @@ export default function App() {
   return (
     <MantineProvider theme={theme}>
       <SQLiteProvider>
-        <FeedingProvider>
-          <SettingsProvider>
-            <SettingsContext.Consumer>
-              {(settings) => (
+        <SettingsProvider>
+          <SettingsContext.Consumer>
+            {(settings) => (
+              <FeedingProvider>
                 <PoopProvider>
                   <RoutingGuard>
                     <Container p={0} maw="500px">
@@ -86,10 +86,10 @@ export default function App() {
                     </Container>
                   </RoutingGuard>
                 </PoopProvider>
-              )}
-            </SettingsContext.Consumer>
-          </SettingsProvider>
-        </FeedingProvider>
+              </FeedingProvider>
+            )}
+          </SettingsContext.Consumer>
+        </SettingsProvider>
       </SQLiteProvider>
     </MantineProvider>
   );

@@ -1,29 +1,11 @@
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Chip,
-  Drawer,
-  Flex,
-  Group,
-  InputLabel,
-  NumberInput,
-  Stack,
-} from '@mantine/core';
+import { ActionIcon, Box, Button, Drawer, Flex, Group, NumberInput } from '@mantine/core';
 import { TimeInput } from '@mantine/dates';
-import {
-  IconClockPause,
-  IconClockPlay,
-  IconClockStop,
-  IconDropletHalfFilled,
-  IconTrash,
-} from '@tabler/icons-react';
+import { IconClockPlay, IconDropletHalfFilled, IconTrash } from '@tabler/icons-react';
 import FeedingEntry from 'classes/feeding-entry.class';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
-import formatMillisecondsToMinutesSeconds from 'shared/helpers/format-milliseconds-to-minutes-seconds';
-import formatMinutesSecondsToMilliseconds from 'shared/helpers/format-minutes-seconds-to-milliseconds';
+import { useSettingsContext } from 'service/settings.service';
 import { IFeedingEntry } from 'shared/types/types';
 
 function timeToTimeStamp(original: number, time: string) {
@@ -44,6 +26,7 @@ function timeStampToTime(original: number) {
 
 function EditBottleFeedingEntryDrawer() {
   const { t } = useTranslation();
+  const { defaultVolume, feedingUnit } = useSettingsContext();
   const { editBottleFeedingEntryDrawer, feedingEntries, deleteFeeding, updateFeedingEntry } =
     useFeedingContext();
   const {
@@ -127,15 +110,15 @@ function EditBottleFeedingEntryDrawer() {
           />
           <NumberInput
             leftSection={<IconDropletHalfFilled stroke="1" />}
-            label={t('bottle-feeding-entry-drawer-input-label-volume', { suffix: 'ml' })}
+            label={t('bottle-feeding-entry-drawer-input-label-volume', { suffix: feedingUnit })}
             value={formData?.volume}
             onChange={(value) => updateForm('volume', valueToNumber(value))}
-            suffix=" ml"
-            defaultValue={100} // need to set the default on creation of entry
+            suffix={` ${feedingUnit}`}
+            defaultValue={defaultVolume}
             allowNegative={false}
             allowDecimal={false}
             hideControls
-            max={1000}
+            max={5000}
           />
         </Group>
         <Flex flex="1" align="end">

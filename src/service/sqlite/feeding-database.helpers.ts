@@ -82,8 +82,8 @@ async function addFeedingEntryToDB(
   }
   try {
     const result = await db.run(
-      `INSERT INTO feeding (created, stopped, type, pauseStart, pauseDuration)
-      VALUES ("${entry.created}", "${entry.stopped}", "${entry.type}", "${entry.pauseStart}", "${entry.pauseDuration}")`,
+      `INSERT INTO feeding (created, stopped, type, pauseStart, pauseDuration, volume)
+      VALUES ("${entry.created}", "${entry.stopped}", "${entry.type}", "${entry.pauseStart}", "${entry.pauseDuration}", ${entry.volume})`,
     );
     return result.changes?.lastId || null;
   } catch (err) {
@@ -116,7 +116,8 @@ async function updateFeedingEntryInDB(db: SQLiteDBConnection, entry: IFeedingEnt
            stopped = "${entry.stopped}", 
            type = "${entry.type}", 
            pauseStart = "${entry.pauseStart}", 
-           pauseDuration = "${entry.pauseDuration}" 
+           pauseDuration = "${entry.pauseDuration}", 
+           volume = "${entry.volume}" 
        WHERE id = ${entry.id};`,
     );
   } catch (err) {
