@@ -3,7 +3,10 @@ import {
   Button,
   Card,
   Container,
+  Divider,
   Flex,
+  Group,
+  Modal,
   NumberInput,
   ScrollArea,
   Select,
@@ -13,6 +16,7 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { IconAlertTriangle, IconDropletHalfFilled, IconRuler2 } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -50,6 +54,9 @@ export default function SettingsPage() {
   const { deleteHistory: deleteFeedingHistory } = useFeedingContext();
   const { deleteHistory: deletePoopHistory } = usePoopContext();
   const { t } = useTranslation();
+
+  const [resetWarningOpen, { open: openResetWarning, close: closeResetWarning }] =
+    useDisclosure(false);
 
   useEffect(() => {}, []);
 
@@ -166,13 +173,36 @@ export default function SettingsPage() {
               <Stack gap="xs">
                 <Text size="sm">{t('settings-page-warning-text-reset')}</Text>
                 <Flex justify="end">
-                  <Button onClick={onDeleteHistory}>{t('settings-page-button-label-reset')}</Button>
+                  <Button onClick={openResetWarning}>
+                    {t('settings-page-button-label-reset')}
+                  </Button>
                 </Flex>
               </Stack>
             </Alert>
           </Card>
         </Stack>
       </Container>
+      <Modal
+        opened={resetWarningOpen}
+        onClose={closeResetWarning}
+        centered
+        title={t('settings-page-modal-title-reset')}
+        autoFocus={false}
+      >
+        <Stack>
+          <Divider />
+          <Text>{t('settings-page-modal-text')}</Text>
+          <Divider />
+          <Group justify="end">
+            <Button variant="outline" onClick={closeResetWarning}>
+              {t('settings-page-modal-title-cancel')}
+            </Button>
+            <Button data-autofocus onClick={onDeleteHistory}>
+              {t('settings-page-modal-title-confirm')}
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
     </ScrollArea>
   );
 }
