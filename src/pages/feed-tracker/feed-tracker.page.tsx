@@ -28,14 +28,16 @@ export default function FeedTracker() {
           {feedByBoob && <BoobButton label={t('right')} orientation="Right" />}
         </Group>
 
-        <FeedTimer />
+        {feedByBoob && <FeedTimer />}
 
         <Stack flex="1 0 0" w="100%" gap="xs">
           <Group justify="space-between" align="center">
             <Title order={5}>{t('feeding-history-title')}</Title>
-            <ActionIcon variant="subtle" onClick={addFeedingEntry}>
-              <IconPlus stroke="1.5" />
-            </ActionIcon>
+            {feedByBoob && (
+              <ActionIcon variant="subtle" onClick={addFeedingEntry}>
+                <IconPlus stroke="1.5" />
+              </ActionIcon>
+            )}
           </Group>
           {feedingEntries?.length ? (
             <HistoryInfiniteScrollList<IFeedingEntry>
