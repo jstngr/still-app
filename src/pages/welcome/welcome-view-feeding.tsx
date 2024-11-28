@@ -1,5 +1,4 @@
-import { Button, Flex, Group, Image, InputLabel, Stack, Switch, Text, Title } from '@mantine/core';
-import { IconCircleDashedCheck } from '@tabler/icons-react';
+import { Button, Flex, Image, Stack, Switch, Text, Title } from '@mantine/core';
 import Breastfeeding3a from 'assets/images/breastfeeding3a.png';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
