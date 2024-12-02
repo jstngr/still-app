@@ -1,76 +1,114 @@
-import { Card, Container, Stack, Title } from '@mantine/core';
+import { Carousel, Embla } from '@mantine/carousel';
+import { Button, FloatingIndicator, Group, Stack } from '@mantine/core';
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFeedingContext } from 'service/feeding.service';
-import { useSQLiteContext } from 'service/sqlite/sqlite-provider';
-import {
-  countEntriesChunksInLast24Hours,
-  getBoobDistributionFromDB,
-} from 'service/sqlite/statistics-database.helper';
-import { IBoobDistribution, IFeedingEntry } from 'shared/types/types';
-import BoobCompareKpiCard from './components/boob-compare-kpi-card';
-import FeedingLastTwentyFourKpiCard from './components/feeding-last-twenty-four-kpi-card';
-import TimelineChart from './components/timeline-chart';
-import { useSettingsContext } from 'service/settings.service';
+
+import styles from './statistics-page.module.css';
+import Last24Hours from './components/last-24-hours';
+import LastWeek from './components/last-week';
 
 export default function StatisticsPage() {
-  const { feedingEntries, addFeedingEntry } = useFeedingContext();
-  const { feedByBoob, feedByBottle, poopTrackerEnabled, sleepTrackerEnabled } =
-    useSettingsContext();
   const { t } = useTranslation();
 
-  const { db, sqlReady } = useSQLiteContext();
+  // const { db, sqlReady } = useSQLiteContext();
 
-  const [chunksAmount, setChunksAmount] = useState(0);
-  const [entries, setentries] = useState<IFeedingEntry[]>([]);
-  const [chunks, setChunks] = useState<IFeedingEntry[][]>([]);
-  const [boobDistribution, setBoobDistribution] = useState<IBoobDistribution>({
-    Left: 0,
-    Right: 0,
-  });
+  // const [chunksAmount, setChunksAmount] = useState(0);
+  // const [entries, setentries] = useState<IFeedingEntry[]>([]);
+  // const [chunks, setChunks] = useState<IFeedingEntry[][]>([]);
+  // const [boobDistribution, setBoobDistribution] = useState<IBoobDistribution>({
+  //   Left: 0,
+  //   Right: 0,
+  // });
+
+  // useEffect(() => {
+  //   async function loadChunks() {
+  //     if (db) {
+  //       const result = await countEntriesChunksInLast24Hours(db);
+  //       setChunksAmount(result.count);
+  //       setentries(result.entries);
+  //       setChunks(result.chunks);
+
+  //       const boobDistributionResult = await getBoobDistributionFromDB(db);
+  //       setBoobDistribution(boobDistributionResult);
+  //     }
+  //   }
+  //   if (sqlReady) {
+  //     loadChunks();
+  //   }
+  // }, [sqlReady]);
+
+  const [embla, setEmbla] = useState<Embla | null>(null);
 
   useEffect(() => {
-    async function loadChunks() {
-      if (db) {
-        const result = await countEntriesChunksInLast24Hours(db);
-        setChunksAmount(result.count);
-        setentries(result.entries);
-        setChunks(result.chunks);
+    if (embla) {
+      embla.on('select', () => {
+        setValue(embla.selectedScrollSnap().toString());
+      });
+    }
+  }, [embla]);
 
-        const boobDistributionResult = await getBoobDistributionFromDB(db);
-        setBoobDistribution(boobDistributionResult);
-      }
-    }
-    if (sqlReady) {
-      loadChunks();
-    }
-  }, [sqlReady]);
+  const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
+  const [value, setValue] = useState<string | null>('0');
+  const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLButtonElement | null>>({});
+  const setControlRef = (val: string) => (node: HTMLButtonElement) => {
+    controlsRefs[val] = node;
+    setControlsRefs(controlsRefs);
+  };
 
   return (
-    <Container fluid h="100%" w="100%">
-      <Stack gap="lg">
-        <Stack align="left" h="100%" w="100%">
-          <Title order={5}>Feeding Statistics</Title>
-          <FeedingLastTwentyFourKpiCard value={chunksAmount} />
+    <Stack gap="xs" style={{ overflowY: 'hidden' }}>
+      <Group ref={setRootRef} pos="relative" justify="center">
+        <Button
+          onClick={() => {
+            embla?.scrollPrev();
+          }}
+          variant="subtle"
+          w="42vw"
+          maw="200px"
+          ref={setControlRef('0')}
+          className={styles.tabButton}
+          px="xs"
+        >
+          {t('statistics-page-tab-24-hours')}
+        </Button>
+        <Button
+          onClick={() => {
+            embla?.scrollNext();
+          }}
+          variant="subtle"
+          w="42vw"
+          maw="200px"
+          ref={setControlRef('1')}
+          className={styles.tabButton}
+          px="xs"
+        >
+          {t('statistics-page-tab-7-days')}
+        </Button>
+        <FloatingIndicator
+          target={value ? controlsRefs[value] : null}
+          parent={rootRef}
+          className={styles.indicator}
+          transitionDuration={600}
+        />
+      </Group>
 
-          <Card w="100%" withBorder>
-            <TimelineChart chunks={chunks} />
-          </Card>
-
-          <BoobCompareKpiCard left={boobDistribution.Left} right={boobDistribution.Right} />
-        </Stack>
-        {poopTrackerEnabled && (
-          <Stack align="left" h="100%" w="100%">
-            <Title order={5}>Poop Statistics</Title>
-          </Stack>
-        )}
-        {sleepTrackerEnabled && (
-          <Stack align="left" h="100%" w="100%">
-            <Title order={5}>Sleep Statistics</Title>
-          </Stack>
-        )}
-      </Stack>
-    </Container>
+      <Carousel
+        getEmblaApi={setEmbla}
+        withControls={false}
+        classNames={{
+          root: styles.carouselRoot,
+          viewport: styles.carouselViewport,
+          container: styles.carouselContainer,
+        }}
+      >
+        <Carousel.Slide key="0" pt="xxs">
+          <Last24Hours />
+        </Carousel.Slide>
+        <Carousel.Slide key="1" pt="xxs">
+          <LastWeek />
+        </Carousel.Slide>
+      </Carousel>
+    </Stack>
   );
 }

@@ -1,0 +1,19 @@
+.indicator {
+  border-radius: 0;
+  border-bottom: 1px solid var(--mantine-color-primary-3);
+}
+
+.tabButton {
+  z-index: 1;
+}
+
+.carouselRoot {
+  overflow-y: hidden;
+}
+
+.carouselViewport {
+  height: 100% !important;
+}
+.carouselContainer {
+  height: 100% !important;
+}

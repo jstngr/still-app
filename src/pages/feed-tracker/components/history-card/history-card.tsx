@@ -98,12 +98,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
         {isRunning && <div className={styles.activeCardIndicator} />}
         <Group justify="space-between" gap="xs">
           <Group align="center" h="100%">
-            <Badge
-              w="2.5rem"
-              variant="outline"
-              size="lg"
-              className={`${monoStyles.monoFont} ${styles.historyBadge}`}
-            >
+            <Badge w="2.5rem" variant="outline" size="lg" className={monoStyles.monoFont}>
               {getBadgeContent(entry.type)}
             </Badge>
             {!isBottle && (

@@ -12,6 +12,7 @@ import './index.css';
 import './i18n';
 
 import '@mantine/core/styles.css';
+import '@mantine/carousel/styles.css';
 import { BrowserRouter } from 'react-router-dom';
 
 const domNode = document.getElementById('root');
@@ -25,5 +26,5 @@ if (!Capacitor.isNativePlatform()) {
 root.render(
   <BrowserRouter>
     <App />
-  </BrowserRouter>
+  </BrowserRouter>,
 );

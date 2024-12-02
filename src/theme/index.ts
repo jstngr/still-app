@@ -37,9 +37,10 @@ const theme: MantineThemeOverride = createTheme({
     },
     AppShellMain: {
       defaultProps: {
-        h: 'calc(100dvh - var(--app-shell-footer-height))',
-        mih: 'calc(100dvh - var(--app-shell-footer-height))',
-        mah: 'calc(100dvh - var(--app-shell-footer-height))',
+        p: 'env(safe-area-inset-top, 20px) env(safe-area-inset-left, 20px) 0 env(safe-area-inset-right, 20px)',
+        h: 'calc(100dvh - var(--app-shell-footer-height) - env(safe-area-inset-bottom, 20px))',
+        mih: 'calc(100dvh - var(--app-shell-footer-height) - env(safe-area-inset-bottom, 20px))',
+        mah: 'calc(100dvh - var(--app-shell-footer-height) - env(safe-area-inset-bottom, 20px))',
       },
     },
     InputText: {

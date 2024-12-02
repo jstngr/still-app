@@ -1,11 +1,6 @@
 import { SimpleGrid } from '@mantine/core';
 import React from 'react';
-import {
-  IconBabyBottle,
-  IconBedFlat,
-  IconChartBar,
-  IconPoo,
-} from '@tabler/icons-react';
+import { IconBabyBottle, IconBedFlat, IconChartBar, IconPoo } from '@tabler/icons-react';
 import NavButton from './nav-button';
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';

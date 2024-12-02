@@ -99,7 +99,7 @@ export function WebMock(): IFeedingEntry[] {
     const start = e.split(', ')[0];
     const end = e.split(', ')[1];
     return {
-      boob: index % 2 === 1 ? 'Left' : 'Right',
+      type: index % 2 === 1 ? 'Left' : 'Right',
       created: parseInt(start, 10),
       stopped: parseInt(end, 10),
       id: index,
@@ -109,7 +109,7 @@ export function WebMock(): IFeedingEntry[] {
 
 export default function inserMok(db) {
   db.query(`
-  INSERT INTO feeding (created, stopped, boob) VALUES
+  INSERT INTO feeding (created, stopped, type) VALUES
 (${getStartAndEnd('00:15', getRandomInterval(), 0)}, 'Left'), 
 (${getStartAndEnd('01:45', getRandomInterval(), 0)}, 'Right'), 
 (${getStartAndEnd('03:30', getRandomInterval(), 0)}, 'Left'), 

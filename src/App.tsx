@@ -2,7 +2,7 @@ import { AppShell, Container, MantineProvider, Stack } from '@mantine/core';
 import AppTitle from 'components/app-title';
 import Navigation from 'components/navigation/navigation';
 import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Outlet, Route, Routes } from 'react-router';
 import { FeedingProvider } from 'service/feeding.service';
 import theme from 'theme';
@@ -15,11 +15,12 @@ import RoutingGuard from 'service/routing-guard';
 import { SettingsContext, SettingsProvider } from 'service/settings.service';
 import { SQLiteProvider } from 'service/sqlite/sqlite-provider';
 import AppRoutes from 'shared/constants/app-routes';
+import { KeepAwake } from '@capacitor-community/keep-awake';
 
 function AppFrame() {
   return (
     <AppShell>
-      <AppShell.Main p="env(safe-area-inset-top, 20px) env(safe-area-inset-left, 20px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-right, 20px)">
+      <AppShell.Main>
         <Stack h="100%" gap="xl">
           <AppTitle />
           <Outlet />
@@ -33,6 +34,19 @@ function AppFrame() {
 }
 
 export default function App() {
+  useEffect(() => {
+    async function keepAwake() {
+      try {
+        const result = await KeepAwake.isSupported();
+        if (result.isSupported) {
+          KeepAwake.keepAwake();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    keepAwake();
+  }, []);
   return (
     <MantineProvider theme={theme}>
       <SQLiteProvider>

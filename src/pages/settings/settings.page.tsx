@@ -18,7 +18,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAlertTriangle, IconDropletHalfFilled, IconRuler2 } from '@tabler/icons-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 import { usePoopContext } from 'service/poop.service';
@@ -58,8 +58,6 @@ export default function SettingsPage() {
   const [resetWarningOpen, { open: openResetWarning, close: closeResetWarning }] =
     useDisclosure(false);
 
-  useEffect(() => {}, []);
-
   const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChangeBabyName(event.target.value);
   };
@@ -81,7 +79,7 @@ export default function SettingsPage() {
   return (
     <ScrollArea>
       <Container fluid w="100%" h="calc(100% - 76px)" pb="8px">
-        <Stack gap="xl" align="start" h="100%" w="100%">
+        <Stack gap="lg" align="start" h="100%" w="100%">
           <Title order={5}>{t('settings-page-title')}</Title>
           <Card withBorder w="100%">
             <Stack>

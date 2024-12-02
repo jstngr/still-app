@@ -13,7 +13,7 @@ import { IBoobDistribution, IFeedingEntry } from 'shared/types/types';
  *    entries that are spaced less than 30 minutes apart.
  */
 async function countEntriesChunksInLast24Hours(
-  db: SQLiteDBConnection
+  db: SQLiteDBConnection,
 ): Promise<{ count: number; entries: IFeedingEntry[]; chunks: IFeedingEntry[][] }> {
   if (!db) {
     console.error('[FeedingDatabase] No db instance found to count entries.');
@@ -76,7 +76,7 @@ async function countEntriesChunksInLast24Hours(
  */
 async function getBoobDistributionFromDB(db?: SQLiteDBConnection): Promise<IBoobDistribution> {
   if (!db) {
-    console.error('[FeedingDatabase] No db instance found on get boob distribution');
+    console.error('[FeedingDatabase] No db instance found on get type distribution');
     return { Left: 0, Right: 0 };
   }
 
@@ -85,8 +85,8 @@ async function getBoobDistributionFromDB(db?: SQLiteDBConnection): Promise<IBoob
   try {
     const selectResult = await db.query(`
       SELECT 
-        SUM(CASE WHEN boob = 'Left' THEN 1 ELSE 0 END) AS Left,
-        SUM(CASE WHEN boob = 'Right' THEN 1 ELSE 0 END) AS Right
+        SUM(CASE WHEN type = 'Left' THEN 1 ELSE 0 END) AS Left,
+        SUM(CASE WHEN type = 'Right' THEN 1 ELSE 0 END) AS Right
       FROM feeding
       WHERE created >= ${twentyFiveHoursAgo};
     `);

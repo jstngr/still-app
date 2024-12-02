@@ -49,7 +49,7 @@ export default function HistoryInfiniteScrollList<T extends Entry>(
   }, [data?.length]);
 
   return (
-    <Box flex="1 0 0" w="calc(100% + 8px)" ml="-4px" h={'100%'}>
+    <Box flex="1 0 0" w="calc(100% + 8px)" ml="-4px" h="100%">
       <AutoSizer>
         {({ height, width }) => (
           <List
