@@ -12,7 +12,6 @@ import {
   updateFeedingEntryInDB,
 } from './sqlite/feeding-database.helpers';
 import { useSettingsContext } from './settings.service';
-import inserMok from './mock-data';
 
 interface IFeedingContextType {
   activeFeeding?: IFeedingEntry;

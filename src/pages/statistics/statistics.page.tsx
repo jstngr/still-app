@@ -10,34 +10,6 @@ import LastWeek from './components/last-week';
 
 export default function StatisticsPage() {
   const { t } = useTranslation();
-
-  // const { db, sqlReady } = useSQLiteContext();
-
-  // const [chunksAmount, setChunksAmount] = useState(0);
-  // const [entries, setentries] = useState<IFeedingEntry[]>([]);
-  // const [chunks, setChunks] = useState<IFeedingEntry[][]>([]);
-  // const [boobDistribution, setBoobDistribution] = useState<IBoobDistribution>({
-  //   Left: 0,
-  //   Right: 0,
-  // });
-
-  // useEffect(() => {
-  //   async function loadChunks() {
-  //     if (db) {
-  //       const result = await countEntriesChunksInLast24Hours(db);
-  //       setChunksAmount(result.count);
-  //       setentries(result.entries);
-  //       setChunks(result.chunks);
-
-  //       const boobDistributionResult = await getBoobDistributionFromDB(db);
-  //       setBoobDistribution(boobDistributionResult);
-  //     }
-  //   }
-  //   if (sqlReady) {
-  //     loadChunks();
-  //   }
-  // }, [sqlReady]);
-
   const [embla, setEmbla] = useState<Embla | null>(null);
 
   useEffect(() => {

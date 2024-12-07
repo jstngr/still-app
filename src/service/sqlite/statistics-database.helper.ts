@@ -1,5 +1,5 @@
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
-import { IBoobDistribution, IFeedingEntry } from 'shared/types/types';
+import { IBoobDistribution, IFeedingEntry, IPoopEntry } from 'shared/types/types';
 
 /**
  * Counts the number of feeding chunks within the last 24 hours, grouping feeding entries
@@ -8,28 +8,28 @@ import { IBoobDistribution, IFeedingEntry } from 'shared/types/types';
  * @param db - The SQLiteDBConnection instance used to execute the query.
  * @returns An object containing:
  * - `count`: The number of feeding entry chunks created in the last 24 hours.
- * - `entries`: The list of feeding entries retrieved from the database within the last 24 hours.
  * - `chunks`: An array of feeding entry groups (chunks), where each chunk represents
  *    entries that are spaced less than 30 minutes apart.
  */
 async function countEntriesChunksInLast24Hours(
   db: SQLiteDBConnection,
-): Promise<{ count: number; entries: IFeedingEntry[]; chunks: IFeedingEntry[][] }> {
+): Promise<{ count: number; chunks: IFeedingEntry[][] }> {
   if (!db) {
     console.error('[FeedingDatabase] No db instance found to count entries.');
-    return { count: 0, entries: [], chunks: [] };
+    return { count: 0, chunks: [] };
   }
 
   try {
-    const twentyFiveHoursAgo = Date.now() - 25 * 60 * 60 * 1000;
+    const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
     const result = await db.query(`
       SELECT *
       FROM feeding
-      WHERE created >= ${twentyFiveHoursAgo}
+      WHERE created >= ${twentyFourHoursAgo}
+        AND type != 'Bottle'
       ORDER BY created ASC
     `);
     const entries = result.values || [];
-    if (!entries) return { count: 0, entries: [], chunks: [] };
+    if (!entries) return { count: 0, chunks: [] };
 
     /**
      * Groups feeding entries into chunks where the difference between
@@ -54,12 +54,13 @@ async function countEntriesChunksInLast24Hours(
       chunks[lastChunkIndex].push(entry);
     });
 
-    return { count: chunks.length, entries, chunks };
+    return { count: chunks.length, chunks };
   } catch (err) {
     console.error('[FeedingDatabase] Error counting entries:', err);
-    return { count: 0, entries: [], chunks: [] };
+    return { count: 0, chunks: [] };
   }
 }
+
 /**
  * Retrieves the distribution of feeding entries where the "boob" column
  * is either 'Left' or 'Right' within the last 24 hours.
@@ -77,27 +78,120 @@ async function countEntriesChunksInLast24Hours(
 async function getBoobDistributionFromDB(db?: SQLiteDBConnection): Promise<IBoobDistribution> {
   if (!db) {
     console.error('[FeedingDatabase] No db instance found on get type distribution');
-    return { Left: 0, Right: 0 };
+    return { Left: 0, Right: 0, LeftFeedings: [], RightFeedings: [] };
   }
 
-  const twentyFiveHoursAgo = Date.now() - 25 * 60 * 60 * 1000;
+  const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
 
   try {
-    const selectResult = await db.query(`
+    const distributionResult = await db.query(`
       SELECT 
         SUM(CASE WHEN type = 'Left' THEN 1 ELSE 0 END) AS Left,
         SUM(CASE WHEN type = 'Right' THEN 1 ELSE 0 END) AS Right
       FROM feeding
-      WHERE created >= ${twentyFiveHoursAgo};
+      WHERE created >= ${twentyFourHoursAgo}
+      ORDER BY created ASC;
     `);
 
-    const result = selectResult?.values?.[0] as IBoobDistribution;
-    return { Left: result.Left || 0, Right: result.Right || 0 };
+    const distribution = distributionResult?.values?.[0] as IBoobDistribution;
+    const leftFeedingsResult = await db.query(`
+      SELECT * FROM feeding
+      WHERE created >= ${twentyFourHoursAgo}
+      AND type = 'Left'
+      ORDER BY created ASC;
+    `);
+    const rightFeedingsResult = await db.query(`
+      SELECT * FROM feeding
+      WHERE created >= ${twentyFourHoursAgo}
+      AND type = 'Right';
+      ORDER BY created ASC
+    `);
+    return {
+      Left: distribution.Left || 0,
+      Right: distribution.Right || 0,
+      LeftFeedings: leftFeedingsResult?.values as IFeedingEntry[],
+      RightFeedings: rightFeedingsResult?.values as IFeedingEntry[],
+    };
   } catch (err) {
     console.error('[FeedingDatabase] Error getting boob distribution:', err);
   }
 
-  return { Left: 0, Right: 0 };
+  return { Left: 0, Right: 0, LeftFeedings: [], RightFeedings: [] };
 }
 
-export { countEntriesChunksInLast24Hours, getBoobDistributionFromDB };
+async function getBottleFeedingsFromDB(
+  db?: SQLiteDBConnection,
+): Promise<{ bottleFeedings: IFeedingEntry[] }> {
+  if (!db) {
+    console.error('[FeedingDatabase] No db instance found on get type distribution');
+    return { bottleFeedings: [] };
+  }
+
+  const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
+
+  try {
+    const feedingResult = await db.query(`
+      SELECT *
+      FROM feeding
+      WHERE created >= ${twentyFourHoursAgo}
+      AND type = 'Bottle'
+      ORDER BY created ASC;
+    `);
+
+    return {
+      bottleFeedings: feedingResult.values as IFeedingEntry[],
+    };
+  } catch (err) {
+    console.error('[FeedingDatabase] Error getting boob distribution:', err);
+  }
+
+  return { bottleFeedings: [] };
+}
+
+async function getPoopFromDB(
+  db?: SQLiteDBConnection,
+): Promise<{ poopEntries: IPoopEntry[]; averageDistance: number }> {
+  if (!db) {
+    console.error('[PoopDatabase] No db instance found on get type distribution');
+    return { poopEntries: [], averageDistance: 0 };
+  }
+
+  const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
+
+  try {
+    const poopResult = await db.query(`
+      SELECT *
+      FROM poop
+      WHERE created >= ${twentyFourHoursAgo}
+      ORDER BY created ASC;
+    `);
+
+    let averageDistance = 0;
+    let lastCreated = 0;
+    (poopResult.values as IPoopEntry[])?.forEach((poop) => {
+      if (!lastCreated) {
+        lastCreated = poop.created;
+        return;
+      }
+      averageDistance += poop.created - lastCreated;
+      lastCreated = poop.created;
+    });
+    averageDistance = Math.floor(averageDistance / (poopResult.values?.length || 1));
+
+    return {
+      poopEntries: poopResult.values as IPoopEntry[],
+      averageDistance,
+    };
+  } catch (err) {
+    console.error('[FeedingDatabase] Error getting boob distribution:', err);
+  }
+
+  return { poopEntries: [], averageDistance: 0 };
+}
+
+export {
+  getPoopFromDB,
+  countEntriesChunksInLast24Hours,
+  getBoobDistributionFromDB,
+  getBottleFeedingsFromDB,
+};

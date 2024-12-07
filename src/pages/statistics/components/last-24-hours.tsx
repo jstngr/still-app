@@ -7,7 +7,7 @@ import {
   IconBedFlatFilled,
 } from '@tabler/icons-react';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useSettingsContext } from 'service/settings.service';
 import monoStyles from 'shared/styles/mono-styles.module.css';
 import useLast24Hours from '../hooks/use-last-24-hours';
@@ -17,7 +17,17 @@ export default function Last24Hours() {
     useSettingsContext();
   const { t } = useTranslation();
 
-  const {} = useLast24Hours();
+  const {
+    chunks,
+    averageChunkDuration,
+    boobDistribution,
+    averageDurationLeft,
+    averageDurationRight,
+    averageBottleVolume,
+    bottleAmount,
+    poopEntries,
+    averagePoopDistance,
+  } = useLast24Hours();
 
   return (
     <ScrollArea h="100%">
@@ -32,13 +42,18 @@ export default function Last24Hours() {
                 <Stack gap="0" justify="space-between">
                   <Group gap="xxs" align="end">
                     <Text size="24px" className={monoStyles.monoFont}>
-                      5
+                      {bottleAmount}
                     </Text>
-                    <Text>Bottle Feedings</Text>
+                    <Text>{t('statistics-page-24-hours-bottle-title')}</Text>
                   </Group>
                   <Text size="sm">
-                    with in average <strong className={monoStyles.monoFont}>149</strong>
-                    {feedingUnit}
+                    <Trans
+                      i18nKey="statistics-page-24-hours-bottle-subtitle"
+                      components={{
+                        Big: <strong className={monoStyles.monoFont} />,
+                      }}
+                      values={{ averageBottleVolume, feedingUnit }}
+                    />
                   </Text>
                 </Stack>
               </Group>
@@ -58,21 +73,23 @@ export default function Last24Hours() {
                     <Stack gap="0">
                       <Group gap="xxs">
                         <Text size="24px" className={monoStyles.monoFont}>
-                          9
+                          {chunks.length}
                         </Text>
-                        <Text>Breast Feedings</Text>
+                        <Text>{t('statistics-page-24-hours-breast-title')}</Text>
                       </Group>
 
                       <Text size="sm">
-                        with average length of <strong className={monoStyles.monoFont}>15</strong>{' '}
-                        minutes
+                        <Trans
+                          i18nKey="statistics-page-24-hours-breast-subtitle"
+                          components={{
+                            Big: <strong className={monoStyles.monoFont} />,
+                          }}
+                          values={{ averageChunkDuration }}
+                        />
                       </Text>
                     </Stack>
                   </Group>
-                  <Text size="xs">
-                    {'>'} Feeding entries are grouped based on how close they are in time. If there
-                    {"'"}s a break of more than 30 minutes, a new feeding session starts.
-                  </Text>
+                  <Text size="xs">{t('statistics-page-24-hours-breast-hint')}</Text>
                 </Stack>
 
                 <Group wrap="nowrap" align="start">
@@ -80,14 +97,30 @@ export default function Last24Hours() {
                     <IconSwitchHorizontal />
                   </ThemeIcon>
                   <Stack gap="0" justify="space-between">
-                    <Text>Distributed over boobs</Text>
+                    <Text>{t('statistics-page-24-hours-breast-distribution-title')}</Text>
                     <Text size="sm">
-                      <strong className={monoStyles.monoFont}>5</strong> Left (average{' '}
-                      <strong className={monoStyles.monoFont}>10</strong>min)
+                      <Trans
+                        i18nKey="statistics-page-24-hours-breast-distribution-subtitle-left"
+                        components={{
+                          Big: <strong className={monoStyles.monoFont} />,
+                        }}
+                        values={{
+                          boobDistribution: boobDistribution?.Left || 0,
+                          averageDuration: averageDurationLeft,
+                        }}
+                      />
                     </Text>
                     <Text size="sm">
-                      <strong className={monoStyles.monoFont}>4</strong> Right (average{' '}
-                      <strong className={monoStyles.monoFont}>9</strong>min)
+                      <Trans
+                        i18nKey="statistics-page-24-hours-breast-distribution-subtitle-right"
+                        components={{
+                          Big: <strong className={monoStyles.monoFont} />,
+                        }}
+                        values={{
+                          boobDistribution: boobDistribution?.Right || 0,
+                          averageDuration: averageDurationRight,
+                        }}
+                      />
                     </Text>
                   </Stack>
                 </Group>
@@ -105,12 +138,20 @@ export default function Last24Hours() {
                   <Stack gap="0" justify="space-between">
                     <Group gap="xxs" align="end">
                       <Text size="24px" className={monoStyles.monoFont}>
-                        9
+                        {poopEntries?.length}
                       </Text>
-                      <Text>Poo{"'"}s recorded</Text>
+                      <Text>{t('statistics-page-24-hours-poop-title')}</Text>
                     </Group>
                     <Text size="sm">
-                      In average all <strong className={monoStyles.monoFont}>2:30</strong> hours
+                      <Trans
+                        i18nKey="statistics-page-24-hours-poop-subtitle"
+                        components={{
+                          Big: <strong className={monoStyles.monoFont} />,
+                        }}
+                        values={{
+                          averagePoopDistance,
+                        }}
+                      />
                     </Text>
                   </Stack>
                 </Group>

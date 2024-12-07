@@ -18,6 +18,8 @@ interface IPoopEntry {
 interface IBoobDistribution {
   Left: number;
   Right: number;
+  LeftFeedings: IFeedingEntry[];
+  RightFeedings: IFeedingEntry[];
 }
 
 export type { IFeedingType, IFeedingEntry, IPoopEntry, IBoobDistribution };
