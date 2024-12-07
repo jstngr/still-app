@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 import { usePoopContext } from 'service/poop.service';
 import { useSettingsContext } from 'service/settings.service';
+import { useSleepContext } from 'service/sleep.service';
 import { TLanguage } from 'translations/react-i18next';
 
 const valueToNumber = (value: string | number) => {
@@ -53,6 +54,7 @@ export default function SettingsPage() {
   } = useSettingsContext();
   const { deleteHistory: deleteFeedingHistory } = useFeedingContext();
   const { deleteHistory: deletePoopHistory } = usePoopContext();
+  const { deleteHistory: deleteSleepHistory } = useSleepContext();
   const { t } = useTranslation();
 
   const [resetWarningOpen, { open: openResetWarning, close: closeResetWarning }] =
@@ -75,6 +77,7 @@ export default function SettingsPage() {
     await deleteFeedingHistory();
     await deletePoopHistory();
     await deleteSettings();
+    await deleteSleepHistory();
   };
   return (
     <ScrollArea>
