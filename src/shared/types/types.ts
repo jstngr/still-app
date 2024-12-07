@@ -15,6 +15,12 @@ interface IPoopEntry {
   created: number;
 }
 
+interface ISleepEntry {
+  id?: number;
+  created: number;
+  stopped: number;
+}
+
 interface IBoobDistribution {
   Left: number;
   Right: number;
@@ -22,4 +28,4 @@ interface IBoobDistribution {
   RightFeedings: IFeedingEntry[];
 }
 
-export type { IFeedingType, IFeedingEntry, IPoopEntry, IBoobDistribution };
+export type { ISleepEntry, IFeedingType, IFeedingEntry, IPoopEntry, IBoobDistribution };

@@ -19,8 +19,7 @@ import styles from './last-week.module.css';
 import getLast7Days from 'shared/helpers/get-last-7-days';
 
 export default function LastWeek() {
-  const { feedByBoob, feedByBottle, poopTrackerEnabled, sleepTrackerEnabled, feedingUnit } =
-    useSettingsContext();
+  const { feedingUnit } = useSettingsContext();
   const { t } = useTranslation();
 
   const weekDays = useMemo(getLast7Days, []);

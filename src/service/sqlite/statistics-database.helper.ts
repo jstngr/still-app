@@ -1,5 +1,5 @@
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
-import { IBoobDistribution, IFeedingEntry, IPoopEntry } from 'shared/types/types';
+import { IBoobDistribution, IFeedingEntry, IPoopEntry, ISleepEntry } from 'shared/types/types';
 
 /**
  * Counts the number of feeding chunks within the last 24 hours, grouping feeding entries
@@ -189,9 +189,50 @@ async function getPoopFromDB(
   return { poopEntries: [], averageDistance: 0 };
 }
 
+async function getSleepStatsFromDB(
+  db?: SQLiteDBConnection,
+): Promise<{ sleepEntries: ISleepEntry[]; averageLength: number; totalLength: number }> {
+  if (!db) {
+    console.error('[SleepDatabase] No db instance found on get sleep stats');
+    return { sleepEntries: [], averageLength: 0, totalLength: 0 };
+  }
+
+  const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
+
+  try {
+    const sleepResult = await db.query(`
+      SELECT *
+      FROM sleep
+      WHERE created >= ${twentyFourHoursAgo}
+      ORDER BY created ASC;
+    `);
+
+    let averageLength = 0;
+    let totalLength = 0;
+    (sleepResult.values as ISleepEntry[])?.forEach((sleep) => {
+      const start = sleep.created;
+      const end = sleep.stopped || start;
+      averageLength += end - start;
+      totalLength += end - start;
+    });
+    averageLength = Math.floor(averageLength / (sleepResult.values?.length || 1));
+
+    return {
+      sleepEntries: sleepResult.values as ISleepEntry[],
+      averageLength,
+      totalLength,
+    };
+  } catch (err) {
+    console.error('[SleepDatabase] Error getting sleep stats:', err);
+  }
+
+  return { sleepEntries: [], averageLength: 0, totalLength: 0 };
+}
+
 export {
   getPoopFromDB,
   countEntriesChunksInLast24Hours,
   getBoobDistributionFromDB,
   getBottleFeedingsFromDB,
+  getSleepStatsFromDB,
 };

@@ -16,6 +16,8 @@ import { SettingsContext, SettingsProvider } from 'service/settings.service';
 import { SQLiteProvider } from 'service/sqlite/sqlite-provider';
 import AppRoutes from 'shared/constants/app-routes';
 import { KeepAwake } from '@capacitor-community/keep-awake';
+import { SleepProvider } from 'service/sleep.service';
+import SleepPage from 'pages/sleep/sleep.page';
 
 function AppFrame() {
   return (
@@ -54,52 +56,57 @@ export default function App() {
           <SettingsContext.Consumer>
             {(settings) => (
               <FeedingProvider>
-                <PoopProvider>
-                  <RoutingGuard>
-                    <Container p={0} maw="500px">
-                      <Routes>
-                        {!settings?.initialized && (
-                          <>
-                            <Route path={AppRoutes.welcome.relative} element={<WelcomePage />} />
-                            <Route
-                              index
-                              element={<Navigate to={AppRoutes.welcome.absolute} replace />}
-                            />
-                          </>
-                        )}
-                        {settings?.initialized && (
-                          <>
-                            <Route path={AppRoutes.app.relative} element={<AppFrame />}>
-                              <Route path={AppRoutes.feeding.relative} element={<FeedTracker />} />
-                              {settings?.poopTrackerEnabled && (
-                                <Route path={AppRoutes.poop.relative} element={<PoopPage />} />
-                              )}
-                              {settings?.sleepTrackerEnabled && (
-                                <Route path={AppRoutes.sleep.relative} element={<div>Sleep</div>} />
-                              )}
-                              <Route
-                                path={AppRoutes.statistics.relative}
-                                element={<StatisticsPage />}
-                              />
-                              <Route
-                                path={AppRoutes.settings.relative}
-                                element={<SettingsPage />}
-                              />
+                <SleepProvider>
+                  <PoopProvider>
+                    <RoutingGuard>
+                      <Container p={0} maw="500px">
+                        <Routes>
+                          {!settings?.initialized && (
+                            <>
+                              <Route path={AppRoutes.welcome.relative} element={<WelcomePage />} />
                               <Route
                                 index
-                                element={<Navigate to={AppRoutes.feeding.absolute} replace />}
+                                element={<Navigate to={AppRoutes.welcome.absolute} replace />}
                               />
-                            </Route>
-                            <Route
-                              index
-                              element={<Navigate to={AppRoutes.app.absolute} replace />}
-                            />
-                          </>
-                        )}
-                      </Routes>
-                    </Container>
-                  </RoutingGuard>
-                </PoopProvider>
+                            </>
+                          )}
+                          {settings?.initialized && (
+                            <>
+                              <Route path={AppRoutes.app.relative} element={<AppFrame />}>
+                                <Route
+                                  path={AppRoutes.feeding.relative}
+                                  element={<FeedTracker />}
+                                />
+                                {settings?.poopTrackerEnabled && (
+                                  <Route path={AppRoutes.poop.relative} element={<PoopPage />} />
+                                )}
+                                {settings?.sleepTrackerEnabled && (
+                                  <Route path={AppRoutes.sleep.relative} element={<SleepPage />} />
+                                )}
+                                <Route
+                                  path={AppRoutes.statistics.relative}
+                                  element={<StatisticsPage />}
+                                />
+                                <Route
+                                  path={AppRoutes.settings.relative}
+                                  element={<SettingsPage />}
+                                />
+                                <Route
+                                  index
+                                  element={<Navigate to={AppRoutes.feeding.absolute} replace />}
+                                />
+                              </Route>
+                              <Route
+                                index
+                                element={<Navigate to={AppRoutes.app.absolute} replace />}
+                              />
+                            </>
+                          )}
+                        </Routes>
+                      </Container>
+                    </RoutingGuard>
+                  </PoopProvider>
+                </SleepProvider>
               </FeedingProvider>
             )}
           </SettingsContext.Consumer>

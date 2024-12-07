@@ -27,6 +27,9 @@ export default function Last24Hours() {
     bottleAmount,
     poopEntries,
     averagePoopDistance,
+    sleepEntries,
+    averageSleepLength,
+    totalSleepLength,
   } = useLast24Hours();
 
   return (
@@ -169,16 +172,32 @@ export default function Last24Hours() {
                   <Stack gap="0" justify="space-between">
                     <Group gap="xxs" align="end">
                       <Text size="24px" className={monoStyles.monoFont}>
-                        9
+                        {sleepEntries.length || 0}
                       </Text>
-                      <Text>Sleeps recorded</Text>
+                      <Text>{t('statistics-page-24-hours-sleep-title')}</Text>
                     </Group>
                     <Stack gap="0">
                       <Text size="sm">
-                        Average length of <strong className={monoStyles.monoFont}>30</strong>min
+                        <Trans
+                          i18nKey="statistics-page-24-hours-sleep-subtitle-length"
+                          components={{
+                            Big: <strong className={monoStyles.monoFont} />,
+                          }}
+                          values={{
+                            averageSleepLength,
+                          }}
+                        />
                       </Text>
                       <Text size="sm">
-                        Total length of <strong className={monoStyles.monoFont}>5</strong>hr
+                        <Trans
+                          i18nKey="statistics-page-24-hours-sleep-subtitle-total"
+                          components={{
+                            Big: <strong className={monoStyles.monoFont} />,
+                          }}
+                          values={{
+                            totalSleepLength,
+                          }}
+                        />
                       </Text>
                     </Stack>
                   </Stack>

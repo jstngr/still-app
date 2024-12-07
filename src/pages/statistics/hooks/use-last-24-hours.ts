@@ -5,6 +5,7 @@ import {
   getBoobDistributionFromDB,
   getBottleFeedingsFromDB,
   getPoopFromDB,
+  getSleepStatsFromDB,
 } from 'service/sqlite/statistics-database.helper';
 import formatMillisecondsToMinutes from 'shared/helpers/format-milliseconds-to-minutes';
 import formatMillisecondsToTime from 'shared/helpers/format-milliseconds-to-time';
@@ -25,6 +26,10 @@ export default function useLast24Hours() {
 
   const [poopEntries, setPoopEntries] = useState<IPoopEntry[]>([]);
   const [averagePoopDistance, setAveragePoopDistance] = useState('0');
+
+  const [sleepEntries, setSleepEntries] = useState<IPoopEntry[]>([]);
+  const [averageSleepLength, setAverageSleepLength] = useState('0');
+  const [totalSleepLength, setTotalSleepLength] = useState('0');
 
   const getAverageChunkDuration = (cChunks: IFeedingEntry[][]) => {
     let average = 0;
@@ -77,6 +82,11 @@ export default function useLast24Hours() {
     const { poopEntries: pEntry, averageDistance } = await getPoopFromDB(db);
     setPoopEntries(pEntry);
     setAveragePoopDistance(formatMillisecondsToTime(averageDistance, false, true));
+
+    const { sleepEntries, averageLength, totalLength } = await getSleepStatsFromDB(db);
+    setSleepEntries(sleepEntries);
+    setAverageSleepLength(formatMillisecondsToTime(averageLength, false, true));
+    setTotalSleepLength(formatMillisecondsToTime(totalLength, false, true));
   };
   useEffect(() => {
     if (!sqlReady) return;
@@ -93,5 +103,8 @@ export default function useLast24Hours() {
     bottleAmount: bottleFeedings.length,
     poopEntries,
     averagePoopDistance,
+    sleepEntries,
+    averageSleepLength,
+    totalSleepLength,
   };
 }
