@@ -31,7 +31,7 @@ function EditPoopEntryDrawer() {
 
   const entry = useMemo(
     () => poopEntries.find(({ id }) => id === poopEntryDrawerEntryId),
-    [poopEntries, poopEntryDrawerEntryId]
+    [poopEntries, poopEntryDrawerEntryId],
   );
 
   const [formData, setformData] = useState(entry);
@@ -41,7 +41,7 @@ function EditPoopEntryDrawer() {
         ({
           ...current,
           [key]: value,
-        } as IPoopEntry)
+        }) as IPoopEntry,
     );
   };
 
@@ -90,14 +90,14 @@ function EditPoopEntryDrawer() {
           onChange={(event) =>
             updateForm(
               'created',
-              timeToTimeStamp(formData?.created || 0, event.currentTarget.value)
+              timeToTimeStamp(formData?.created || 0, event.currentTarget.value),
             )
           }
           maxTime={timeStampToTime(new Date().getTime() || 0)}
         />
 
         <Flex flex="1" align="end">
-          <Group flex="1" grow align="stretch">
+          <Group flex="1" align="stretch" justify="space-between">
             <Box>
               <ActionIcon variant="outline" h="2.25rem" w="2.25rem" onClick={onDelete}>
                 <IconTrash stroke="1.5" size="18px" />

@@ -173,8 +173,8 @@ function EditFeedingEntryDrawer() {
             <InputLabel>{t('feeding-entry-drawer-chip-label-feeded-with')}</InputLabel>
             <Group>
               <Chip.Group
-                value={formData?.boob}
-                onChange={(value) => updateForm('boob', value as 'Left' | 'Right')}
+                value={formData?.type}
+                onChange={(value) => updateForm('type', value as 'Left' | 'Right')}
               >
                 <Chip value="Left" variant="outline">
                   {t('feeding-entry-drawer-chip-left-boob')}
@@ -187,7 +187,7 @@ function EditFeedingEntryDrawer() {
           </Stack>
         </Stack>
         <Flex flex="1" align="end">
-          <Group flex="1" grow align="stretch">
+          <Group flex="1" align="stretch" justify="space-between">
             <Box>
               <ActionIcon variant="outline" h="2.25rem" w="2.25rem" onClick={onDelete}>
                 <IconTrash stroke="1.5" size="18px" />

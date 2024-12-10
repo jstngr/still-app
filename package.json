@@ -44,6 +44,7 @@
     "@capacitor/core": "^6.1.2",
     "@capacitor/device": "^6.0.1",
     "@capacitor/ios": "^6.1.2",
+    "@capacitor/keyboard": "^6.0.3",
     "@capacitor/preferences": "^6.0.2",
     "@capacitor/splash-screen": "^6.0.2",
     "@emotion/styled": "^11.13.0",

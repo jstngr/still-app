@@ -8,13 +8,24 @@
  * const days = getLast7Days();
  * console.log(days); // [4, 5, 6, 0, 1, 2, 3]
  */
-export default function getLast7Days(): number[] {
-  const result: number[] = [];
+export default function getLast7Days(): {
+  key: number;
+  day: string;
+}[] {
+  const result: {
+    key: number;
+    day: string;
+  }[] = [];
 
   for (let i = 6; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
-    result.push(date.getDay());
+    const key = date.getDay();
+    const day = date.toISOString().split('T')[0];
+    result.push({
+      key,
+      day,
+    });
   }
 
   return result;

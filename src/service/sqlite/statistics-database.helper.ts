@@ -2,6 +2,33 @@ import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { IBoobDistribution, IFeedingEntry, IPoopEntry, ISleepEntry } from 'shared/types/types';
 
 /**
+ * Groups feeding entries into chunks where the difference between
+ * the 'stopped' time of the previous entry and the 'created' time
+ * of the current entry is 30 minutes or less.
+ */
+export function splitEntriesIntoChunks(entries: IFeedingEntry[]) {
+  if (!entries) return [];
+  const chunks: IFeedingEntry[][] = [];
+  let lastChunkIndex = 0;
+
+  entries.forEach((entry, index) => {
+    if (index === 0) {
+      chunks[lastChunkIndex] = [entry];
+      return;
+    }
+
+    const diff = entry.created - (entries[index - 1].stopped || entry.created);
+
+    if (diff > 30 * 60 * 1000) {
+      lastChunkIndex += 1;
+      chunks[lastChunkIndex] = [];
+    }
+    chunks[lastChunkIndex].push(entry);
+  });
+  return chunks;
+}
+
+/**
  * Counts the number of feeding chunks within the last 24 hours, grouping feeding entries
  * that are less than 30 minutes apart.
  *
@@ -31,28 +58,7 @@ async function countEntriesChunksInLast24Hours(
     const entries = result.values || [];
     if (!entries) return { count: 0, chunks: [] };
 
-    /**
-     * Groups feeding entries into chunks where the difference between
-     * the 'stopped' time of the previous entry and the 'created' time
-     * of the current entry is 30 minutes or less.
-     */
-    const chunks: IFeedingEntry[][] = [];
-    let lastChunkIndex = 0;
-
-    entries.forEach((entry, index) => {
-      if (index === 0) {
-        chunks[lastChunkIndex] = [entry];
-        return;
-      }
-
-      const diff = entry.created - entries[index - 1].stopped;
-
-      if (diff > 30 * 60 * 1000) {
-        lastChunkIndex += 1;
-        chunks[lastChunkIndex] = [];
-      }
-      chunks[lastChunkIndex].push(entry);
-    });
+    const chunks = splitEntriesIntoChunks(entries);
 
     return { count: chunks.length, chunks };
   } catch (err) {

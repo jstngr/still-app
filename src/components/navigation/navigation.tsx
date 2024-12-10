@@ -1,6 +1,6 @@
 import { SimpleGrid } from '@mantine/core';
 import React from 'react';
-import { IconBabyBottle, IconBedFlat, IconChartBar, IconPoo } from '@tabler/icons-react';
+import { IconChartBar, IconDroplet, IconPoo, IconZzz } from '@tabler/icons-react';
 import NavButton from './nav-button';
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,7 @@ export default function Navigation() {
         to="feeding"
         active={pathname.includes('feed')}
         label={t('navigation-button-label-feed-tracker')}
-        Icon={IconBabyBottle}
+        Icon={IconDroplet}
       />
       {settings.poopTrackerEnabled && (
         <NavButton
@@ -36,7 +36,7 @@ export default function Navigation() {
           to="sleep"
           active={pathname.includes('sleep')}
           label={t('navigation-button-label-sleep-tracker')}
-          Icon={IconBedFlat}
+          Icon={IconZzz}
         />
       )}
       <NavButton

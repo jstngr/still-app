@@ -78,7 +78,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
       setActiveFeeding(data[0]);
     }
     // inserMok(db);
-
+    // inserMokWeek(db);
     // setFeedingEntries(WebMock());
   }
   useEffect(() => {
@@ -179,7 +179,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
   const addFeedingEntry = async () => {
     const newEntry = new FeedingEntry({
       type: 'Left',
-      stopped: new Date().getTime(),
+      stopped: new Date().getTime() + 1000,
     });
     if (db) {
       const id = await addFeedingEntryToDB(db, newEntry.toObject());

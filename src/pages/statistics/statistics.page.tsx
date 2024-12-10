@@ -75,10 +75,10 @@ export default function StatisticsPage() {
         }}
       >
         <Carousel.Slide key="0" pt="xxs">
-          <Last24Hours />
+          <LastWeek />
         </Carousel.Slide>
         <Carousel.Slide key="1" pt="xxs">
-          <LastWeek />
+          <Last24Hours />
         </Carousel.Slide>
       </Carousel>
     </Stack>

@@ -1,46 +1,67 @@
-import {
-  ScrollArea,
-  Container,
-  Card,
-  Stack,
-  Table,
-  Badge,
-  Flex,
-  Text,
-  Group,
-  ThemeIcon,
-} from '@mantine/core';
-import monoStyles from 'shared/styles/mono-styles.module.css';
-import React, { useMemo } from 'react';
+import { ScrollArea, Container, Card, Stack, Table, Text, Group, ThemeIcon } from '@mantine/core';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSettingsContext } from 'service/settings.service';
-import { IconBabyBottle, IconPoo } from '@tabler/icons-react';
+import { IconBabyBottle, IconBedFlat, IconDroplet, IconPoo } from '@tabler/icons-react';
 import styles from './last-week.module.css';
-import getLast7Days from 'shared/helpers/get-last-7-days';
+
+import useLastWeek from '../hooks/use-last-week';
 
 export default function LastWeek() {
   const { feedingUnit } = useSettingsContext();
   const { t } = useTranslation();
 
-  const weekDays = useMemo(getLast7Days, []);
+  const { data } = useLastWeek();
 
-  const data = weekDays.map((dayKey) => ({
-    day: t(`week-day-${dayKey}`),
-  }));
-  const feedingRows = data.map((d) => (
-    <Table.Tr key={d.day}>
-      <Table.Td>{d.day}</Table.Td>
-      <Table.Td>{'5:30 (9x)'}</Table.Td>
-      <Table.Td>{'4:80 (8x)'}</Table.Td>
-      <Table.Td>
-        {'250'} {feedingUnit}
-      </Table.Td>
-    </Table.Tr>
-  ));
+  const bottleRows = data.map((d) => {
+    if (!d.bottleAmount)
+      return (
+        <Table.Tr key={d.day}>
+          <Table.Td>{d.weekDay}</Table.Td>
+          <Table.Td>-</Table.Td>
+          <Table.Td>-</Table.Td>
+        </Table.Tr>
+      );
+    return (
+      <Table.Tr key={d.day}>
+        <Table.Td>{d.weekDay}</Table.Td>
+        <Table.Td>
+          {d.bottleAverageVolume} {feedingUnit} ({d.bottleAmount}x)
+        </Table.Td>
+        <Table.Td>
+          {d.bottleTotalVolume} {feedingUnit}
+        </Table.Td>
+      </Table.Tr>
+    );
+  });
+
+  const feedingRows = data.map((d) => {
+    if (!d.bottleAmount)
+      return (
+        <Table.Tr key={d.day}>
+          <Table.Td>{d.weekDay}</Table.Td>
+          <Table.Td>-</Table.Td>
+          <Table.Td>-</Table.Td>
+          <Table.Td>-</Table.Td>
+        </Table.Tr>
+      );
+    return (
+      <Table.Tr key={d.day}>
+        <Table.Td>{d.weekDay}</Table.Td>
+        <Table.Td>
+          {d.leftTime} ({d.leftAmount}x)
+        </Table.Td>
+        <Table.Td>
+          {d.rightTime} ({d.rightAmount}x)
+        </Table.Td>
+        <Table.Td>{d.feedingChunkAmount}x</Table.Td>
+      </Table.Tr>
+    );
+  });
 
   const poopRows = data.map((d) => (
     <Table.Tr key={d.day}>
-      <Table.Td>{d.day}</Table.Td>
+      <Table.Td>{d.weekDay}</Table.Td>
       <Table.Td>10</Table.Td>
       <Table.Td>60 min</Table.Td>
     </Table.Tr>
@@ -48,7 +69,7 @@ export default function LastWeek() {
 
   const sleepRows = data.map((d) => (
     <Table.Tr key={d.day}>
-      <Table.Td>{d.day}</Table.Td>
+      <Table.Td>{d.weekDay}</Table.Td>
       <Table.Td>10</Table.Td>
       <Table.Td>60 min</Table.Td>
       <Table.Td>600 min</Table.Td>
@@ -65,34 +86,45 @@ export default function LastWeek() {
                 <ThemeIcon radius="50%" size="xl" variant="outline">
                   <IconBabyBottle />
                 </ThemeIcon>
-                <Text>Feeding Breakdown by Boob and Bottle</Text>
+                <Text>Feeding Breakdown by Bottle</Text>
               </Group>
 
               <Table striped>
                 <Table.Thead>
                   <Table.Tr>
                     <Table.Th></Table.Th>
-                    <Table.Th>
-                      <Badge w="2.5rem" variant="outline" size="lg" className={monoStyles.monoFont}>
-                        L
-                      </Badge>
-                    </Table.Th>
-                    <Table.Th>
-                      <Badge w="2.5rem" variant="outline" size="lg" className={monoStyles.monoFont}>
-                        R
-                      </Badge>
-                    </Table.Th>
-                    <Table.Th>
-                      <Badge w="2.5rem" variant="outline" size="lg" className={monoStyles.monoFont}>
-                        <Flex>
-                          <IconBabyBottle size={14} stroke={2} />
-                        </Flex>
-                      </Badge>
+                    <Table.Th className={styles.tableTextTh}>Average</Table.Th>
+                    <Table.Th className={styles.tableTextTh}>Total</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody className={styles.tableBody}>{bottleRows}</Table.Tbody>
+              </Table>
+            </Stack>
+          </Card>
+
+          <Card withBorder>
+            <Stack>
+              <Group wrap="nowrap" align="center">
+                <ThemeIcon radius="50%" size="xl" variant="outline">
+                  <IconDroplet />
+                </ThemeIcon>
+                <Text>Feeding Breakdown by Boob</Text>
+              </Group>
+
+              <Table striped>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th></Table.Th>
+                    <Table.Th className={styles.tableTextTh}>{t('left')}</Table.Th>
+                    <Table.Th className={styles.tableTextTh}>{t('right')}</Table.Th>
+                    <Table.Th className={styles.tableTextTh}>
+                      {t('statistics-page-table-col-feeding-chunks')}*
                     </Table.Th>
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody className={styles.tableBody}>{feedingRows}</Table.Tbody>
               </Table>
+              <Text size="xs">{t('statistics-page-24-hours-breast-hint')}</Text>
             </Stack>
           </Card>
 
@@ -122,7 +154,7 @@ export default function LastWeek() {
             <Stack>
               <Group wrap="nowrap" align="center">
                 <ThemeIcon radius="50%" size="xl" variant="outline">
-                  <IconPoo />
+                  <IconBedFlat />
                 </ThemeIcon>
                 <Text>Sleep Overview with Duration Averages and Sessions</Text>
               </Group>

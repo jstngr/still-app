@@ -122,7 +122,7 @@ function EditBottleFeedingEntryDrawer() {
           />
         </Group>
         <Flex flex="1" align="end">
-          <Group flex="1" grow align="stretch">
+          <Group flex="1" align="stretch" justify="space-between">
             <Box>
               <ActionIcon variant="outline" h="2.25rem" w="2.25rem" onClick={onDelete}>
                 <IconTrash stroke="1.5" size="18px" />
