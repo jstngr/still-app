@@ -18,6 +18,7 @@ import AppRoutes from 'shared/constants/app-routes';
 import { KeepAwake } from '@capacitor-community/keep-awake';
 import { SleepProvider } from 'service/sleep.service';
 import SleepPage from 'pages/sleep/sleep.page';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 
 function AppFrame() {
   return (
@@ -36,6 +37,16 @@ function AppFrame() {
 }
 
 export default function App() {
+  useEffect(() => {
+    // Lock the orientation to portrait
+    ScreenOrientation.lock({ orientation: 'portrait' });
+
+    // Optionally unlock on component unmount
+    return () => {
+      ScreenOrientation.unlock();
+    };
+  }, []);
+
   useEffect(() => {
     async function keepAwake() {
       try {

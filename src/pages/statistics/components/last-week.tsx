@@ -59,13 +59,25 @@ export default function LastWeek() {
     );
   });
 
-  const poopRows = data.map((d) => (
-    <Table.Tr key={d.day}>
-      <Table.Td>{d.weekDay}</Table.Td>
-      <Table.Td>10</Table.Td>
-      <Table.Td>60 min</Table.Td>
-    </Table.Tr>
-  ));
+  const poopRows = data.map((d) => {
+    if (!d.poopEntries?.length)
+      return (
+        <Table.Tr key={d.day}>
+          <Table.Td>{d.weekDay}</Table.Td>
+          <Table.Td>-</Table.Td>
+          <Table.Td>-</Table.Td>
+        </Table.Tr>
+      );
+    return (
+      <Table.Tr key={d.day}>
+        <Table.Td>{d.weekDay}</Table.Td>
+        <Table.Td>{d.poopEntries?.length}</Table.Td>
+        <Table.Td>
+          {d.averageTimeBetweenPoops || 0} {t('statistics-page-label-hours')}
+        </Table.Td>
+      </Table.Tr>
+    );
+  });
 
   const sleepRows = data.map((d) => (
     <Table.Tr key={d.day}>
@@ -86,15 +98,19 @@ export default function LastWeek() {
                 <ThemeIcon radius="50%" size="xl" variant="outline">
                   <IconBabyBottle />
                 </ThemeIcon>
-                <Text>Feeding Breakdown by Bottle</Text>
+                <Text>{t('statistics-page-last-week-bottle-title')}</Text>
               </Group>
 
               <Table striped>
                 <Table.Thead>
                   <Table.Tr>
                     <Table.Th></Table.Th>
-                    <Table.Th className={styles.tableTextTh}>Average</Table.Th>
-                    <Table.Th className={styles.tableTextTh}>Total</Table.Th>
+                    <Table.Th className={styles.tableTextTh}>
+                      {t('statistics-page-last-week-bottle-label-average')}
+                    </Table.Th>
+                    <Table.Th className={styles.tableTextTh}>
+                      {t('statistics-page-last-week-bottle-label-total')}
+                    </Table.Th>
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody className={styles.tableBody}>{bottleRows}</Table.Tbody>
@@ -108,7 +124,7 @@ export default function LastWeek() {
                 <ThemeIcon radius="50%" size="xl" variant="outline">
                   <IconDroplet />
                 </ThemeIcon>
-                <Text>Feeding Breakdown by Boob</Text>
+                <Text>{t('statistics-page-last-week-feeding-title')}</Text>
               </Group>
 
               <Table striped>
@@ -134,15 +150,19 @@ export default function LastWeek() {
                 <ThemeIcon radius="50%" size="xl" variant="outline">
                   <IconPoo />
                 </ThemeIcon>
-                <Text>Total Counts and Average Time Between Poops</Text>
+                <Text>{t('statistics-page-last-week-poops-title')}</Text>
               </Group>
 
               <Table striped>
                 <Table.Thead>
                   <Table.Tr>
                     <Table.Th></Table.Th>
-                    <Table.Th className={styles.tableTextTh}>Amount</Table.Th>
-                    <Table.Th className={styles.tableTextTh}>Time between</Table.Th>
+                    <Table.Th className={styles.tableTextTh}>
+                      {t('statistics-page-last-week-poops-amount')}
+                    </Table.Th>
+                    <Table.Th className={styles.tableTextTh}>
+                      {t('statistics-page-last-week-poops-time-between')}
+                    </Table.Th>
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody className={styles.tableBody}>{poopRows}</Table.Tbody>

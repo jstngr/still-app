@@ -46,6 +46,7 @@
     "@capacitor/ios": "^6.1.2",
     "@capacitor/keyboard": "^6.0.3",
     "@capacitor/preferences": "^6.0.2",
+    "@capacitor/screen-orientation": "^6.0.3",
     "@capacitor/splash-screen": "^6.0.2",
     "@emotion/styled": "^11.13.0",
     "@fontsource-variable/jetbrains-mono": "^5.1.1",

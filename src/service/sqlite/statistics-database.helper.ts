@@ -154,6 +154,21 @@ async function getBottleFeedingsFromDB(
   return { bottleFeedings: [] };
 }
 
+export function getAverageTimeBetween(entries: IPoopEntry[] | ISleepEntry[]) {
+  let averageDistance = 0;
+  let lastCreated = 0;
+  entries.forEach((entry) => {
+    if (!lastCreated) {
+      lastCreated = entry.created;
+      return;
+    }
+    averageDistance += entry.created - lastCreated;
+    lastCreated = entry.created;
+  });
+  averageDistance = Math.floor(averageDistance / (entries.length || 1));
+  return averageDistance;
+}
+
 async function getPoopFromDB(
   db?: SQLiteDBConnection,
 ): Promise<{ poopEntries: IPoopEntry[]; averageDistance: number }> {
@@ -172,18 +187,7 @@ async function getPoopFromDB(
       ORDER BY created ASC;
     `);
 
-    let averageDistance = 0;
-    let lastCreated = 0;
-    (poopResult.values as IPoopEntry[])?.forEach((poop) => {
-      if (!lastCreated) {
-        lastCreated = poop.created;
-        return;
-      }
-      averageDistance += poop.created - lastCreated;
-      lastCreated = poop.created;
-    });
-    averageDistance = Math.floor(averageDistance / (poopResult.values?.length || 1));
-
+    const averageDistance = getAverageTimeBetween((poopResult.values as IPoopEntry[]) || []);
     return {
       poopEntries: poopResult.values as IPoopEntry[],
       averageDistance,
