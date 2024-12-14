@@ -1,37 +1,55 @@
-import { ActionIcon, Badge, Box, Card, Flex, Grid, Group, Stack, Text } from '@mantine/core';
+import {
+  ActionIcon,
+  Badge,
+  BadgeVariant,
+  Box,
+  Card,
+  Flex,
+  Group,
+  Stack,
+  Text,
+} from '@mantine/core';
 import FeedingEntry from 'classes/feeding-entry.class';
 import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
 import formatDateLocaleFromTimestamp from 'shared/helpers/format-date-locale-from-timestamp';
-import formatTime from 'shared/helpers/format-time';
 import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import monoStyles from 'shared/styles/mono-styles.module.css';
 import { IFeedingEntry, IFeedingType } from 'shared/types/types';
-import Timer from '../../../../components/timer';
 import styles from './history-card.module.css';
-import { IconBabyBottle, IconPencil } from '@tabler/icons-react';
-import formatSecondsToMinutesSeconds from 'shared/helpers/format-seconds-to-minutes-seconds';
+import { IconBabyBottle, IconClockPlay, IconClockStop, IconPencil } from '@tabler/icons-react';
 import listItemStyles from 'components/list-item.module.css';
 import { useSettingsContext } from 'service/settings.service';
-import { TFunction } from 'i18next';
+import Timer from 'components/timer';
+import formatSecondsToMinutesSeconds from 'shared/helpers/format-seconds-to-minutes-seconds';
 
 interface IHistoryCardProps {
   entry: IFeedingEntry;
   index: number;
 }
 
-function getBadgeContent(type: IFeedingType, t: TFunction) {
-  if (type === 'Bottle')
-    return (
+function TypeBadge(props: { type: IFeedingType }) {
+  const { t } = useTranslation();
+  let content: string | React.ReactElement = '';
+  let variant: BadgeVariant = 'filled';
+
+  if (props.type === 'Bottle') {
+    content = (
       <Flex>
         <IconBabyBottle size={14} stroke={2} />
       </Flex>
     );
-  if (type === 'Left') return t('upperletter-left');
-  if (type === 'Right') return t('upperletter-right');
-  return '';
+    variant = 'outline';
+  }
+  if (props.type === 'Left') content = t('upperletter-left');
+  if (props.type === 'Right') content = t('upperletter-right');
+  return (
+    <Badge w="2.5rem" variant={variant} size="lg" className={monoStyles.monoFont}>
+      {content}
+    </Badge>
+  );
 }
 
 export default function HistoryCard(props: IHistoryCardProps) {
@@ -57,12 +75,14 @@ export default function HistoryCard(props: IHistoryCardProps) {
       isPaused: feedingEntry.isPaused(),
       timeAgo: feedingEntry.getTimeAgo(),
       timeFrom: formatTimeFromTimestamp(feedingEntry.getStarted()),
-      timeTo: formatTimeFromTimestamp(feedingEntry.getStopped()),
+      timeTo: feedingEntry.getStopped()
+        ? formatTimeFromTimestamp(feedingEntry.getStopped())
+        : '--:--',
     };
   }, [entry]);
 
   const showTimeAgo = useMemo(
-    () => !isRunning && !isPaused && props.index < 2,
+    () => !isRunning && !isPaused && props.index === 0,
     [isPaused, isRunning],
   );
 
@@ -97,96 +117,73 @@ export default function HistoryCard(props: IHistoryCardProps) {
         className={showDateLabel ? '' : listItemStyles.dashedBorderTop}
       >
         {isRunning && <div className={styles.activeCardIndicator} />}
-        <Group justify="space-between" gap="xs">
-          <Group align="center" h="100%">
-            <Badge w="2.5rem" variant="outline" size="lg" className={monoStyles.monoFont}>
-              {getBadgeContent(entry.type, t)}
-            </Badge>
-            {!isBottle && (
-              <Stack gap={'xxs'} align="start">
-                <Group gap={'xs'} justify="end" grow>
-                  <Text size="12px" c="dimmed">
-                    {t('history-card-label-from')}
-                  </Text>
-                  <Text size="12px" className={monoStyles.monoFont}>
-                    {timeFrom}
-                  </Text>
-                </Group>
-                <Group gap={'xs'} justify="end" w="100%" grow>
-                  <Text size="12px" c="dimmed">
-                    {t('history-card-label-to')}
-                  </Text>
-                  <Text size="12px" className={monoStyles.monoFont}>
-                    {timeTo}
-                  </Text>
-                </Group>
-              </Stack>
-            )}
-          </Group>
-          {isBottle && (
-            <>
-              <Stack gap="0" align="end">
-                <Text className={monoStyles.monoFont}>{timeFrom}</Text>
-                <Text size="12px" c="dimmed">
-                  {t('history-card-label-feeded-bottle')}
-                </Text>
-              </Stack>
-              <Stack gap="0" align="end">
-                <Text className={monoStyles.monoFont}>
-                  {entry.volume || 0}
-                  {feedingUnit}
-                </Text>
-                <Text size="12px" c="dimmed">
-                  {t('history-card-label-volume')}
-                </Text>
-              </Stack>
-            </>
-          )}
-          {!isBottle && (
-            <Grid gutter="4px" flex="1">
-              <Grid.Col span={6}>
-                <Stack gap="0" align="end">
-                  <Timer
-                    isRunning={!!(isRunning && !isPaused)}
-                    isStopped={false}
-                    startingSeconds={Math.floor(new FeedingEntry(entry).getDuration() / 1000)}
-                  >
-                    {(timer) => (
-                      <Text className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}>
-                        {formatSecondsToMinutesSeconds(timer.seconds)}
-                      </Text>
-                    )}
-                  </Timer>
-                  <Text size="12px" c="dimmed">
-                    {t('history-card-label-duration')}
-                  </Text>
-                </Stack>
-              </Grid.Col>
-              <Grid.Col span={6}>
-                {showTimeAgo ? (
-                  <Stack gap="0" align="end">
-                    <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
-                      {(timer) => (
-                        <>
-                          <Text className={monoStyles.monoFont}>
-                            {formatTime(timer.seconds, false)}
-                          </Text>
-                          <Text size="12px" c="dimmed">
-                            {timer.seconds > 60 * 60
-                              ? t('history-card-label-hours-ago')
-                              : t('history-card-label-min-ago')}
-                          </Text>
-                        </>
-                      )}
-                    </Timer>
-                  </Stack>
-                ) : (
-                  <span></span>
-                )}
-              </Grid.Col>
-            </Grid>
-          )}
+        <Group align="center" justify="space-between" gap="0">
+          <TypeBadge type={entry.type} />
+          <Stack gap="0">
+            <Group gap="xxs" align="center" className={monoStyles.monoFont}>
+              <IconClockPlay size="16px" color="var(--mantine-color-background-3)" />
+              <Text size="sm">{timeFrom}</Text>
+              <Text size="sm" opacity={isBottle ? 0 : 1}>
+                -
+              </Text>
+              <IconClockStop
+                opacity={isBottle ? 0 : 1}
+                size="16px"
+                color="var(--mantine-color-background-3)"
+              />
+              <Text size="sm" opacity={isBottle ? 0 : 1}>
+                {timeTo}
+              </Text>
+            </Group>
 
+            {isBottle && (
+              <Text size="sm">
+                {t('history-card-label-volume', { volume: entry.volume || 0, unit: feedingUnit })}
+              </Text>
+            )}
+            {!isBottle && (
+              <Timer
+                isRunning={!!(isRunning && !isPaused)}
+                isStopped={false}
+                startingSeconds={Math.floor(new FeedingEntry(entry).getDuration() / 1000)}
+              >
+                {(timer) => (
+                  <Text size="sm">
+                    {timer.seconds < 60 ? (
+                      t('history-card-label-just-started')
+                    ) : (
+                      <Trans
+                        i18nKey="history-card-label-duration"
+                        components={{
+                          Mono: (
+                            <Text
+                              component="span"
+                              className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}
+                            />
+                          ),
+                        }}
+                        values={{
+                          duration: formatSecondsToMinutesSeconds(timer.seconds),
+                        }}
+                        count={Math.floor(timer.seconds / 60)}
+                      />
+                    )}
+                  </Text>
+                )}
+              </Timer>
+            )}
+          </Stack>
+          {showTimeAgo && (
+            <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
+              {(timer) => (
+                <Text size="xs" component="span" className={monoStyles.monoFont}>
+                  {t('history-card-label-min-ago', {
+                    value: formatSecondsToMinutesSeconds(Math.max(timer.seconds, 999), false),
+                  })}
+                </Text>
+              )}
+            </Timer>
+          )}
           <ActionIcon
             disabled={activeFeeding?.id === entry.id}
             variant="subtle"

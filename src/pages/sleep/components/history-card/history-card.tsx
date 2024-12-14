@@ -109,7 +109,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
                 >
                   {(timer) => (
                     <Text className={monoStyles.monoFont}>
-                      {formatSecondsToMinutesSeconds(timer.seconds)}
+                      {formatSecondsToMinutesSeconds(timer.seconds, true)}
                     </Text>
                   )}
                 </Timer>
