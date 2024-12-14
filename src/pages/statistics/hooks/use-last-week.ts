@@ -4,12 +4,19 @@ import { useSQLiteContext } from 'service/sqlite/sqlite-provider';
 import {
   getFeedings2weeksFromDB,
   getPoops2weeksFromDB,
+  getSleeps2weeksFromDB,
   IFeedingDataGroupedByDay,
   IFeedingDataGroupedByDayData,
   IPoopDataGroupedByDay,
   IPoopDataGroupedByDayData,
+  ISleepDataGroupedByDay,
+  ISleepDataGroupedByDayData,
 } from 'service/sqlite/statistics-last-week-database.helper';
 import getLast7Days from 'shared/helpers/get-last-7-days';
+
+export type ILastWeekData = ({ day: string; weekDay: string } & IFeedingDataGroupedByDayData &
+  IPoopDataGroupedByDayData &
+  ISleepDataGroupedByDayData)[];
 
 export default function useLastWeek() {
   const { db, sqlReady } = useSQLiteContext();
@@ -20,14 +27,17 @@ export default function useLastWeek() {
     {},
   );
   const [poopDataGroupedByDay, setPoopDataGroupedByDay] = useState<IPoopDataGroupedByDay>({});
+  const [sleepDataGroupedByDay, setSleepDataGroupedByDay] = useState<ISleepDataGroupedByDay>({});
 
   const loadData = async () => {
     const feedingDataGroupedByDayResult = await getFeedings2weeksFromDB(db);
     setFeedingDataGroupedByDay(feedingDataGroupedByDayResult);
 
     const poopDataGroupedByDayResult = await getPoops2weeksFromDB(db);
-    console.log('🚀 ~ loadData ~ poopDataGroupedByDayResult:', poopDataGroupedByDayResult);
     setPoopDataGroupedByDay(poopDataGroupedByDayResult);
+
+    const sleepDataGroupedByDayResult = await getSleeps2weeksFromDB(db);
+    setSleepDataGroupedByDay(sleepDataGroupedByDayResult);
   };
 
   useEffect(() => {
@@ -41,12 +51,12 @@ export default function useLastWeek() {
     return t(`week-day-${key}`);
   };
 
-  const data: ({ day: string; weekDay: string } & IFeedingDataGroupedByDayData &
-    IPoopDataGroupedByDayData)[] = weekDays.map(({ key, day }) => ({
+  const data: ILastWeekData = weekDays.map(({ key, day }) => ({
     day: day,
     weekDay: getWeekDay(day, key),
     ...(feedingDataGroupedByDay[day] || {}),
     ...(poopDataGroupedByDay[day] || {}),
+    ...(sleepDataGroupedByDay[day] || {}),
   }));
 
   data.sort((a, b) => (new Date(a.day).getTime() < new Date(b.day).getTime() ? 1 : -1));

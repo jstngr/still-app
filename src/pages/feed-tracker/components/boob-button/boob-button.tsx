@@ -32,7 +32,10 @@ export default function BoobButton(props: IBoobButtonProps) {
 
   const markAsNext = useMemo(
     () =>
-      !activeFeeding && !!feedingEntries?.length && feedingEntries[0]?.type !== props.orientation,
+      !activeFeeding &&
+      !!feedingEntries?.length &&
+      feedingEntries[0]?.type !== props.orientation &&
+      feedingEntries[0]?.type !== 'Bottle',
     [props.orientation, feedingEntries, activeFeeding],
   );
 

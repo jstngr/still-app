@@ -8,7 +8,7 @@ import { ISleepEntry } from 'shared/types/types';
 import SleepTimer from './components/sleep-timer';
 import { useSleepContext } from 'service/sleep.service';
 import SleepHistoryItem from './components/sleep-history-item';
-import EditSleepEntryDrawer from './components/edit-feeding-entry-drawer';
+import EditSleepEntryDrawer from './components/edit-sleep-entry-drawer';
 
 export default function SleepPage() {
   const { activeSleep, sleepEntries, stopSleep, addSleepEntry, startSleep } = useSleepContext();

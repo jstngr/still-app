@@ -15,21 +15,22 @@ import { IconBabyBottle, IconPencil } from '@tabler/icons-react';
 import formatSecondsToMinutesSeconds from 'shared/helpers/format-seconds-to-minutes-seconds';
 import listItemStyles from 'components/list-item.module.css';
 import { useSettingsContext } from 'service/settings.service';
+import { TFunction } from 'i18next';
 
 interface IHistoryCardProps {
   entry: IFeedingEntry;
   index: number;
 }
 
-function getBadgeContent(type: IFeedingType) {
+function getBadgeContent(type: IFeedingType, t: TFunction) {
   if (type === 'Bottle')
     return (
       <Flex>
         <IconBabyBottle size={14} stroke={2} />
       </Flex>
     );
-  if (type === 'Left') return 'L';
-  if (type === 'Right') return 'R';
+  if (type === 'Left') return t('upperletter-left');
+  if (type === 'Right') return t('upperletter-right');
   return '';
 }
 
@@ -99,7 +100,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
         <Group justify="space-between" gap="xs">
           <Group align="center" h="100%">
             <Badge w="2.5rem" variant="outline" size="lg" className={monoStyles.monoFont}>
-              {getBadgeContent(entry.type)}
+              {getBadgeContent(entry.type, t)}
             </Badge>
             {!isBottle && (
               <Stack gap={'xxs'} align="start">
