@@ -39,7 +39,7 @@
   "poop-entry-drawer-button-label-save": "Änderungen speichern",
   "poop-entry-drawer-input-label-at": "Geschehen um",
   "poop-entry-drawer-title-edit": "Eintrag bearbeiten",
-  "poop-history-card-label-at": "Geschehen um",
+  "poop-history-card-label-at": "Eingetragen um <Big>{{value}}</Big> Uhr.",
   "poop-page-title-history": "Windelverlauf",
   "right": "Rechts",
   "settings-page-alert-title-reset": "Verlauf zurücksetzen",

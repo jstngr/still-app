@@ -39,7 +39,7 @@
   "poop-entry-drawer-button-label-save": "Save Changes",
   "poop-entry-drawer-input-label-at": "Happened at",
   "poop-entry-drawer-title-edit": "Edit Entry",
-  "poop-history-card-label-at": "Happened at",
+  "poop-history-card-label-at": "Tracked at <Big>{{value}}</Big> o'clock.",
   "poop-page-title-history": "Poop history",
   "right": "Right",
   "settings-page-alert-title-reset": "Reset History",

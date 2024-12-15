@@ -1,6 +1,5 @@
 import { ActionIcon, Box, Card, Flex, Group, Stack, Text } from '@mantine/core';
 import { IconPencil, IconPoo } from '@tabler/icons-react';
-import { t } from 'i18next';
 import React, { useMemo } from 'react';
 import { usePoopContext } from 'service/poop.service';
 import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
@@ -9,6 +8,7 @@ import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import monoStyles from 'shared/styles/mono-styles.module.css';
 import { IPoopEntry } from 'shared/types/types';
 import listItemStyles from './list-item.module.css';
+import { Trans } from 'react-i18next';
 
 export default function PoopHistoryItem({
   index,
@@ -61,10 +61,13 @@ export default function PoopHistoryItem({
             <Group gap="xs" grow>
               <Group gap="xxs">
                 <Text size="12px" c="dimmed">
-                  {t('poop-history-card-label-at')}
-                </Text>
-                <Text size="12px" className={monoStyles.monoFont}>
-                  {formatTimeFromTimestamp(entry.created)}
+                  <Trans
+                    i18nKey="poop-history-card-label-at"
+                    values={{ value: formatTimeFromTimestamp(entry.created) }}
+                    components={{
+                      Big: <Text size="12px" className={monoStyles.monoFont} component="span" />,
+                    }}
+                  />
                 </Text>
               </Group>
             </Group>
