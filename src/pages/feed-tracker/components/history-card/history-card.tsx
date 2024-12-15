@@ -24,6 +24,7 @@ import listItemStyles from 'components/list-item.module.css';
 import { useSettingsContext } from 'service/settings.service';
 import Timer from 'components/timer';
 import formatSecondsToMinutesSeconds from 'shared/helpers/format-seconds-to-minutes-seconds';
+import formatTime from 'shared/helpers/format-time';
 
 interface IHistoryCardProps {
   entry: IFeedingEntry;
@@ -49,6 +50,34 @@ function TypeBadge(props: { type: IFeedingType }) {
     <Badge w="2.5rem" variant={variant} size="lg" className={monoStyles.monoFont}>
       {content}
     </Badge>
+  );
+}
+
+function TimeAgo(props: { timeAgo: number }) {
+  const { t } = useTranslation();
+
+  const innerTimer = (seconds: number) => {
+    if (seconds > 60 * 60) {
+      return t('history-card-label-hours-ago', {
+        value: formatTime(seconds, false),
+      });
+    }
+    return t('history-card-label-min-ago', {
+      value: formatSecondsToMinutesSeconds(seconds, false),
+    });
+  };
+
+  return (
+    <Timer isRunning isStopped={false} startingSeconds={Math.floor(props.timeAgo / 1000)}>
+      {(timer) => {
+        if (timer.seconds > 12 * 60 * 60) return null;
+        return (
+          <Text size="xs" component="span" className={monoStyles.monoFont}>
+            {innerTimer(timer.seconds)}
+          </Text>
+        );
+      }}
+    </Timer>
   );
 }
 
@@ -149,7 +178,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
               >
                 {(timer) => (
                   <Text size="sm">
-                    {timer.seconds < 60 ? (
+                    {timer.seconds < 60 && isRunning ? (
                       t('history-card-label-just-started')
                     ) : (
                       <Trans
@@ -163,9 +192,9 @@ export default function HistoryCard(props: IHistoryCardProps) {
                           ),
                         }}
                         values={{
-                          duration: formatSecondsToMinutesSeconds(timer.seconds),
+                          duration: formatSecondsToMinutesSeconds(Math.max(timer.seconds, 60)),
                         }}
-                        count={Math.floor(timer.seconds / 60)}
+                        count={Math.floor(Math.max(timer.seconds, 60) / 60)}
                       />
                     )}
                   </Text>
@@ -173,17 +202,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
               </Timer>
             )}
           </Stack>
-          {showTimeAgo && (
-            <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
-              {(timer) => (
-                <Text size="xs" component="span" className={monoStyles.monoFont}>
-                  {t('history-card-label-min-ago', {
-                    value: formatSecondsToMinutesSeconds(Math.max(timer.seconds, 999), false),
-                  })}
-                </Text>
-              )}
-            </Timer>
-          )}
+          {showTimeAgo && <TimeAgo timeAgo={timeAgo} />}
           <ActionIcon
             disabled={activeFeeding?.id === entry.id}
             variant="subtle"

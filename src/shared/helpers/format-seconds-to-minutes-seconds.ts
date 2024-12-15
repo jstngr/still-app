@@ -9,8 +9,10 @@ export default function formatSecondsToMinutesSeconds(
   seconds: number,
   showSeconds?: boolean,
 ): string {
-  if (seconds === 0) {
+  if (seconds === 0 && showSeconds) {
     return '00:00';
+  } else if (seconds === 0) {
+    return '00';
   }
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;

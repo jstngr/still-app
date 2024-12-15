@@ -1,6 +1,6 @@
-import { ActionIcon, Badge, Box, Card, Flex, Grid, Group, Stack, Text } from '@mantine/core';
+import { ActionIcon, Badge, Box, Card, Flex, Group, Stack, Text } from '@mantine/core';
 import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
 import formatDateLocaleFromTimestamp from 'shared/helpers/format-date-locale-from-timestamp';
 import formatTime from 'shared/helpers/format-time';
@@ -9,7 +9,7 @@ import monoStyles from 'shared/styles/mono-styles.module.css';
 import { ISleepEntry } from 'shared/types/types';
 import Timer from '../../../../components/timer';
 import styles from './history-card.module.css';
-import { IconPencil, IconZzz } from '@tabler/icons-react';
+import { IconClockPlay, IconClockStop, IconPencil, IconZzz } from '@tabler/icons-react';
 import formatSecondsToMinutesSeconds from 'shared/helpers/format-seconds-to-minutes-seconds';
 import listItemStyles from 'components/list-item.module.css';
 import SleepEntry from 'classes/sleep-entry.class';
@@ -18,6 +18,34 @@ import { useSleepContext } from 'service/sleep.service';
 interface IHistoryCardProps {
   entry: ISleepEntry;
   index: number;
+}
+
+function TimeAgo(props: { timeAgo: number }) {
+  const { t } = useTranslation();
+
+  const innerTimer = (seconds: number) => {
+    if (seconds > 60 * 60) {
+      return t('history-card-label-hours-ago', {
+        value: formatTime(seconds, false),
+      });
+    }
+    return t('history-card-label-min-ago', {
+      value: formatSecondsToMinutesSeconds(seconds, false),
+    });
+  };
+
+  return (
+    <Timer isRunning isStopped={false} startingSeconds={Math.floor(props.timeAgo / 1000)}>
+      {(timer) => {
+        if (timer.seconds > 12 * 60 * 60) return null;
+        return (
+          <Text size="xs" component="span" className={monoStyles.monoFont}>
+            {innerTimer(timer.seconds)}
+          </Text>
+        );
+      }}
+    </Timer>
+  );
 }
 
 export default function HistoryCard(props: IHistoryCardProps) {
@@ -40,7 +68,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
       isRunning: sleepEntry.isRunning(),
       timeAgo: sleepEntry.getTimeAgo(),
       timeFrom: formatTimeFromTimestamp(sleepEntry.getStarted()),
-      timeTo: formatTimeFromTimestamp(sleepEntry.getStopped()),
+      timeTo: sleepEntry.getStopped() ? formatTimeFromTimestamp(sleepEntry.getStopped()) : '--:--',
     };
   }, [entry]);
 
@@ -71,77 +99,47 @@ export default function HistoryCard(props: IHistoryCardProps) {
         className={showDateLabel ? '' : listItemStyles.dashedBorderTop}
       >
         {isRunning && <div className={styles.activeCardIndicator} />}
-        <Group justify="space-between" gap="xs">
-          <Group align="center" h="100%">
-            <Badge w="2.5rem" variant="outline" size="lg" className={monoStyles.monoFont}>
-              <Flex>
-                <IconZzz size={14} stroke={2} />
-              </Flex>
-            </Badge>
+        <Group align="center" justify="space-between" gap="0">
+          <Badge w="2.5rem" variant="outline" size="lg" className={monoStyles.monoFont}>
+            <Flex>
+              <IconZzz size={14} stroke={2} />
+            </Flex>
+          </Badge>
+          <Stack gap="0">
+            <Group gap="xxs" align="center" className={monoStyles.monoFont}>
+              <IconClockPlay size="16px" color="var(--mantine-color-background-3)" />
+              <Text size="sm">{timeFrom}</Text>
+              <Text size="sm">-</Text>
+              <IconClockStop size="16px" color="var(--mantine-color-background-3)" />
+              <Text size="sm">{timeTo}</Text>
+            </Group>
 
-            <Stack gap={'xxs'} align="start">
-              <Group gap={'xs'} justify="end" grow>
-                <Text size="12px" c="dimmed">
-                  {t('history-card-label-from')}
-                </Text>
-                <Text size="12px" className={monoStyles.monoFont}>
-                  {timeFrom}
-                </Text>
-              </Group>
-              <Group gap={'xs'} justify="end" w="100%" grow>
-                <Text size="12px" c="dimmed">
-                  {t('history-card-label-to')}
-                </Text>
-                <Text size="12px" className={monoStyles.monoFont}>
-                  {timeTo}
-                </Text>
-              </Group>
-            </Stack>
-          </Group>
-
-          <Grid gutter="4px" flex="1">
-            <Grid.Col span={6}>
-              <Stack gap="0" align="end">
-                <Timer
-                  isRunning={!!isRunning}
-                  isStopped={false}
-                  startingSeconds={Math.floor(new SleepEntry(entry).getDuration() / 1000)}
-                >
-                  {(timer) => (
-                    <Text className={monoStyles.monoFont}>
-                      {formatSecondsToMinutesSeconds(timer.seconds, true)}
-                    </Text>
+            <Timer
+              isRunning={!!isRunning}
+              isStopped={false}
+              startingSeconds={Math.floor(new SleepEntry(entry).getDuration() / 1000)}
+            >
+              {(timer) => (
+                <Text size="sm">
+                  {timer.seconds < 60 && isRunning ? (
+                    t('history-card-label-just-started')
+                  ) : (
+                    <Trans
+                      i18nKey="history-card-label-duration"
+                      components={{
+                        Mono: <Text component="span" className={monoStyles.monoFont} />,
+                      }}
+                      values={{
+                        duration: formatSecondsToMinutesSeconds(Math.max(timer.seconds, 60)),
+                      }}
+                      count={Math.floor(Math.max(timer.seconds, 60) / 60)}
+                    />
                   )}
-                </Timer>
-                <Text size="12px" c="dimmed">
-                  {t('history-card-label-duration')}
                 </Text>
-              </Stack>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              {showTimeAgo ? (
-                <Stack gap="0" align="end">
-                  <Timer isRunning isStopped={false} startingSeconds={Math.floor(timeAgo / 1000)}>
-                    {(timer) => (
-                      <>
-                        <Text className={monoStyles.monoFont}>
-                          {formatTime(timer.seconds, false)}
-                        </Text>
-                        <Text size="12px" c="dimmed">
-                          {timer.seconds > 60 * 60
-                            ? t('history-card-label-hours-ago')
-                            : t('history-card-label-min-ago')}
-                        </Text>
-                      </>
-                    )}
-                  </Timer>
-                </Stack>
-              ) : (
-                <span></span>
               )}
-            </Grid.Col>
-          </Grid>
-
+            </Timer>
+          </Stack>
+          {showTimeAgo && <TimeAgo timeAgo={timeAgo} />}
           <ActionIcon
             disabled={activeSleep?.id === entry.id}
             variant="subtle"
