@@ -47,7 +47,9 @@ export default function Last24Hours() {
                     <Text size="24px" className={monoStyles.monoFont}>
                       {bottleAmount}
                     </Text>
-                    <Text>{t('statistics-page-24-hours-bottle-title')}</Text>
+                    <Text>
+                      {t('statistics-page-24-hours-bottle-title', { count: bottleAmount })}
+                    </Text>
                   </Group>
                   <Text size="sm">
                     <Trans
@@ -78,7 +80,9 @@ export default function Last24Hours() {
                         <Text size="24px" className={monoStyles.monoFont}>
                           {chunks.length}
                         </Text>
-                        <Text>{t('statistics-page-24-hours-breast-title')}</Text>
+                        <Text>
+                          {t('statistics-page-24-hours-breast-title', { count: chunks.length })}
+                        </Text>
                       </Group>
 
                       <Text size="sm">
@@ -87,7 +91,10 @@ export default function Last24Hours() {
                           components={{
                             Big: <strong className={monoStyles.monoFont} />,
                           }}
-                          values={{ averageChunkDuration }}
+                          values={{
+                            averageChunkDuration,
+                          }}
+                          count={parseInt(averageChunkDuration, 10)}
                         />
                       </Text>
                     </Stack>
@@ -111,6 +118,7 @@ export default function Last24Hours() {
                           boobDistribution: boobDistribution?.Left || 0,
                           averageDuration: averageDurationLeft,
                         }}
+                        count={parseInt(averageDurationLeft, 10)}
                       />
                     </Text>
                     <Text size="sm">
@@ -123,6 +131,7 @@ export default function Last24Hours() {
                           boobDistribution: boobDistribution?.Right || 0,
                           averageDuration: averageDurationRight,
                         }}
+                        count={parseInt(averageDurationRight, 10)}
                       />
                     </Text>
                   </Stack>
@@ -143,7 +152,9 @@ export default function Last24Hours() {
                       <Text size="24px" className={monoStyles.monoFont}>
                         {poopEntries?.length}
                       </Text>
-                      <Text>{t('statistics-page-24-hours-poop-title')}</Text>
+                      <Text>
+                        {t('statistics-page-24-hours-poop-title', { count: poopEntries?.length })}
+                      </Text>
                     </Group>
                     <Text size="sm">
                       <Trans
@@ -174,7 +185,9 @@ export default function Last24Hours() {
                       <Text size="24px" className={monoStyles.monoFont}>
                         {sleepEntries.length || 0}
                       </Text>
-                      <Text>{t('statistics-page-24-hours-sleep-title')}</Text>
+                      <Text>
+                        {t('statistics-page-24-hours-sleep-title', { count: sleepEntries.length })}
+                      </Text>
                     </Group>
                     <Stack gap="0">
                       <Text size="sm">

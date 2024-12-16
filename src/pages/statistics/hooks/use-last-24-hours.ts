@@ -39,8 +39,9 @@ export default function useLast24Hours() {
       const duration = end - start;
       average += duration;
     });
-    if (average === 0) return '0';
-    return formatMillisecondsToMinutes(Math.floor(average / cChunks.length));
+
+    if (average === 0) return '00';
+    return formatMillisecondsToMinutes(Math.max(Math.floor(average / cChunks.length), 60 * 1000));
   };
 
   const getAverageDuration = (entries: IFeedingEntry[]) => {
@@ -51,8 +52,8 @@ export default function useLast24Hours() {
       const duration = end - start;
       average += duration;
     });
-    if (average === 0) return '0';
-    return formatMillisecondsToMinutes(Math.floor(average / entries.length));
+    if (average === 0) return '00';
+    return formatMillisecondsToMinutes(Math.max(Math.floor(average / entries.length), 60 * 1000));
   };
 
   const getAverageVolume = (entries: IFeedingEntry[]) => {

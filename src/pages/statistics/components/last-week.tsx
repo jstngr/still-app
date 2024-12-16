@@ -129,9 +129,7 @@ function LastWeek() {
           <Table.Tr key={d.day}>
             <Table.Td>{d.weekDay}</Table.Td>
             <Table.Td>{d.poopEntries.length}</Table.Td>
-            <Table.Td>
-              {d.averageTimeBetweenPoops || 0} {t('statistics-page-label-hours')}
-            </Table.Td>
+            <Table.Td>{d.averageTimeBetweenPoops || '00:00'}</Table.Td>
           </Table.Tr>
         )
       }
@@ -147,12 +145,8 @@ function LastWeek() {
           <Table.Tr key={d.day}>
             <Table.Td>{d.weekDay}</Table.Td>
             <Table.Td>{d.sleepEntries.length || 0}</Table.Td>
-            <Table.Td>
-              {d.averageDurationOfSleeps} {t('statistics-page-label-hours')}
-            </Table.Td>
-            <Table.Td>
-              {d.totalDurationOfSleeps} {t('statistics-page-label-hours')}
-            </Table.Td>
+            <Table.Td>{d.averageDurationOfSleeps}</Table.Td>
+            <Table.Td>{d.totalDurationOfSleeps}</Table.Td>
           </Table.Tr>
         )
       }
@@ -195,6 +189,7 @@ function LastWeek() {
             <DataCard
               icon={<IconPoo />}
               title={t('statistics-page-last-week-poops-title')}
+              subtitle={t('statistics-page-last-week-poops-subtitle')}
               tableHeaders={[
                 '',
                 t('statistics-page-last-week-poops-amount'),
@@ -207,6 +202,7 @@ function LastWeek() {
             <DataCard
               icon={<IconBedFlat />}
               title={t('statistics-page-last-week-sleep-title')}
+              subtitle={t('statistics-page-last-week-sleep-subtitle')}
               tableHeaders={[
                 '',
                 t('statistics-page-last-week-sleep-label-sessions'),
