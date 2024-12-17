@@ -43,7 +43,7 @@ export default function WelcomeViewFinish() {
         </Stack>
       </Flex>
       <Flex flex="1" align="end">
-        <Pagination active={3} />
+        <Pagination active={4} />
       </Flex>
     </>
   );

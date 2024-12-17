@@ -41,5 +41,19 @@
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<true />
+
+		<key>GADIsAdManagerApp</key>
+		<true />
+		<key>GADApplicationIdentifier</key>
+		<string>ca-app-pub-3385049365741222~1441830408</string>
+		<key>SKAdNetworkItems</key>
+		<array>
+			<dict>
+				<key>SKAdNetworkIdentifier</key>
+				<string>cstr6suwn9.skadnetwork</string>
+			</dict>
+		</array>
+		<key>NSUserTrackingUsageDescription</key>
+		<string>We use your data to show you personalized ads and improve your experience.</string>
 	</dict>
 </plist>

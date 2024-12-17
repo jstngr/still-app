@@ -3,6 +3,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
 import { Capacitor } from '@capacitor/core';
+import { BrowserRouter } from 'react-router-dom';
 
 import 'normalize.css';
 import '@fontsource/poppins';
@@ -13,7 +14,6 @@ import './i18n';
 
 import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
-import { BrowserRouter } from 'react-router-dom';
 
 const domNode = document.getElementById('root');
 const root = createRoot(domNode);

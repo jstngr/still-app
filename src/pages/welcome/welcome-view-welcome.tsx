@@ -1,18 +1,11 @@
-import {
-  Button,
-  Flex,
-  Image,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Button, Flex, Image, Stack, Text, Title } from '@mantine/core';
 import React from 'react';
 import BreastFeeding2 from 'assets/images/breastfeeding2.jpg';
 import styles from './welcome.module.css';
 import { useNavigate } from 'react-router';
 import AppRoutes from 'shared/constants/app-routes';
-import Pagination from './pagination';
 import { Trans, useTranslation } from 'react-i18next';
+import Pagination from './pagination';
 
 export default function WelcomeViewWelcome() {
   const { t } = useTranslation();
@@ -51,9 +44,7 @@ export default function WelcomeViewWelcome() {
           </Stack>
         </Stack>
       </Flex>
-      <Flex flex="1" align="end">
-        <Pagination active={0} />
-      </Flex>
+      <Pagination active={0} />
     </>
   );
 }

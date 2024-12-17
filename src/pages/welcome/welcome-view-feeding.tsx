@@ -54,7 +54,7 @@ export default function WelcomeViewFeeding() {
         </Stack>
       </Flex>
       <Flex flex="1" align="end">
-        <Pagination active={2} />
+        <Pagination active={3} />
       </Flex>
     </>
   );

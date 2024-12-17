@@ -37,6 +37,7 @@
     "run:ios": "npx cap run ios"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^6.2.0-1",
     "@capacitor-community/keep-awake": "^5.0.1",
     "@capacitor-community/sqlite": "^6.0.2",
     "@capacitor/android": "^6.1.2",
