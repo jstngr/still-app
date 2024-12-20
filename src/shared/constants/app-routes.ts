@@ -10,6 +10,7 @@ const AppRoutes = {
   welcomeName: { absolute: '/welcome/name', relative: 'name' },
   welcomeSettings: { absolute: '/welcome/settings', relative: 'settings' },
   welcomeFeeding: { absolute: '/welcome/feeding', relative: 'feeding' },
+  welcomePrivacy: { absolute: '/welcome/privacy', relative: 'privacy' },
   welcomeFinish: { absolute: '/welcome/finish', relative: 'finish' },
 };
 

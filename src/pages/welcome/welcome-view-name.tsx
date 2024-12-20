@@ -1,5 +1,5 @@
 import { Button, Flex, Image, Stack, Text, TextInput, Title } from '@mantine/core';
-import Baby2 from 'assets/images/Baby2.png';
+import Baby2 from 'assets/images/Baby2.webp';
 import React from 'react';
 import { useNavigate } from 'react-router';
 import { useSettingsContext } from 'service/settings.service';

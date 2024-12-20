@@ -1,6 +1,6 @@
 import { Button, Flex, Image, Stack, Text, Title } from '@mantine/core';
 import React from 'react';
-import BreastFeeding2 from 'assets/images/breastfeeding2.jpg';
+import BreastFeeding2 from 'assets/images/breastfeeding2.webp';
 import styles from './welcome.module.css';
 import { useNavigate } from 'react-router';
 import AppRoutes from 'shared/constants/app-routes';

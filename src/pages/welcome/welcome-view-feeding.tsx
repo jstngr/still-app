@@ -1,5 +1,5 @@
 import { Button, Flex, Image, Stack, Switch, Text, Title } from '@mantine/core';
-import Breastfeeding3a from 'assets/images/breastfeeding3a.png';
+import Breastfeeding3 from 'assets/images/breastfeeding3.webp';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
@@ -7,15 +7,21 @@ import { useSettingsContext } from 'service/settings.service';
 import AppRoutes from 'shared/constants/app-routes';
 import Pagination from './pagination';
 import styles from './welcome.module.css';
+import { useAdmobContext } from 'service/admob.service';
 
 export default function WelcomeViewFeeding() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { feedByBoob, feedByBottle, onChangeFeedByBoob, onChangeFeedByBottle, babyName } =
     useSettingsContext();
+  const { appleTrackingDenied } = useAdmobContext();
 
   const next = () => {
-    navigate(AppRoutes.welcomeFinish.absolute);
+    if (appleTrackingDenied) {
+      navigate(AppRoutes.welcomeFinish.absolute);
+    } else {
+      navigate(AppRoutes.welcomePrivacy.absolute);
+    }
   };
   return (
     <>
@@ -25,7 +31,7 @@ export default function WelcomeViewFeeding() {
           radius="99999px"
           w="50dvw"
           maw="200px"
-          src={Breastfeeding3a}
+          src={Breastfeeding3}
           h="50dvw"
           mah="200px"
         />

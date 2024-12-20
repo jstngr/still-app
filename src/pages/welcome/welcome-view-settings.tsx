@@ -11,7 +11,7 @@ import {
   Title,
 } from '@mantine/core';
 import { IconCircleDashedCheck } from '@tabler/icons-react';
-import BreastFeeding5 from 'assets/images/breastfeeding5.png';
+import BreastFeeding5 from 'assets/images/breastfeeding5.webp';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';

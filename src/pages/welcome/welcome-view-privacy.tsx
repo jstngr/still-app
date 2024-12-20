@@ -1,24 +1,24 @@
 import { Button, Flex, Image, Stack, Text, Title } from '@mantine/core';
-import Baby1 from 'assets/images/Baby1.webp';
+import Baby4 from 'assets/images/Baby4.webp';
 import React from 'react';
 import { useNavigate } from 'react-router';
 import Pagination from './pagination';
 import styles from './welcome.module.css';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSettingsContext } from 'service/settings.service';
+import AppRoutes from 'shared/constants/app-routes';
 import { useAdmobContext } from 'service/admob.service';
 
-export default function WelcomeViewFinish() {
+export default function WelcomeViewPrivacy() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { onInitialized } = useSettingsContext();
 
-  const { appleTrackingDenied } = useAdmobContext();
+  const { confirmAdmob } = useAdmobContext();
 
   const next = async () => {
-    await onInitialized();
-    navigate('/');
+    await confirmAdmob();
+    navigate(AppRoutes.welcomeFinish.absolute);
   };
+
   return (
     <>
       <Flex flex="1 1 33%" align={'end'}>
@@ -27,7 +27,7 @@ export default function WelcomeViewFinish() {
           radius="99999px"
           w="50dvw"
           maw="200px"
-          src={Baby1}
+          src={Baby4}
           h="50dvw"
           mah="200px"
         />
@@ -35,18 +35,18 @@ export default function WelcomeViewFinish() {
       <Flex flex="1 0 33%">
         <Stack align="center">
           <Title ff={'Dancing Script'} c="primary" size="3rem">
-            {t('welcome-view-finish-title')}
+            {t('welcome-view-privacy-title')}
           </Title>
           <Stack gap="lg" align="center">
             <Text ta="center">
-              <Trans i18nKey="welcome-view-finish-description" components={{ Nl: <br /> }}></Trans>
+              <Trans i18nKey="welcome-view-policy-description" components={{ Nl: <br /> }}></Trans>
             </Text>
-            <Button onClick={next}>{t('welcome-view-finish-button-lable')}</Button>
+            <Button onClick={next}>{t('welcome-view-privacy-button-lable')}</Button>
           </Stack>
         </Stack>
       </Flex>
       <Flex flex="1" align="end">
-        <Pagination active={appleTrackingDenied ? 4 : 5} />
+        <Pagination active={4} />
       </Flex>
     </>
   );

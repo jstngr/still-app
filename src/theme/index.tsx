@@ -1,5 +1,6 @@
-import { createTheme, MantineThemeOverride } from '@mantine/core';
+import { createTheme, MantineProvider, MantineThemeOverride } from '@mantine/core';
 import themeColors from './colors';
+import React, { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 
 const theme: MantineThemeOverride = createTheme({
   fontFamily: 'Poppins',
@@ -58,4 +59,43 @@ const theme: MantineThemeOverride = createTheme({
   },
 });
 
-export default theme;
+interface IThemeContextType {
+  setFooterHeight: (height: number) => void;
+}
+
+const ThemeContext = createContext<IThemeContextType | undefined>(undefined);
+
+interface IThemeProviderProps {
+  children: ReactNode;
+}
+
+export const ThemeProvider: React.FC<IThemeProviderProps> = ({ children }) => {
+  const [footerHeight, setFooterHeight] = useState(0);
+
+  const mantineTheme = useMemo(() => {
+    const temp = theme;
+    if (temp?.components?.AppShell) {
+      temp.components.AppShell.defaultProps.footer.height =
+        footerHeight || temp.components.AppShell.defaultProps.footer.height;
+    }
+    return temp;
+  }, [footerHeight]);
+
+  return (
+    <ThemeContext.Provider
+      value={{
+        setFooterHeight,
+      }}
+    >
+      <MantineProvider theme={mantineTheme}>{children}</MantineProvider>
+    </ThemeContext.Provider>
+  );
+};
+
+export const useThemeContext = () => {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error('useThemeContext must be used within a ThemeContext');
+  }
+  return context;
+};

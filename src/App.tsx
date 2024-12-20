@@ -1,11 +1,11 @@
-import { AppShell, Container, MantineProvider, Stack } from '@mantine/core';
+import { AppShell, Container, Stack } from '@mantine/core';
 import AppTitle from 'components/app-title';
 import Navigation from 'components/navigation/navigation';
 import FeedTracker from 'pages/feed-tracker/feed-tracker.page';
 import React from 'react';
 import { Navigate, Outlet, Route, Routes } from 'react-router';
 import { FeedingProvider } from 'service/feeding.service';
-import theme from 'theme';
+import { ThemeProvider } from 'theme';
 import PoopPage from 'pages/poop/poop.page';
 import SettingsPage from 'pages/settings/settings.page';
 import StatisticsPage from 'pages/statistics/statistics.page';
@@ -42,12 +42,12 @@ export default function App() {
   useKeepAwake();
 
   return (
-    <MantineProvider theme={theme}>
-      <AdmobProvider>
-        <SQLiteProvider>
-          <SettingsProvider>
-            <SettingsContext.Consumer>
-              {(settings) => (
+    <ThemeProvider>
+      <SQLiteProvider>
+        <SettingsProvider>
+          <SettingsContext.Consumer>
+            {(settings) => (
+              <AdmobProvider>
                 <FeedingProvider>
                   <SleepProvider>
                     <PoopProvider>
@@ -107,11 +107,11 @@ export default function App() {
                     </PoopProvider>
                   </SleepProvider>
                 </FeedingProvider>
-              )}
-            </SettingsContext.Consumer>
-          </SettingsProvider>
-        </SQLiteProvider>
-      </AdmobProvider>
-    </MantineProvider>
+              </AdmobProvider>
+            )}
+          </SettingsContext.Consumer>
+        </SettingsProvider>
+      </SQLiteProvider>
+    </ThemeProvider>
   );
 }
