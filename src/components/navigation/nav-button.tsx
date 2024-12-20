@@ -26,7 +26,7 @@ export default function NavButton(props: INavButtonProps) {
   return (
     <Button onClick={handleNavigate} variant="transparent" h="auto" pt="xs" color={color} px={0}>
       <Stack gap="xxs" align="center">
-        <Icon size="24px" strokeWidth={strokeWidth} />
+        <Icon size="20px" strokeWidth={strokeWidth} />
         <Text fw={fontWidth} size="xs">
           {label}
         </Text>

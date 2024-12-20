@@ -88,7 +88,7 @@ export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
   useEffect(() => {
     if (initialized) {
       admobBanner(consentInfoStatus, trackingInfoStatus, (height: number) => {
-        setFooterHeight(height + 66);
+        setFooterHeight(height + 64);
       });
     }
   }, [initialized]);

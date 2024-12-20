@@ -25,7 +25,7 @@ const theme: MantineThemeOverride = createTheme({
         style: {
           overflow: 'hidden',
         },
-        footer: { height: 66 },
+        footer: { height: 64 },
         bg: 'var(--mantine-color-background-0)',
         padding:
           'env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-left, 20px) env(safe-area-inset-bottom, 20px)',
