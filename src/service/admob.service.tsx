@@ -130,6 +130,7 @@ export async function admobBanner(
 
   const options: BannerAdOptions = {
     adId: 'ca-app-pub-3940256099942544/2435281174',
+    // adId: 'ca-app-pub-3385049365741222/3427416213', // Prod
     adSize: BannerAdSize.ADAPTIVE_BANNER,
     position: BannerAdPosition.BOTTOM_CENTER,
     margin: 0, //Margin Banner. Default is 0px; If position is BOTTOM_CENTER, margin is be margin-bottom. If position is TOP_CENTER, margin is be margin-top.

@@ -7,13 +7,13 @@ const config: CapacitorConfig = {
   webDir: 'build',
   server: {
     // hot reload
-    url: 'http://192.168.178.22:3000',
+    // url: 'http://192.168.178.22:3000',
     // url: 'http://localhost:3000',
     cleartext: true,
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 3000, // Show splash for 3 seconds
+      launchShowDuration: 2000, // Show splash for 3 seconds
       launchAutoHide: false, // Automatically hide splash screen after 3 seconds
       backgroundColor: '#ffffff', // Splash screen background color
       androidScaleType: 'CENTER_CROP', // How the splash image is scaled on Android
