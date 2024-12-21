@@ -1,4 +1,5 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   appId: 'com.minigenie.stillapp',
@@ -22,6 +23,11 @@ const config: CapacitorConfig = {
       spinnerColor: '#999999', // Spinner color
       splashFullScreen: true, // Fullscreen mode for the splash screen
       splashImmersive: true, // Immersive mode (Android)
+    },
+    Keyboard: {
+      resize: KeyboardResize.Body,
+      style: KeyboardStyle.Dark,
+      resizeOnFullScreen: true,
     },
   },
 };
