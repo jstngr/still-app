@@ -56,6 +56,14 @@ const theme: MantineThemeOverride = createTheme({
         },
       },
     },
+    Drawer: {
+      styles: (theme) => ({
+        content: {
+          borderRadius: theme.radius.md,
+          paddingBottom: 64,
+        },
+      }),
+    },
   },
 });
 
@@ -78,6 +86,15 @@ export const ThemeProvider: React.FC<IThemeProviderProps> = ({ children }) => {
       temp.components.AppShell.defaultProps.footer.height =
         footerHeight || temp.components.AppShell.defaultProps.footer.height;
     }
+    if (temp?.components?.Drawer) {
+      temp.components.Drawer.styles = (theme) => ({
+        content: {
+          borderRadius: theme.radius.md,
+          paddingBottom: Math.max(footerHeight - 64 + 8, 0),
+        },
+      });
+    }
+
     return temp;
   }, [footerHeight]);
 
