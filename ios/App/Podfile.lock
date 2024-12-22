@@ -4,6 +4,8 @@ PODS:
   - CapacitorCommunityAdmob (6.2.0-1):
     - Capacitor
     - Google-Mobile-Ads-SDK (= 11.3.0)
+  - CapacitorCommunityInAppReview (6.0.0):
+    - Capacitor
   - CapacitorCommunityKeepAwake (5.0.1):
     - Capacitor
   - CapacitorCommunitySqlite (6.0.2):
@@ -34,6 +36,7 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCommunityAdmob (from `../../node_modules/@capacitor-community/admob`)"
+  - "CapacitorCommunityInAppReview (from `../../node_modules/@capacitor-community/in-app-review`)"
   - "CapacitorCommunityKeepAwake (from `../../node_modules/@capacitor-community/keep-awake`)"
   - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
@@ -55,6 +58,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorCommunityAdmob:
     :path: "../../node_modules/@capacitor-community/admob"
+  CapacitorCommunityInAppReview:
+    :path: "../../node_modules/@capacitor-community/in-app-review"
   CapacitorCommunityKeepAwake:
     :path: "../../node_modules/@capacitor-community/keep-awake"
   CapacitorCommunitySqlite:
@@ -75,6 +80,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
   CapacitorCommunityAdmob: 397a611688c5cfb07590863335135e36b5c83199
+  CapacitorCommunityInAppReview: c69a9392f39a10f28092d823cfa979637f4fa079
   CapacitorCommunityKeepAwake: e2ddd50812e3407f8dc3a2c28e97d66e9b59b2f5
   CapacitorCommunitySqlite: 47dab3a2d9a9581a0fe7642cf9cffd34c5d5b358
   CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
@@ -88,6 +94,6 @@ SPEC CHECKSUMS:
   SQLCipher: 77fbe633cd84db04b07876dd50766b4924b57d61
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: c91d81ef14011a0a0df7bf58edf5ff4dbcf056e5
+PODFILE CHECKSUM: 4952a7c2b971ff66322d28ca2078a46f316cd6c5
 
 COCOAPODS: 1.16.2

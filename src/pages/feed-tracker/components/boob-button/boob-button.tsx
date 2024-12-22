@@ -7,6 +7,7 @@ import styles from './boob-button.module.css';
 import { DefaultTReturn } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { $Dictionary } from 'i18next/typescript/helpers';
+import { useAppRatingContext } from 'service/app-rating.service';
 interface IBoobButtonProps {
   label: DefaultTReturn<$Dictionary>;
   orientation: IFeedingType;
@@ -38,6 +39,13 @@ export default function BoobButton(props: IBoobButtonProps) {
       feedingEntries[0]?.type !== 'Bottle',
     [props.orientation, feedingEntries, activeFeeding],
   );
+
+  const { triggerRating } = useAppRatingContext();
+
+  const onClickStart = () => {
+    startFeeding(props.orientation);
+    triggerRating();
+  };
 
   if (isActive) {
     return (
@@ -105,7 +113,7 @@ export default function BoobButton(props: IBoobButtonProps) {
       mah={maxHeight}
       w={height}
       maw={maxHeight}
-      onClick={() => startFeeding(props.orientation)}
+      onClick={onClickStart}
     >
       {markAsNext && (
         <div className={styles.nextButtonIndicator}>

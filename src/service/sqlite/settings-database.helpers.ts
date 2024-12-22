@@ -18,7 +18,8 @@ async function createTable(db: SQLiteDBConnection): Promise<boolean> {
         feedByBottle BOOLEAN NOT NULL,
         initialized BOOLEAN NOT NULL,
         feedingUnit TEXT NOT NULL,
-        defaultVolume INTEGER NOT NULL
+        defaultVolume INTEGER NOT NULL,
+        appRated BOOLEAN NOT NULL
       );
     `;
   try {
@@ -47,9 +48,9 @@ async function addSettingsRowIfNotExist(db: SQLiteDBConnection): Promise<void> {
       const language = await getSystemLanguage();
       await db.run(`
       INSERT INTO settings 
-        (babyName, language, poopTracker, sleepTracker, initialized, feedByBoob, feedByBottle, defaultVolume, feedingUnit) 
+        (babyName, language, poopTracker, sleepTracker, initialized, feedByBoob, feedByBottle, defaultVolume, feedingUnit, appRated) 
       VALUES 
-        ("", "${language}", true, true, false, true, false, 100, "ml")
+        ("", "${language}", true, true, false, true, false, 100, "ml", false)
       ;`);
     }
   } catch (err) {
@@ -100,6 +101,7 @@ async function getSettingsFromDB(db?: SQLiteDBConnection): Promise<ISettingsObje
       data.initialized = !!data.initialized;
       data.feedByBoob = !!data.feedByBoob;
       data.feedByBottle = !!data.feedByBottle;
+      data.appRated = !!data.appRated;
     }
     return (data as ISettingsObject) || null;
   } catch (err) {
@@ -282,7 +284,24 @@ async function saveInitializedToDb(db: SQLiteDBConnection): Promise<boolean | nu
     await db.query(`UPDATE settings SET initialized = true;`);
     return true;
   } catch (err) {
-    console.error('[SettingsDatabase] Error updating sleepTracker:', err);
+    console.error('[SettingsDatabase] Error updating initialized:', err);
+  }
+  return false;
+}
+
+/**
+ * Updates the "appRated" boolean in the database.
+ *
+ * @param db - The SQLiteDBConnection instance used to execute the update query.
+ * @returns A promise that resolves when the update is complete to boolean.
+ * @throws Logs an error message if the query fails.
+ */
+async function saveAppRatedToDb(db: SQLiteDBConnection): Promise<boolean | null> {
+  try {
+    await db.query(`UPDATE settings SET appRated = true;`);
+    return true;
+  } catch (err) {
+    console.error('[SettingsDatabase] Error updating appRated:', err);
   }
   return false;
 }
@@ -311,4 +330,5 @@ export {
   saveFeedByBottleToDB,
   saveFeedingUnitToDB,
   saveDefaultVolumeToDB,
+  saveAppRatedToDb,
 };

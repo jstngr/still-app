@@ -6,6 +6,7 @@ import {
   deleteSettingsFromDB,
   getSettingsFromDB,
   initSettingsDB,
+  saveAppRatedToDb,
   saveBabyNameToDB,
   saveDefaultVolumeToDB,
   saveFeedByBoobToDB,
@@ -39,6 +40,8 @@ interface ISettingsContextType {
   onChangeDefaultVolume: (value: number) => void;
   onInitialized: () => Promise<void>;
   settingsLoaded: boolean;
+  appRated: boolean;
+  onAppRated: () => Promise<void>;
 }
 
 export interface ISettingsObject {
@@ -52,6 +55,7 @@ export interface ISettingsObject {
   feedingUnit: string;
   defaultVolume: number;
   feedByBottle: boolean;
+  appRated: boolean;
 }
 
 const SettingsContext = createContext<ISettingsContextType | undefined>(undefined);
@@ -72,6 +76,7 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
   const [feedByBottle, setFeedByBottle] = useState(false);
   const [feedingUnit, setFeedingUnit] = useState('ml');
   const [defaultVolume, setDefaultVolume] = useState(100);
+  const [appRated, setAppRated] = useState(false);
 
   const { db, sqlReady } = useSQLiteContext();
 
@@ -90,6 +95,7 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
       setFeedByBottle(data.feedByBottle);
       setFeedingUnit(data.feedingUnit);
       setDefaultVolume(data.defaultVolume);
+      setAppRated(data.appRated);
       setSettingsLoaded(true);
     }
   }
@@ -192,6 +198,13 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
     }
   };
 
+  const onAppRated = async () => {
+    if (db) {
+      await saveAppRatedToDb(db);
+      setAppRated(true);
+    }
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -215,6 +228,8 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
         onInitialized,
         onChangeFeedingUnit,
         onChangeDefaultVolume,
+        onAppRated,
+        appRated,
       }}
     >
       {children}
