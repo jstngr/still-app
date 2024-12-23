@@ -6,12 +6,6 @@ const config: CapacitorConfig = {
   appName: 'Still App',
   bundledWebRuntime: false,
   webDir: 'build',
-  server: {
-    // hot reload
-    url: 'http://192.168.178.22:3000',
-    // url: 'http://localhost:3000',
-    cleartext: true,
-  },
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000, // Show splash for 3 seconds
@@ -33,3 +27,10 @@ const config: CapacitorConfig = {
 };
 
 export default config;
+
+// server: {
+//   // hot reload
+//   // url: 'http://192.168.178.22:3000',
+//   // url: 'http://localhost:3000',
+//   cleartext: true,
+// },
