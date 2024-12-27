@@ -25,6 +25,7 @@ export const SQLiteProvider: React.FC<ISQLiteProviderProps> = ({ children }) => 
 
   useEffect(() => {
     const initDb = async () => {
+      console.log('🚀 Init DB ');
       try {
         // Get or create a database connection using the singleton service
         const db = await sqliteService.getConnection(dbName, readonly);

@@ -1,6 +1,6 @@
 {
   "name": "Still App",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Capacitor wrapped react app to provide a simple solution of baby feeding timing",
   "main": "index.tsx",
   "author": "Tobias Justinger",

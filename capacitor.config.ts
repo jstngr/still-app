@@ -6,10 +6,33 @@ const config: CapacitorConfig = {
   appName: 'Still App',
   bundledWebRuntime: false,
   webDir: 'build',
+
+  server: {
+    cleartext: true,
+  },
+
   plugins: {
+    CapacitorSQLite: {
+      iosDatabaseLocation: 'Library/CapacitorDatabase',
+      iosIsEncryption: false,
+      iosKeychainPrefix: 'cap',
+      iosBiometric: {
+        biometricAuth: false,
+        biometricTitle: 'Biometric login for capacitor sqlite',
+      },
+      androidIsEncryption: false,
+      androidBiometric: {
+        biometricAuth: false,
+        biometricTitle: 'Biometric login for capacitor sqlite',
+        biometricSubTitle: 'Log in using your biometric',
+      },
+      electronWindowsLocation: 'C:\\ProgramData\\CapacitorDatabases',
+      electronMacLocation: 'YOUR_VOLUME/CapacitorDatabases',
+      electronLinuxLocation: 'Databases',
+    },
     SplashScreen: {
       launchShowDuration: 2000, // Show splash for 3 seconds
-      launchAutoHide: false, // Automatically hide splash screen after 3 seconds
+      launchAutoHide: true, // Automatically hide splash screen after 3 seconds
       backgroundColor: '#ffffff', // Splash screen background color
       androidScaleType: 'CENTER_CROP', // How the splash image is scaled on Android
       showSpinner: true, // Show loading spinner

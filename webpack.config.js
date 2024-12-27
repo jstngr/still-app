@@ -20,15 +20,16 @@ module.exports = {
       vm: require.resolve('vm-browserify'),
     },
   },
-  // output: {
-  //   path: path.resolve(__dirname, 'dist'),
-  //   publicPath: '/'
-  // },
   output: {
-    // path: path.resolve(__dirname, 'build'), // Make sure it's 'build'
+    path: path.resolve(__dirname, 'build'),
     publicPath: '/',
-    filename: 'bundle.js',
   },
+  // For capacitor run
+  // output: {
+  //   // path: path.resolve(__dirname, 'build'), // Make sure it's 'build'
+  //   publicPath: '/',
+  //   filename: 'bundle.js',
+  // },
   devServer: {
     hot: true,
     historyApiFallback: true,
@@ -79,10 +80,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'index.html'),
-      favicon: './src/assets/Giraff_only.svg',
-    }),
     new Dotenv(),
     new CopyWebpackPlugin({
       patterns: [
