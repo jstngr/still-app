@@ -18,14 +18,13 @@ interface ISQLiteProviderProps {
 }
 
 export const SQLiteProvider: React.FC<ISQLiteProviderProps> = ({ children }) => {
-  const dbName = 'still-app-database';
+  const dbName = 'tiny-feeds-database';
   const readonly = false;
   const [db, setDb] = useState<SQLiteDBConnection>();
   const [sqlReady, setSqlReady] = useState(false);
 
   useEffect(() => {
     const initDb = async () => {
-      console.log('🚀 Init DB ');
       try {
         // Get or create a database connection using the singleton service
         const db = await sqliteService.getConnection(dbName, readonly);

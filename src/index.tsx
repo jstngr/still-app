@@ -10,10 +10,7 @@ import '@fontsource/poppins';
 import '@fontsource-variable/jetbrains-mono';
 import '@fontsource/dancing-script';
 import './index.css';
-console.log('AAAAAAAAAAAAAAAABBBBBB');
 import './i18n';
-
-console.log('AAAAAAAAAAAAAAAA');
 
 import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';

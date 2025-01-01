@@ -39,8 +39,6 @@ function AppFrame() {
 }
 
 export default function App() {
-  console.log('Blaaa');
-  console.error('Blubb');
   useScreenLock();
   useKeepAwake();
 

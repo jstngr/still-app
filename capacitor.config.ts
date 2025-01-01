@@ -2,8 +2,8 @@ import { CapacitorConfig } from '@capacitor/cli';
 import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
-  appId: 'com.minigenie.stillapp',
-  appName: 'Still App',
+  appId: 'com.minigenie.tinyfeeds',
+  appName: 'TinyFeeds',
   bundledWebRuntime: false,
   webDir: 'build',
 
@@ -32,7 +32,7 @@ const config: CapacitorConfig = {
     },
     SplashScreen: {
       launchShowDuration: 2000, // Show splash for 3 seconds
-      launchAutoHide: true, // Automatically hide splash screen after 3 seconds
+      launchAutoHide: false, // Automatically hide splash screen after 3 seconds
       backgroundColor: '#ffffff', // Splash screen background color
       androidScaleType: 'CENTER_CROP', // How the splash image is scaled on Android
       showSpinner: true, // Show loading spinner
