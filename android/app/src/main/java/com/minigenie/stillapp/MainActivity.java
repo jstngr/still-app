@@ -1,4 +1,4 @@
-package com.minigenie.stillapp;
+package com.minigenie.feedandsleep;
 
 import com.getcapacitor.BridgeActivity;
 

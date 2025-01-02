@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Still App</string>
-    <string name="title_activity_main">Still App</string>
-    <string name="package_name">com.minigenie.stillapp</string>
-    <string name="custom_url_scheme">com.minigenie.stillapp</string>
+    <string name="app_name">Feed and Sleep</string>
+    <string name="title_activity_main">Feed and Sleep</string>
+    <string name="package_name">com.minigenie.feedandsleep</string>
+    <string name="custom_url_scheme">com.minigenie.feedandsleep</string>
 </resources>

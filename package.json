@@ -1,5 +1,5 @@
 {
-  "name": "Still App",
+  "name": "Feed and Sleep",
   "version": "0.1.1",
   "description": "Capacitor wrapped react app to provide a simple solution of baby feeding timing",
   "main": "index.tsx",
