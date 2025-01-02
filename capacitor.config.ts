@@ -2,14 +2,10 @@ import { CapacitorConfig } from '@capacitor/cli';
 import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
-  appId: 'com.minigenie.tinyfeeds',
-  appName: 'TinyFeeds',
+  appId: 'com.minigenie.feedandsleep',
+  appName: 'Feed and Sleep',
   bundledWebRuntime: false,
   webDir: 'build',
-
-  server: {
-    cleartext: true,
-  },
 
   plugins: {
     CapacitorSQLite: {

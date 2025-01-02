@@ -133,7 +133,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
       {showDateLabel && (
         <Box bg="background.1" p="4px">
           <Text c="dimmed" size="12px" key={`label_${entry.id}`}>
-            {formatDateLocaleFromTimestamp(entry.created)}
+            {formatDateLocaleFromTimestamp(entry.created, t)}
           </Text>
         </Box>
       )}

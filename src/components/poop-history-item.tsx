@@ -8,7 +8,7 @@ import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import monoStyles from 'shared/styles/mono-styles.module.css';
 import { IPoopEntry } from 'shared/types/types';
 import listItemStyles from './list-item.module.css';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 export default function PoopHistoryItem({
   index,
@@ -21,6 +21,7 @@ export default function PoopHistoryItem({
 }): React.ReactNode {
   const entry = data[index];
   const { editPoopEntryDrawer } = usePoopContext();
+  const { t } = useTranslation();
 
   const showDateLabel = useMemo(() => {
     const prevEntry = data[index - 1];
@@ -42,7 +43,7 @@ export default function PoopHistoryItem({
         {showDateLabel && (
           <Box bg="background.1" p="4px">
             <Text c="dimmed" size="12px" key={`label_${entry.id}`}>
-              {formatDateLocaleFromTimestamp(entry.created)}
+              {formatDateLocaleFromTimestamp(entry.created, t)}
             </Text>
           </Box>
         )}
