@@ -1,4 +1,4 @@
-package com.minigenie.feedandsleep;
+package de.mini-genie.feedandsleep;
 
 import com.getcapacitor.BridgeActivity;
 

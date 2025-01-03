@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
-  appId: 'com.minigenie.feedandsleep',
+  appId: 'de.mini-genie.feedandsleep',
   appName: 'Feed and Sleep',
   bundledWebRuntime: false,
   webDir: 'build',

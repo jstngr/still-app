@@ -1,2 +1,2 @@
-"use strict";(self.webpackChunkStill_App=self.webpackChunkStill_App||[]).push([[873],{7873:function(e,n,t){t.r(n),t.d(n,{InAppReviewWeb:function(){return s}});var p=t(6546);class s extends p.E_{async requestReview(){throw this.unimplemented("Not implemented on web.")}}}}]);
+"use strict";(self.webpackChunkFeed_and_Sleep=self.webpackChunkFeed_and_Sleep||[]).push([[873],{7873:function(e,n,t){t.r(n),t.d(n,{InAppReviewWeb:function(){return p}});var s=t(6546);class p extends s.E_{async requestReview(){throw this.unimplemented("Not implemented on web.")}}}}]);
 //# sourceMappingURL=873.js.map

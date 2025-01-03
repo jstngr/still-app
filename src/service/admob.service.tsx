@@ -118,22 +118,16 @@ export async function admobBanner(
   const isPersonalised =
     consentInfoStatus === AdmobConsentStatus.OBTAINED && trackingInfoStatus === 'authorized';
 
-  AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
-    // Subscribe Banner Event Listener
-  });
-
   AdMob.addListener(BannerAdPluginEvents.SizeChanged, (size: AdMobBannerSize) => {
     setFooterHeight(size.height);
-
-    // Subscribe Change Banner Size
   });
 
   const options: BannerAdOptions = {
-    adId: 'ca-app-pub-3940256099942544/2435281174',
-    // adId: 'ca-app-pub-3385049365741222/3427416213', // Prod
+    // adId: 'ca-app-pub-3940256099942544/2435281174', // Test
+    adId: 'ca-app-pub-3385049365741222/3427416213', // Prod
     adSize: BannerAdSize.ADAPTIVE_BANNER,
     position: BannerAdPosition.BOTTOM_CENTER,
-    margin: 0, //Margin Banner. Default is 0px; If position is BOTTOM_CENTER, margin is be margin-bottom. If position is TOP_CENTER, margin is be margin-top.
+    margin: 0,
     isTesting: true,
     npa: !isPersonalised, // The default behavior of the Google Mobile Ads SDK is to serve personalized ads. Set this to true to request Non-Personalized Ads
   };

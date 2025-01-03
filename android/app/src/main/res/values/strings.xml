@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Feed and Sleep</string>
     <string name="title_activity_main">Feed and Sleep</string>
-    <string name="package_name">com.minigenie.feedandsleep</string>
-    <string name="custom_url_scheme">com.minigenie.feedandsleep</string>
+    <string name="package_name">de.mini-genie.feedandsleep</string>
+    <string name="custom_url_scheme">de.mini-genie.feedandsleep</string>
 </resources>

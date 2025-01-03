@@ -18,7 +18,7 @@ interface ISQLiteProviderProps {
 }
 
 export const SQLiteProvider: React.FC<ISQLiteProviderProps> = ({ children }) => {
-  const dbName = 'tiny-feeds-database';
+  const dbName = 'feed-and-sleep-database';
   const readonly = false;
   const [db, setDb] = useState<SQLiteDBConnection>();
   const [sqlReady, setSqlReady] = useState(false);

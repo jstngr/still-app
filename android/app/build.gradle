@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.minigenie.feedandsleep"
+    namespace "de.mini-genie.feedandsleep"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.minigenie.feedandsleep"
+        applicationId "de.mini-genie.feedandsleep"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

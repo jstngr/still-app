@@ -362,7 +362,7 @@
 				<key>entitlements</key>
 				<dict>
 					<key>application-identifier</key>
-					<string>JK5BPT7CNP.com.minigenie.feedandsleep</string>
+					<string>JK5BPT7CNP.de.mini-genie.feedandsleep</string>
 					<key>com.apple.developer.team-identifier</key>
 					<string>JK5BPT7CNP</string>
 					<key>get-task-allow</key>
@@ -377,7 +377,7 @@
 					<key>dateExpires</key>
 					<string>23.12.25</string>
 					<key>name</key>
-					<string>iOS Team Ad Hoc Provisioning Profile: com.minigenie.feedandsleep</string>
+					<string>iOS Team Ad Hoc Provisioning Profile: de.mini-genie.feedandsleep</string>
 				</dict>
 				<key>team</key>
 				<dict>
