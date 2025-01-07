@@ -9,7 +9,7 @@ import {
   AdMobBannerSize,
 } from '@capacitor-community/admob';
 import { TrackingAuthorizationStatusInterface } from '@capacitor-community/admob/dist/esm/shared/tracking-authorization-status.interface';
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 import React from 'react';
 import { useSettingsContext } from './settings.service';
 import { useThemeContext } from 'theme';
@@ -103,11 +103,14 @@ export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
 };
 
 export const useAdmobContext = () => {
-  const context = useContext(AdmobContext);
-  if (context === undefined) {
-    throw new Error('useAdmobContext must be used within a AdmobContext');
-  }
-  return context;
+  // const context = useContext(AdmobContext);
+  // if (context === undefined) {
+  //   throw new Error('useAdmobContext must be used within a AdmobContext');
+  // }
+  return {
+    confirmAdmob: () => undefined,
+    appleTrackingDenied: true,
+  };
 };
 
 export async function admobBanner(
