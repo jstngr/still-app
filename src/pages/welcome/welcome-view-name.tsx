@@ -39,7 +39,9 @@ export default function WelcomeViewName() {
           </Title>
           <Stack gap="lg" align="center">
             <Text ta="center">{t('welcome-view-name-description')}</Text>
-            <TextInput onChange={onChangeName} value={babyName} />
+            <form onSubmit={babyName ? next : () => {}}>
+              <TextInput onChange={onChangeName} value={babyName} />
+            </form>
             <Button disabled={!babyName} onClick={next}>
               {t('welcome-view-name-button-label')}
             </Button>
