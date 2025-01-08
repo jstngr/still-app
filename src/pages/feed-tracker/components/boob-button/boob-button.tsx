@@ -49,7 +49,7 @@ export default function BoobButton(props: IBoobButtonProps) {
 
   if (isActive) {
     return (
-      <Stack gap="xxs">
+      <Stack gap="xxs" bd="1px solid red" w={height} maw={maxHeight}>
         <Button
           styles={{
             root: {
