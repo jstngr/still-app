@@ -9,7 +9,7 @@ import {
   AdMobBannerSize,
 } from '@capacitor-community/admob';
 import { TrackingAuthorizationStatusInterface } from '@capacitor-community/admob/dist/esm/shared/tracking-authorization-status.interface';
-import { createContext, ReactNode, useEffect, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import React from 'react';
 import { useSettingsContext } from './settings.service';
 import { useThemeContext } from 'theme';
@@ -45,15 +45,13 @@ interface IAdmobProviderProps {
 }
 
 export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
-  const [consentInfoStatus, setConsentStatusInfo] = useState(AdmobConsentStatus.UNKNOWN);
   const [trackingInfoStatus, setTrackingStatusInfo] = useState<ITrackingStatus>('notDetermined');
 
   const { initialized } = useSettingsContext();
 
   useEffect(() => {
     const init = async () => {
-      const { consentInfo, trackingInfo } = await initializeAdmob();
-      setConsentStatusInfo(consentInfo.status);
+      const { trackingInfo } = await initializeAdmob();
       setTrackingStatusInfo(trackingInfo.status);
     };
     init();
@@ -65,7 +63,6 @@ export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
       AdMob.requestConsentInfo(),
     ]);
 
-    setConsentStatusInfo(consentInfo.status);
     setTrackingStatusInfo(trackingInfo.status);
 
     if (trackingInfo.status === 'notDetermined') {
@@ -85,12 +82,49 @@ export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
 
   const { setFooterHeight } = useThemeContext();
 
-  useEffect(() => {
-    if (initialized) {
-      admobBanner(consentInfoStatus, trackingInfoStatus, (height: number) => {
-        setFooterHeight(height + 64);
-      });
+  const showBanner = async () => {
+    if (!initialized) {
+      return;
     }
+
+    const [trackingInfo, consentInfo] = await Promise.all([
+      AdMob.trackingAuthorizationStatus(),
+      AdMob.requestConsentInfo(),
+    ]);
+
+    // Make sure permission was asked
+    if (
+      trackingInfo.status === 'notDetermined' ||
+      consentInfo.status === AdmobConsentStatus.REQUIRED
+    ) {
+      if (trackingInfo.status === 'notDetermined') {
+        await AdMob.requestTrackingAuthorization();
+      }
+
+      const authorizationStatus = await AdMob.trackingAuthorizationStatus();
+      setTrackingStatusInfo(authorizationStatus.status);
+      if (
+        authorizationStatus.status === 'authorized' &&
+        consentInfo.isConsentFormAvailable &&
+        consentInfo.status === AdmobConsentStatus.REQUIRED
+      ) {
+        await AdMob.showConsentForm();
+      }
+
+      setTimeout(() => {
+        // try again after 1 minute
+        showBanner();
+      }, 60 * 1000);
+      return;
+    }
+
+    admobBanner(consentInfo.status, trackingInfo.status, (height: number) => {
+      setFooterHeight(height + 64);
+    });
+  };
+
+  useEffect(() => {
+    showBanner();
   }, [initialized]);
 
   return (
@@ -103,14 +137,11 @@ export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
 };
 
 export const useAdmobContext = () => {
-  // const context = useContext(AdmobContext);
-  // if (context === undefined) {
-  //   throw new Error('useAdmobContext must be used within a AdmobContext');
-  // }
-  return {
-    confirmAdmob: () => undefined,
-    appleTrackingDenied: true,
-  };
+  const context = useContext(AdmobContext);
+  if (context === undefined) {
+    throw new Error('useAdmobContext must be used within a AdmobContext');
+  }
+  return context;
 };
 
 export async function admobBanner(
