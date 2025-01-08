@@ -6,12 +6,12 @@ const config: CapacitorConfig = {
   appName: 'Feed and Sleep',
   bundledWebRuntime: false,
   webDir: 'build',
-  server: {
-    // hot reload
-    // url: 'http://192.168.178.22:3000',
-    url: 'http://localhost:3000',
-    cleartext: true,
-  },
+  // server: {
+  //   // hot reload
+  //   // url: 'http://192.168.178.22:3000',
+  //   url: 'http://localhost:3000',
+  //   cleartext: true,
+  // },
   plugins: {
     CapacitorSQLite: {
       iosDatabaseLocation: 'Library/CapacitorDatabase',
