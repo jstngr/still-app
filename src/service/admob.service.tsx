@@ -12,7 +12,6 @@ import { TrackingAuthorizationStatusInterface } from '@capacitor-community/admob
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import React from 'react';
 import { useSettingsContext } from './settings.service';
-import { useThemeContext } from 'theme';
 
 type ITrackingStatus = 'authorized' | 'denied' | 'notDetermined' | 'restricted';
 
@@ -80,7 +79,7 @@ export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
     }
   };
 
-  const { setFooterHeight } = useThemeContext();
+  // const { setFooterHeight } = useThemeContext();
 
   const showBanner = async () => {
     if (!initialized) {
@@ -118,9 +117,9 @@ export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
       return;
     }
 
-    admobBanner(consentInfo.status, trackingInfo.status, (height: number) => {
-      setFooterHeight(height + 64);
-    });
+    // admobBanner(consentInfo.status, trackingInfo.status, (height: number) => {
+    //   setFooterHeight(height + 64);
+    // });
   };
 
   useEffect(() => {
