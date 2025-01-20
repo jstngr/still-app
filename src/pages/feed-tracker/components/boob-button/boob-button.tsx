@@ -18,7 +18,7 @@ const maxHeight = '6rem';
 
 export default function BoobButton(props: IBoobButtonProps) {
   const { t } = useTranslation();
-  const { label } = props;
+  const { label, orientation } = props;
   const {
     startFeeding,
     feedingEntries,
@@ -40,6 +40,8 @@ export default function BoobButton(props: IBoobButtonProps) {
     [props.orientation, feedingEntries, activeFeeding],
   );
 
+  const isLeft = orientation === 'Left';
+
   const { triggerRating } = useAppRatingContext();
 
   const onClickStart = () => {
@@ -57,7 +59,7 @@ export default function BoobButton(props: IBoobButtonProps) {
               borderTopRightRadius: '99999px',
             },
           }}
-          color="primary"
+          color={isLeft ? 'blue' : 'primary'}
           h={`calc(${height} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
           mah={`calc(${maxHeight} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
           w={height}
@@ -84,7 +86,7 @@ export default function BoobButton(props: IBoobButtonProps) {
               borderBottomRightRadius: '99999px',
             },
           }}
-          color="primary"
+          color={isLeft ? 'blue' : 'primary'}
           h={`calc(${height} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
           mah={`calc(${maxHeight} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
           w={height}
@@ -108,7 +110,7 @@ export default function BoobButton(props: IBoobButtonProps) {
           overflow: 'visible',
         },
       }}
-      color="primary"
+      color={isLeft ? 'blue' : 'primary'}
       h={height}
       mah={maxHeight}
       w={height}

@@ -47,7 +47,13 @@ function TypeBadge(props: { type: IFeedingType }) {
   if (props.type === 'Left') content = t('upperletter-left');
   if (props.type === 'Right') content = t('upperletter-right');
   return (
-    <Badge w="2.5rem" variant={variant} size="lg" className={monoStyles.monoFont}>
+    <Badge
+      w="2.5rem"
+      variant={variant}
+      color={props.type === 'Left' ? 'blue' : 'primary'}
+      size="lg"
+      className={monoStyles.monoFont}
+    >
       {content}
     </Badge>
   );
