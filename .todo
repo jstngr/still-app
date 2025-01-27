@@ -1,5 +1,4 @@
 # TODO
-- Ads
-- Slider into welcome screen?
-- Scroll into welcome screen
-- Poop distance between day and entry
+- fix the bug with standby time from last feeding is not updated, it’s updated only on app complete reload
+- make this time from last feeding more visible
+- break record after 60 minutes with notification ( possible function to add, now it’s no limit and could be 8540 minutes 😅)
