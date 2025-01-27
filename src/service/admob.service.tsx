@@ -94,8 +94,9 @@ export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
 
     // Make sure permission was asked
     if (
-      trackingInfo.status === 'notDetermined' ||
-      consentInfo.status === AdmobConsentStatus.REQUIRED
+      (trackingInfo.status === 'notDetermined' ||
+        consentInfo.status === AdmobConsentStatus.REQUIRED) &&
+      trackingInfo.status !== 'denied'
     ) {
       if (trackingInfo.status === 'notDetermined') {
         await AdMob.requestTrackingAuthorization();
@@ -129,7 +130,7 @@ export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
 
   return (
     <AdmobContext.Provider
-      value={{ confirmAdmob, appleTrackingDenied: trackingInfoStatus === 'denied' }}
+      value={{ confirmAdmob, appleTrackingDenied: trackingInfoStatus === 'denied', showBanner }}
     >
       {children}
     </AdmobContext.Provider>
