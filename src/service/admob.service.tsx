@@ -163,7 +163,7 @@ export async function admobBanner(
     adSize: BannerAdSize.ADAPTIVE_BANNER,
     position: BannerAdPosition.BOTTOM_CENTER,
     margin: 0,
-    isTesting: true,
+    isTesting: false,
     npa: !isPersonalised, // The default behavior of the Google Mobile Ads SDK is to serve personalized ads. Set this to true to request Non-Personalized Ads
   };
   AdMob.showBanner(options);
