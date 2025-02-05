@@ -16,7 +16,7 @@ export default function FeedTimer() {
   );
 
   return (
-    <Flex>
+    <Flex h="42px" align="center">
       <Text size="32px" className={monoStyles.monoFont}>
         <Timer
           isRunning={!!isRunning}

@@ -13,9 +13,10 @@ import { useFeedingContext } from 'service/feeding.service';
 import { useSettingsContext } from 'service/settings.service';
 import { IFeedingEntry } from 'shared/types/types';
 import EditBottleFeedingEntryDrawer from './components/edit-bottle-feeding-entry-drawer';
+import TimeAgoTimer from './components/time-ago-timer';
 
 export default function FeedTracker() {
-  const { feedingEntries, addFeedingEntry } = useFeedingContext();
+  const { feedingEntries, addFeedingEntry, activeFeeding } = useFeedingContext();
   const { feedByBoob, feedByBottle } = useSettingsContext();
   const { t } = useTranslation();
 
@@ -27,7 +28,8 @@ export default function FeedTracker() {
           {feedByBottle && <BottleButton />}
           {feedByBoob && <BoobButton label={t('right')} orientation="Right" />}
         </Group>
-        {feedByBoob && <FeedTimer />}
+        {activeFeeding && feedByBoob && <FeedTimer />}
+        {!activeFeeding && <TimeAgoTimer />}
         <Stack flex="1 0 0" w="100%" gap="xs">
           <Group justify="space-between" align="center">
             <Title order={5}>{t('feeding-history-title')}</Title>

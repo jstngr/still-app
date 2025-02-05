@@ -18,7 +18,6 @@ interface IFeedingContextType {
   feedingEntries: IFeedingEntry[];
   startFeeding: (type: IFeedingType) => void;
   stopFeeding: () => void;
-  continueFeeding: () => void;
   switchBoob: () => void;
   deleteFeeding: (id: number) => void;
   updateFeedingEntry: (entry: FeedingEntry) => void;
@@ -152,16 +151,6 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     }
   };
 
-  const continueFeeding = () => {
-    if (!activeFeeding) {
-      return;
-    }
-    const currentFeeding = new FeedingEntry(activeFeeding);
-    currentFeeding.continue();
-    setActiveFeeding(currentFeeding.toObject());
-    updateFeedingEntry(currentFeeding);
-  };
-
   const addFeedingEntry = async () => {
     const newEntry = new FeedingEntry({
       type: 'Left',
@@ -209,7 +198,6 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
         startFeeding,
         stopFeeding,
         activeFeeding,
-        continueFeeding,
         switchBoob,
         deleteFeeding,
         updateFeedingEntry,

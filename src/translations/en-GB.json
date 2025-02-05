@@ -103,6 +103,8 @@
   "statistics-page-tab-24-hours": "Last 24 hours",
   "statistics-page-tab-7-days": "Last 7 days",
   "statistics-page-table-col-feeding-chunks": "Feedings",
+  "time-ago-label": "Time since last feeding",
+  "time-ago-label-more-than-24-hours": "Your last feeding is more then 24 hours ago",
   "today": "Today",
   "upperletter-left": "L",
   "upperletter-right": "R",

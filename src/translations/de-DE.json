@@ -103,6 +103,8 @@
   "statistics-page-tab-24-hours": "Letzte 24 Stunden",
   "statistics-page-tab-7-days": "Letzte 7 Tage",
   "statistics-page-table-col-feeding-chunks": "Fütterungen",
+  "time-ago-label": "Zeit seit der letzten Mahlzeit",
+  "time-ago-label-more-than-24-hours": "Die letzte Mahlzeit ist mehr als 24 Stunden her",
   "today": "Heute",
   "upperletter-left": "L",
   "upperletter-right": "R",

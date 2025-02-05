@@ -19,8 +19,7 @@ const maxHeight = '6rem';
 export default function BoobButton(props: IBoobButtonProps) {
   const { t } = useTranslation();
   const { label, orientation } = props;
-  const { startFeeding, feedingEntries, activeFeeding, stopFeeding, continueFeeding } =
-    useFeedingContext();
+  const { startFeeding, feedingEntries, activeFeeding, stopFeeding } = useFeedingContext();
 
   const isActive = useMemo(() => activeFeeding?.type === props.orientation, [activeFeeding]);
 
