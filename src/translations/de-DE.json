@@ -64,6 +64,8 @@
   "sleep-page-button-label-start": "Start",
   "sleep-page-button-label-stop": "Stopp",
   "sleep-page-history-title": "Schlafverlauf",
+  "sleep-page-time-ago-label": "Zeit seit der letzten Schlafphase",
+  "sleep-page-time-ago-label-more-than-24-hours": "Die letzte Schlafphase liegt mehr als 24 Stunden zurück.",
   "statistics-page-24-hours-bottle-subtitle": "mit durchschnittlich <Big>{{averageBottleVolume}}</Big> {{feedingUnit}}",
   "statistics-page-24-hours-bottle-title": "Flaschenfütterung",
   "statistics-page-24-hours-bottle-title_other": "Flaschenfütterungen",

@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import formatDateFromTimestamp from 'shared/helpers/format-date-from-timestamp';
 import formatDateLocaleFromTimestamp from 'shared/helpers/format-date-locale-from-timestamp';
-import formatTime from 'shared/helpers/format-time';
 import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import monoStyles from 'shared/styles/mono-styles.module.css';
 import { ISleepEntry } from 'shared/types/types';
@@ -20,34 +19,6 @@ interface IHistoryCardProps {
   index: number;
 }
 
-function TimeAgo(props: { timeAgo: number }) {
-  const { t } = useTranslation();
-
-  const innerTimer = (seconds: number) => {
-    if (seconds > 60 * 60) {
-      return t('history-card-label-hours-ago', {
-        value: formatTime(seconds, false),
-      });
-    }
-    return t('history-card-label-min-ago', {
-      value: formatSecondsToMinutesSeconds(seconds, false),
-    });
-  };
-
-  return (
-    <Timer isRunning isStopped={false} startingSeconds={Math.floor(props.timeAgo / 1000)}>
-      {(timer) => {
-        if (timer.seconds > 12 * 60 * 60) return null;
-        return (
-          <Text size="xs" component="span" className={monoStyles.monoFont}>
-            {innerTimer(timer.seconds)}
-          </Text>
-        );
-      }}
-    </Timer>
-  );
-}
-
 export default function HistoryCard(props: IHistoryCardProps) {
   const { entry, index } = props;
   const { t } = useTranslation();
@@ -62,17 +33,14 @@ export default function HistoryCard(props: IHistoryCardProps) {
     );
   }, [sleepEntries]);
 
-  const { isRunning, timeAgo, timeFrom, timeTo } = useMemo(() => {
+  const { isRunning, timeFrom, timeTo } = useMemo(() => {
     const sleepEntry = new SleepEntry(entry);
     return {
       isRunning: sleepEntry.isRunning(),
-      timeAgo: sleepEntry.getTimeAgo(),
       timeFrom: formatTimeFromTimestamp(sleepEntry.getStarted()),
       timeTo: sleepEntry.getStopped() ? formatTimeFromTimestamp(sleepEntry.getStopped()) : '--:--',
     };
   }, [entry]);
-
-  const showTimeAgo = useMemo(() => !isRunning && props.index < 1, [isRunning]);
 
   const onClickEdit = () => {
     if (!entry?.id) {
@@ -139,7 +107,6 @@ export default function HistoryCard(props: IHistoryCardProps) {
               )}
             </Timer>
           </Stack>
-          {showTimeAgo && <TimeAgo timeAgo={timeAgo} />}
           <ActionIcon
             disabled={activeSleep?.id === entry.id}
             variant="subtle"

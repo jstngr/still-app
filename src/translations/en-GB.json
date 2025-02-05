@@ -64,6 +64,8 @@
   "sleep-page-button-label-start": "Start",
   "sleep-page-button-label-stop": "Stop",
   "sleep-page-history-title": "Sleep History",
+  "sleep-page-time-ago-label": "Time since last sleeping session",
+  "sleep-page-time-ago-label-more-than-24-hours": "The last sleeping session is more than 24 hours ago",
   "statistics-page-24-hours-bottle-subtitle": "with in average <Big>{{averageBottleVolume}}</Big> {{feedingUnit}}",
   "statistics-page-24-hours-bottle-title": "Bottle Feeding",
   "statistics-page-24-hours-bottle-title_other": "Bottle Feedings",
