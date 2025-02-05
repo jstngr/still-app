@@ -103,11 +103,10 @@ export default function HistoryCard(props: IHistoryCardProps) {
     );
   }, [feedingEntries]);
 
-  const { isRunning, isPaused, timeAgo, timeFrom, timeTo } = useMemo(() => {
+  const { isRunning, timeAgo, timeFrom, timeTo } = useMemo(() => {
     const feedingEntry = new FeedingEntry(entry);
     return {
       isRunning: feedingEntry.isRunning(),
-      isPaused: feedingEntry.isPaused(),
       timeAgo: feedingEntry.getTimeAgo(),
       timeFrom: formatTimeFromTimestamp(feedingEntry.getStarted()),
       timeTo: feedingEntry.getStopped()
@@ -116,10 +115,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
     };
   }, [entry]);
 
-  const showTimeAgo = useMemo(
-    () => !isRunning && !isPaused && props.index === 0,
-    [isPaused, isRunning],
-  );
+  const showTimeAgo = useMemo(() => !isRunning && props.index === 0, [isRunning]);
 
   const onClickEdit = () => {
     if (!entry?.id) {
@@ -178,7 +174,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
             )}
             {!isBottle && (
               <Timer
-                isRunning={!!(isRunning && !isPaused)}
+                isRunning={!!isRunning}
                 isStopped={false}
                 startingSeconds={Math.floor(new FeedingEntry(entry).getDuration() / 1000)}
               >
@@ -190,12 +186,7 @@ export default function HistoryCard(props: IHistoryCardProps) {
                       <Trans
                         i18nKey="history-card-label-duration"
                         components={{
-                          Mono: (
-                            <Text
-                              component="span"
-                              className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}
-                            />
-                          ),
+                          Mono: <Text component="span" className={monoStyles.monoFont} />,
                         }}
                         values={{
                           duration: formatSecondsToMinutesSeconds(Math.max(timer.seconds, 60)),

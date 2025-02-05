@@ -18,7 +18,6 @@ interface IFeedingContextType {
   feedingEntries: IFeedingEntry[];
   startFeeding: (type: IFeedingType) => void;
   stopFeeding: () => void;
-  pauseFeeding: () => void;
   continueFeeding: () => void;
   switchBoob: () => void;
   deleteFeeding: (id: number) => void;
@@ -77,9 +76,6 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     if (!data[0]?.stopped) {
       setActiveFeeding(data[0]);
     }
-    // inserMok(db);
-    // inserMokWeek(db);
-    // setFeedingEntries(WebMock());
   }
   useEffect(() => {
     loadData();
@@ -166,16 +162,6 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     updateFeedingEntry(currentFeeding);
   };
 
-  const pauseFeeding = () => {
-    if (!activeFeeding) {
-      return;
-    }
-    const currentFeeding = new FeedingEntry(activeFeeding);
-    currentFeeding.pause();
-    setActiveFeeding(currentFeeding.toObject());
-    updateFeedingEntry(currentFeeding);
-  };
-
   const addFeedingEntry = async () => {
     const newEntry = new FeedingEntry({
       type: 'Left',
@@ -223,7 +209,6 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
         startFeeding,
         stopFeeding,
         activeFeeding,
-        pauseFeeding,
         continueFeeding,
         switchBoob,
         deleteFeeding,

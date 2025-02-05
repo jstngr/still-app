@@ -5,8 +5,6 @@ interface IFeedingEntry {
   created: number;
   stopped?: number;
   type: IFeedingType;
-  pauseStart?: number;
-  pauseDuration?: number;
   volume?: number;
 }
 

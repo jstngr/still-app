@@ -27,9 +27,7 @@ export default function FeedTracker() {
           {feedByBottle && <BottleButton />}
           {feedByBoob && <BoobButton label={t('right')} orientation="Right" />}
         </Group>
-
         {feedByBoob && <FeedTimer />}
-
         <Stack flex="1 0 0" w="100%" gap="xs">
           <Group justify="space-between" align="center">
             <Title order={5}>{t('feeding-history-title')}</Title>

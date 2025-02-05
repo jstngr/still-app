@@ -1,5 +1,5 @@
 import { Button, Stack, Text } from '@mantine/core';
-import { IconPlayerPause, IconPlayerPlay, IconPlayerStop } from '@tabler/icons-react';
+import { IconPlayerPlay, IconPlayerStop } from '@tabler/icons-react';
 import React, { useMemo } from 'react';
 import { useFeedingContext } from 'service/feeding.service';
 import { IFeedingType } from 'shared/types/types';
@@ -19,17 +19,10 @@ const maxHeight = '6rem';
 export default function BoobButton(props: IBoobButtonProps) {
   const { t } = useTranslation();
   const { label, orientation } = props;
-  const {
-    startFeeding,
-    feedingEntries,
-    activeFeeding,
-    stopFeeding,
-    pauseFeeding,
-    continueFeeding,
-  } = useFeedingContext();
+  const { startFeeding, feedingEntries, activeFeeding, stopFeeding, continueFeeding } =
+    useFeedingContext();
 
   const isActive = useMemo(() => activeFeeding?.type === props.orientation, [activeFeeding]);
-  const isPause = useMemo(() => isActive && activeFeeding?.pauseStart, [activeFeeding, isActive]);
 
   const markAsNext = useMemo(
     () =>
@@ -44,63 +37,14 @@ export default function BoobButton(props: IBoobButtonProps) {
 
   const { triggerRating } = useAppRatingContext();
 
-  const onClickStart = () => {
-    startFeeding(props.orientation);
+  const onClick = () => {
+    if (isActive) {
+      stopFeeding();
+    } else {
+      startFeeding(props.orientation);
+    }
     triggerRating();
   };
-
-  if (isActive) {
-    return (
-      <Stack gap="xxs" w={height} maw={maxHeight}>
-        <Button
-          styles={{
-            root: {
-              borderTopLeftRadius: '99999px',
-              borderTopRightRadius: '99999px',
-            },
-          }}
-          color={isLeft ? 'blue' : 'primary'}
-          h={`calc(${height} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
-          mah={`calc(${maxHeight} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
-          w={height}
-          maw={maxHeight}
-          variant="outline"
-          onClick={isPause ? continueFeeding : pauseFeeding}
-        >
-          {isPause ? (
-            <Stack gap="0" align="center">
-              <IconPlayerPlay size={20} />
-              <Text size="xs">{t('boob-button-label-continue')}</Text>
-            </Stack>
-          ) : (
-            <Stack gap="0" align="center">
-              <IconPlayerPause size={20} />
-              <Text size="xs">{t('boob-button-label-pause')}</Text>
-            </Stack>
-          )}
-        </Button>
-        <Button
-          styles={{
-            root: {
-              borderBottomLeftRadius: '99999px',
-              borderBottomRightRadius: '99999px',
-            },
-          }}
-          color={isLeft ? 'blue' : 'primary'}
-          h={`calc(${height} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
-          mah={`calc(${maxHeight} / 2 - (var(--mantine-spacing-xxs) * 0.5))`}
-          w={height}
-          maw={maxHeight}
-          onClick={stopFeeding}
-        >
-          <Stack gap="0" align="center">
-            <IconPlayerStop size={20} />
-            <Text size="xs">{t('boob-button-label-stop')}</Text>
-          </Stack>
-        </Button>
-      </Stack>
-    );
-  }
 
   return (
     <Button
@@ -115,7 +59,7 @@ export default function BoobButton(props: IBoobButtonProps) {
       mah={maxHeight}
       w={height}
       maw={maxHeight}
-      onClick={onClickStart}
+      onClick={onClick}
     >
       {markAsNext && (
         <div className={styles.nextButtonIndicator}>
@@ -123,8 +67,8 @@ export default function BoobButton(props: IBoobButtonProps) {
         </div>
       )}
       <Stack gap="xxs" align="center">
-        <IconPlayerPlay size={20} />
-        <Text size="md">{label}</Text>
+        {isActive ? <IconPlayerStop size={32} /> : <IconPlayerPlay size={20} />}
+        {!isActive && <Text size="md">{label}</Text>}
       </Stack>
     </Button>
   );

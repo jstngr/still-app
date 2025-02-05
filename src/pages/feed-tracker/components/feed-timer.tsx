@@ -14,16 +14,12 @@ export default function FeedTimer() {
     () => activeFeeding && new FeedingEntry(activeFeeding).isRunning(),
     [activeFeeding],
   );
-  const isPaused = useMemo(
-    () => activeFeeding && new FeedingEntry(activeFeeding).isPaused(),
-    [activeFeeding],
-  );
 
   return (
     <Flex>
-      <Text size="32px" className={`${monoStyles.monoFont} ${isPaused && monoStyles.blinking}`}>
+      <Text size="32px" className={monoStyles.monoFont}>
         <Timer
-          isRunning={!!(isRunning && !isPaused)}
+          isRunning={!!isRunning}
           isStopped={!activeFeeding}
           startingSeconds={
             activeFeeding ? Math.floor(new FeedingEntry(activeFeeding).getDuration() / 1000) : 0

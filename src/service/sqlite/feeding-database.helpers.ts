@@ -12,8 +12,6 @@ async function createTable(db: SQLiteDBConnection): Promise<boolean> {
         created INTEGER NOT NULL,
         stopped INTEGER, 
         type TEXT NOT NULL,
-        pauseStart INTEGER,
-        pauseDuration INTEGER,
         volume INTEGER
       );
     `;
@@ -28,6 +26,46 @@ async function createTable(db: SQLiteDBConnection): Promise<boolean> {
 }
 
 /**
+ * Checks for and removes pauseStart and pauseDuration columns from the feeding table if they exist,
+ * while preserving all data. Does nothing if the table or columns don't exist.
+ *
+ * @param db - The SQLiteDBConnection instance
+ * @returns Promise<void>
+ */
+async function removePauseColumns(db: SQLiteDBConnection): Promise<void> {
+  try {
+    // Check if table exists
+    const tableCheck = await db.query(`
+      SELECT name 
+      FROM sqlite_master 
+      WHERE type='table' AND name='feeding';
+    `);
+
+    if (!tableCheck?.values?.length) {
+      return;
+    }
+
+    const columnInfo = await db.query(`PRAGMA table_info(feeding);`);
+    const columns = columnInfo.values as Array<{ name: string }>;
+
+    const hasPauseColumns = columns.some(
+      (col) => col.name === 'pauseStart' || col.name === 'pauseDuration',
+    );
+
+    if (hasPauseColumns) {
+      try {
+        await db.execute('ALTER TABLE feeding DROP COLUMN pauseStart;');
+        await db.execute('ALTER TABLE feeding DROP COLUMN pauseDuration;');
+      } catch (err) {
+        console.error('[FeedingDatabase] Error removing pause columns:', err);
+      }
+    }
+  } catch (err) {
+    console.error('[FeedingDatabase] Error removing pause columns:', err);
+  }
+}
+
+/**
  * Initializes the 'feeding' table in the database.
  *
  * @param db - An optional SQLiteDBConnection instance. If no connection is passed, an error will be logged.
@@ -39,6 +77,8 @@ async function initFeedingDB(db?: SQLiteDBConnection): Promise<void> {
     console.error('[FeedingDatabase] No db instance found');
     return;
   }
+
+  await removePauseColumns(db);
   await createTable(db);
 }
 /**
@@ -82,8 +122,8 @@ async function addFeedingEntryToDB(
   }
   try {
     const result = await db.run(
-      `INSERT INTO feeding (created, stopped, type, pauseStart, pauseDuration, volume)
-      VALUES ("${entry.created}", "${entry.stopped}", "${entry.type}", "${entry.pauseStart}", "${entry.pauseDuration}", ${entry.volume})`,
+      `INSERT INTO feeding (created, stopped, type, volume)
+      VALUES ("${entry.created}", "${entry.stopped}", "${entry.type}", ${entry.volume})`,
     );
     return result.changes?.lastId || null;
   } catch (err) {
@@ -115,8 +155,6 @@ async function updateFeedingEntryInDB(db: SQLiteDBConnection, entry: IFeedingEnt
        SET created = "${entry.created}", 
            stopped = "${entry.stopped}", 
            type = "${entry.type}", 
-           pauseStart = "${entry.pauseStart}", 
-           pauseDuration = "${entry.pauseDuration}", 
            volume = "${entry.volume}" 
        WHERE id = ${entry.id};`,
     );

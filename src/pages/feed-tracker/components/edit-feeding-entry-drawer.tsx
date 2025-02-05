@@ -10,13 +10,11 @@ import {
   Stack,
 } from '@mantine/core';
 import { TimeInput } from '@mantine/dates';
-import { IconClockPause, IconClockPlay, IconClockStop, IconTrash } from '@tabler/icons-react';
+import { IconClockPlay, IconClockStop, IconTrash } from '@tabler/icons-react';
 import FeedingEntry from 'classes/feeding-entry.class';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
-import formatMillisecondsToMinutesSeconds from 'shared/helpers/format-milliseconds-to-minutes-seconds';
-import formatMinutesSecondsToMilliseconds from 'shared/helpers/format-minutes-seconds-to-milliseconds';
 import { IFeedingEntry } from 'shared/types/types';
 
 function timeToTimeStamp(original: number, time: string) {
@@ -76,27 +74,6 @@ function EditFeedingEntryDrawer() {
     closeFeedingEntryDrawer();
   };
 
-  const maxPause = useMemo(
-    () => formatMillisecondsToMinutesSeconds((formData?.stopped || 0) - (formData?.created || 0)),
-    [formData?.created, formData?.stopped],
-  );
-
-  const removePause = () => {
-    updateForm('pauseDuration', 0);
-  };
-
-  useEffect(() => {
-    if (formData) {
-      const entryInstance = new FeedingEntry(formData);
-      const pauseDuration = entryInstance.getPauseDuration();
-      const maxDuration = (formData.stopped || 0) - (formData.created || 0);
-
-      if (pauseDuration > maxDuration) {
-        updateForm('pauseDuration', maxDuration);
-      }
-    }
-  }, [formData?.created, formData?.stopped]);
-
   return (
     <Drawer
       position="bottom"
@@ -144,31 +121,6 @@ function EditFeedingEntryDrawer() {
               minTime={timeStampToTime(formData?.created || 0)}
             />
           </Group>
-          <Group align="end">
-            <TimeInput
-              flex="1"
-              leftSection={<IconClockPause stroke="1" />}
-              label={t('feeding-entry-drawer-input-label-pause')}
-              value={formatMillisecondsToMinutesSeconds(formData?.pauseDuration || 0)}
-              onChange={(event) =>
-                updateForm(
-                  'pauseDuration',
-                  formatMinutesSecondsToMilliseconds(event.currentTarget.value),
-                )
-              }
-              maxTime={maxPause}
-            />
-            <ActionIcon
-              bd="1px solid var(--mantine-color-gray-4)"
-              c="black"
-              variant="white"
-              h="2.25rem"
-              w="2.25rem"
-              onClick={removePause}
-            >
-              <IconTrash stroke="1.5" size="18px" />
-            </ActionIcon>
-          </Group>
           <Stack gap="2px">
             <InputLabel>{t('feeding-entry-drawer-chip-label-feeded-with')}</InputLabel>
             <Group>
@@ -186,7 +138,7 @@ function EditFeedingEntryDrawer() {
             </Group>
           </Stack>
         </Stack>
-        <Flex flex="1" align="end">
+        <Flex flex="1" align="end" mb="1rem">
           <Group flex="1" align="stretch" justify="space-between">
             <Box>
               <ActionIcon variant="outline" h="2.25rem" w="2.25rem" onClick={onDelete}>
