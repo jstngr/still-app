@@ -107,7 +107,7 @@ export function WebMock(): IFeedingEntry[] {
   });
 }
 
-export default function inserMok(db) {
+export default function inserMockData(db) {
   db.query(`
   INSERT INTO feeding (created, stopped, type) VALUES
 (${getStartAndEnd('00:15', getRandomInterval(), 0)}, 'Left'), 

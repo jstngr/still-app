@@ -75,6 +75,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     if (!data[0]?.stopped) {
       setActiveFeeding(data[0]);
     }
+    // inserMockData(db);
   }
   useEffect(() => {
     loadData();

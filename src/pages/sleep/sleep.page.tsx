@@ -53,6 +53,8 @@ export default function SleepPage() {
             timeAgo={timeAgo}
             tooLongAgoLabel={t('sleep-page-time-ago-label-more-than-24-hours')}
             sinceLabel={t('sleep-page-time-ago-label')}
+            hasNoPreviousEntry={!lastEntry}
+            noEntryLabel={t('sleep-page-time-ago-label-no-entry')}
           />
         )}
 

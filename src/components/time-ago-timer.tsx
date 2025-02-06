@@ -10,12 +10,23 @@ interface ITimeAgoTimerProps {
   tooLongAgoLabel: string;
   sinceLabel: string;
   timeAgo: number;
+  hasNoPreviousEntry?: boolean;
+  noEntryLabel: string;
 }
 
 export default function TimeAgoTimer(props: ITimeAgoTimerProps) {
   const { feedingEntries } = useFeedingContext();
   const lastEntry = feedingEntries[0];
 
+  if (props.hasNoPreviousEntry || props.timeAgo < 0) {
+    return (
+      <Flex h="42px" align="center" direction="column">
+        <Text size="sm" c="dimmed" maw={200} ta="center">
+          {props.noEntryLabel}
+        </Text>
+      </Flex>
+    );
+  }
   if (props.timeAgo > 1000 * 60 * 60 * 24) {
     return (
       <Flex h="42px" align="center" direction="column">

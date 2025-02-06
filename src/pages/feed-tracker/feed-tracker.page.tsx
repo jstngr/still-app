@@ -41,6 +41,8 @@ export default function FeedTracker() {
             timeAgo={timeAgo}
             tooLongAgoLabel={t('time-ago-label-more-than-24-hours')}
             sinceLabel={t('time-ago-label')}
+            hasNoPreviousEntry={!lastEntry}
+            noEntryLabel={t('feed-tracker-time-ago-label-no-entry')}
           />
         )}
         <Stack flex="1 0 0" w="100%" gap="xs">
