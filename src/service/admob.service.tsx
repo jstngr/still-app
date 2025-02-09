@@ -1,6 +1,5 @@
 import {
   AdMob,
-  AdmobConsentInfo,
   AdmobConsentStatus,
   BannerAdOptions,
   BannerAdSize,
@@ -9,46 +8,40 @@ import {
   AdMobBannerSize,
 } from '@capacitor-community/admob';
 import { TrackingAuthorizationStatusInterface } from '@capacitor-community/admob/dist/esm/shared/tracking-authorization-status.interface';
-import { createContext, ReactNode, useContext, useEffect, useState, useCallback } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import React from 'react';
 import { useSettingsContext } from './settings.service';
 import { useThemeContext } from 'theme';
 
 // Constants
-const RETRY_DELAY_MS = 60 * 1000;
 const FOOTER_PADDING = 64;
 const BANNER_AD_ID = {
   PROD: 'ca-app-pub-3385049365741222/3427416213',
   TEST: 'ca-app-pub-3940256099942544/2435281174',
 };
 
+// Debug logging function
+const logAdMob = (message: string, data?: unknown) => {
+  console.log(`[AdMob] 🙈 ${message}`, data ? data : '');
+};
+
 type ITrackingStatus = 'authorized' | 'denied' | 'notDetermined' | 'restricted';
 
-async function initializeAdmob(): Promise<{
-  consentInfo: AdmobConsentInfo;
-  trackingInfo: TrackingAuthorizationStatusInterface;
-}> {
+async function initializeAdmob(): Promise<TrackingAuthorizationStatusInterface> {
   try {
     await AdMob.initialize();
+    const [trackingInfo] = await Promise.all([AdMob.trackingAuthorizationStatus()]);
 
-    const [trackingInfo, consentInfo] = await Promise.all([
-      AdMob.trackingAuthorizationStatus(),
-      AdMob.requestConsentInfo(),
-    ]);
-
-    return {
-      consentInfo,
-      trackingInfo,
-    };
+    return trackingInfo;
   } catch (error) {
-    console.error('Failed to initialize AdMob:', error);
+    logAdMob('Failed to initialize AdMob:', error);
     throw error;
   }
 }
 
 interface IAdmobContextType {
   appleTrackingDenied: boolean;
-  confirmAdmob: () => Promise<void>;
+  showConsentForms: () => Promise<void>;
 }
 
 const AdmobContext = createContext<IAdmobContextType | undefined>(undefined);
@@ -60,102 +53,81 @@ interface IAdmobProviderProps {
 export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
   const [trackingInfoStatus, setTrackingStatusInfo] = useState<ITrackingStatus>('notDetermined');
   const { initialized } = useSettingsContext();
+  const [consentChecked, setConsentChecked] = useState(false);
+  const [bannerDisplayed, setBannerDisplayed] = useState(false);
   const { setFooterHeight } = useThemeContext();
 
   useEffect(() => {
     const init = async () => {
       try {
-        const { trackingInfo } = await initializeAdmob();
+        const trackingInfo = await initializeAdmob();
         setTrackingStatusInfo(trackingInfo.status);
       } catch (error) {
-        console.error('Failed to initialize AdMob provider:', error);
+        logAdMob('Failed to initialize AdMob:', error);
       }
     };
     init();
   }, []);
 
-  const confirmAdmob = async () => {
+  const getTrackingStatus = async () => {
+    const trackingInfo = await AdMob.trackingAuthorizationStatus();
+    setTrackingStatusInfo(trackingInfo.status);
+    return trackingInfo.status;
+  };
+
+  const showConsentForms = async () => {
     try {
-      const [trackingInfo, consentInfo] = await Promise.all([
-        AdMob.trackingAuthorizationStatus(),
-        AdMob.requestConsentInfo(),
-      ]);
+      let trackingStatus = await getTrackingStatus();
 
-      setTrackingStatusInfo(trackingInfo.status);
-
-      if (trackingInfo.status === 'notDetermined') {
+      // Show apple tracking consent form
+      if (trackingStatus === 'notDetermined') {
         await AdMob.requestTrackingAuthorization();
+        trackingStatus = await getTrackingStatus();
       }
 
-      const authorizationStatus = await AdMob.trackingAuthorizationStatus();
-      setTrackingStatusInfo(authorizationStatus.status);
+      if (trackingStatus === 'authorized') {
+        // get consent info
+        const { isConsentFormAvailable, status: consentStatus } = await AdMob.requestConsentInfo();
 
-      if (
-        authorizationStatus.status === 'authorized' &&
-        consentInfo.isConsentFormAvailable &&
-        consentInfo.status === AdmobConsentStatus.REQUIRED
-      ) {
-        await AdMob.showConsentForm();
+        if (isConsentFormAvailable && consentStatus === AdmobConsentStatus.REQUIRED) {
+          await AdMob.showConsentForm();
+        }
       }
+      setConsentChecked(true);
     } catch (error) {
-      console.error('Failed to confirm AdMob:', error);
-      throw error;
+      setConsentChecked(false);
+      logAdMob('Failed to show consent forms:', error);
     }
   };
 
-  const showBanner = useCallback(async () => {
-    if (!initialized) {
-      return;
-    }
-
+  const showBanner = async () => {
     try {
       const [trackingInfo, consentInfo] = await Promise.all([
         AdMob.trackingAuthorizationStatus(),
         AdMob.requestConsentInfo(),
       ]);
-
-      // Make sure permission was asked
-      if (
-        (trackingInfo.status === 'notDetermined' ||
-          consentInfo.status === AdmobConsentStatus.REQUIRED) &&
-        trackingInfo.status !== 'denied'
-      ) {
-        if (trackingInfo.status === 'notDetermined') {
-          await AdMob.requestTrackingAuthorization();
-        }
-
-        const authorizationStatus = await AdMob.trackingAuthorizationStatus();
-        setTrackingStatusInfo(authorizationStatus.status);
-
-        if (
-          authorizationStatus.status === 'authorized' &&
-          consentInfo.isConsentFormAvailable &&
-          consentInfo.status === AdmobConsentStatus.REQUIRED
-        ) {
-          await AdMob.showConsentForm();
-        }
-
-        // Retry after delay
-        setTimeout(() => {
-          showBanner();
-        }, RETRY_DELAY_MS);
-        return;
-      }
 
       await admobBanner(consentInfo.status, trackingInfo.status, (height: number) => {
         setFooterHeight(height + FOOTER_PADDING);
       });
+      setBannerDisplayed(true);
     } catch (error) {
-      console.error('Failed to show banner:', error);
+      setBannerDisplayed(false);
+      logAdMob('Failed to show banner:', error);
     }
-  }, [initialized, setFooterHeight]);
+  };
 
   useEffect(() => {
-    showBanner();
-  }, [initialized, showBanner]);
+    if (initialized && consentChecked && !bannerDisplayed) {
+      showBanner();
+    }
+    if (initialized && !consentChecked && !bannerDisplayed) {
+      showConsentForms();
+    }
+  }, [initialized, consentChecked, bannerDisplayed]);
 
   const contextValue: IAdmobContextType = {
-    confirmAdmob,
+    showConsentForms,
     appleTrackingDenied: trackingInfoStatus === 'denied',
   };
 
@@ -198,9 +170,9 @@ export async function admobBanner(
   try {
     await AdMob.showBanner(options);
   } catch (error) {
-    // Clean up listener if showing banner fails
+    logAdMob('Failed to show banner ad:', error);
+
     listenerHandle.remove();
-    console.error('Failed to show banner ad:', error);
     throw error;
   }
 }

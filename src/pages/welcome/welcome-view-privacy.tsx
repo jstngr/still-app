@@ -12,10 +12,10 @@ export default function WelcomeViewPrivacy() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { confirmAdmob } = useAdmobContext();
+  const { showConsentForms } = useAdmobContext();
 
   const next = async () => {
-    await confirmAdmob();
+    await showConsentForms();
     navigate(AppRoutes.welcomeFinish.absolute);
   };
 
