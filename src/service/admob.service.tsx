@@ -107,12 +107,17 @@ export const AdmobProvider: React.FC<IAdmobProviderProps> = ({ children }) => {
         AdMob.requestConsentInfo(),
       ]);
 
-      await admobBanner(consentInfo.status, trackingInfo.status, (height: number) => {
-        setFooterHeight(height + FOOTER_PADDING);
-      });
-      setBannerDisplayed(true);
+      await admobBanner(
+        consentInfo.status,
+        trackingInfo.status,
+        (height: number) => {
+          setFooterHeight(height + FOOTER_PADDING);
+        },
+        () => {
+          setBannerDisplayed(true);
+        },
+      );
     } catch (error) {
-      setBannerDisplayed(false);
       logAdMob('Failed to show banner:', error);
     }
   };
@@ -146,6 +151,7 @@ export async function admobBanner(
   consentInfoStatus: AdmobConsentStatus,
   trackingInfoStatus: ITrackingStatus,
   setFooterHeight: (height: number) => void,
+  setBannerDisplayed: () => void,
 ): Promise<void> {
   const isPersonalised =
     consentInfoStatus === AdmobConsentStatus.OBTAINED && trackingInfoStatus === 'authorized';
@@ -155,6 +161,7 @@ export async function admobBanner(
     BannerAdPluginEvents.SizeChanged,
     (size: AdMobBannerSize) => {
       setFooterHeight(size.height);
+      setBannerDisplayed();
     },
   );
 
