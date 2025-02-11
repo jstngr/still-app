@@ -1,7 +1,7 @@
 PODS:
   - Capacitor (6.1.2):
     - CapacitorCordova
-  - CapacitorCommunityAdmob (6.2.0-1):
+  - CapacitorCommunityAdmob (7.0.1):
     - Capacitor
     - Google-Mobile-Ads-SDK (= 11.3.0)
   - CapacitorCommunityInAppReview (6.0.0):
@@ -79,7 +79,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
-  CapacitorCommunityAdmob: 397a611688c5cfb07590863335135e36b5c83199
+  CapacitorCommunityAdmob: 07ffab7299c2707f78e8b557e5ea4093e2843f50
   CapacitorCommunityInAppReview: c69a9392f39a10f28092d823cfa979637f4fa079
   CapacitorCommunityKeepAwake: e2ddd50812e3407f8dc3a2c28e97d66e9b59b2f5
   CapacitorCommunitySqlite: 47dab3a2d9a9581a0fe7642cf9cffd34c5d5b358
