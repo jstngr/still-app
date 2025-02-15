@@ -19,8 +19,8 @@ import { SleepProvider } from 'service/sleep.service';
 import SleepPage from 'pages/sleep/sleep.page';
 import useScreenLock from 'shared/hooks/screen-lock';
 import useKeepAwake from 'shared/hooks/keep-awake';
-import { AdmobProvider } from 'service/admob.service';
 import { AppRatingProvider } from 'service/app-rating.service';
+import AdMobBanner from 'components/admob-banner';
 
 function AppFrame() {
   return (
@@ -48,72 +48,70 @@ export default function App() {
         <SettingsProvider>
           <SettingsContext.Consumer>
             {(settings) => (
-              <AdmobProvider>
-                <FeedingProvider>
-                  <SleepProvider>
-                    <PoopProvider>
-                      <AppRatingProvider>
-                        <RoutingGuard>
-                          <Container p={0} maw="500px">
-                            <Routes>
-                              {!settings?.initialized && (
-                                <>
+              // <AdmobProvider>
+              <FeedingProvider>
+                <SleepProvider>
+                  <PoopProvider>
+                    <AppRatingProvider>
+                      <RoutingGuard>
+                        <Container p={0} maw="500px">
+                          <Routes>
+                            {!settings?.initialized && (
+                              <>
+                                <Route
+                                  path={AppRoutes.welcome.relative}
+                                  element={<WelcomePage />}
+                                />
+                                <Route
+                                  index
+                                  element={<Navigate to={AppRoutes.welcome.absolute} replace />}
+                                />
+                              </>
+                            )}
+                            {settings?.initialized && (
+                              <>
+                                <Route path={AppRoutes.app.relative} element={<AppFrame />}>
                                   <Route
-                                    path={AppRoutes.welcome.relative}
-                                    element={<WelcomePage />}
+                                    path={AppRoutes.feeding.relative}
+                                    element={<FeedTracker />}
+                                  />
+                                  {settings?.poopTrackerEnabled && (
+                                    <Route path={AppRoutes.poop.relative} element={<PoopPage />} />
+                                  )}
+                                  {settings?.sleepTrackerEnabled && (
+                                    <Route
+                                      path={AppRoutes.sleep.relative}
+                                      element={<SleepPage />}
+                                    />
+                                  )}
+                                  <Route
+                                    path={AppRoutes.statistics.relative}
+                                    element={<StatisticsPage />}
+                                  />
+                                  <Route
+                                    path={AppRoutes.settings.relative}
+                                    element={<SettingsPage />}
                                   />
                                   <Route
                                     index
-                                    element={<Navigate to={AppRoutes.welcome.absolute} replace />}
+                                    element={<Navigate to={AppRoutes.feeding.absolute} replace />}
                                   />
-                                </>
-                              )}
-                              {settings?.initialized && (
-                                <>
-                                  <Route path={AppRoutes.app.relative} element={<AppFrame />}>
-                                    <Route
-                                      path={AppRoutes.feeding.relative}
-                                      element={<FeedTracker />}
-                                    />
-                                    {settings?.poopTrackerEnabled && (
-                                      <Route
-                                        path={AppRoutes.poop.relative}
-                                        element={<PoopPage />}
-                                      />
-                                    )}
-                                    {settings?.sleepTrackerEnabled && (
-                                      <Route
-                                        path={AppRoutes.sleep.relative}
-                                        element={<SleepPage />}
-                                      />
-                                    )}
-                                    <Route
-                                      path={AppRoutes.statistics.relative}
-                                      element={<StatisticsPage />}
-                                    />
-                                    <Route
-                                      path={AppRoutes.settings.relative}
-                                      element={<SettingsPage />}
-                                    />
-                                    <Route
-                                      index
-                                      element={<Navigate to={AppRoutes.feeding.absolute} replace />}
-                                    />
-                                  </Route>
-                                  <Route
-                                    index
-                                    element={<Navigate to={AppRoutes.app.absolute} replace />}
-                                  />
-                                </>
-                              )}
-                            </Routes>
-                          </Container>
-                        </RoutingGuard>
-                      </AppRatingProvider>
-                    </PoopProvider>
-                  </SleepProvider>
-                </FeedingProvider>
-              </AdmobProvider>
+                                </Route>
+                                <Route
+                                  index
+                                  element={<Navigate to={AppRoutes.app.absolute} replace />}
+                                />
+                              </>
+                            )}
+                          </Routes>
+                        </Container>
+                      </RoutingGuard>
+                    </AppRatingProvider>
+                  </PoopProvider>
+                </SleepProvider>
+                <AdMobBanner />
+              </FeedingProvider>
+              // </AdmobProvider>
             )}
           </SettingsContext.Consumer>
         </SettingsProvider>

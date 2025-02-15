@@ -5,18 +5,14 @@ import { useNavigate } from 'react-router';
 import Pagination from './pagination';
 import styles from './welcome.module.css';
 import { Trans, useTranslation } from 'react-i18next';
-import AppRoutes from 'shared/constants/app-routes';
-import { useAdmobContext } from 'service/admob.service';
 
 export default function WelcomeViewPrivacy() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { showConsentForms } = useAdmobContext();
-
   const next = async () => {
-    await showConsentForms();
-    navigate(AppRoutes.welcomeFinish.absolute);
+    //   await showConsentForms();
+    //   navigate(AppRoutes.welcomeFinish.absolute);
   };
 
   return (

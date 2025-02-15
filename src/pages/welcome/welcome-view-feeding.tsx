@@ -7,21 +7,15 @@ import { useSettingsContext } from 'service/settings.service';
 import AppRoutes from 'shared/constants/app-routes';
 import Pagination from './pagination';
 import styles from './welcome.module.css';
-import { useAdmobContext } from 'service/admob.service';
 
 export default function WelcomeViewFeeding() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { feedByBoob, feedByBottle, onChangeFeedByBoob, onChangeFeedByBottle, babyName } =
     useSettingsContext();
-  const { appleTrackingDenied } = useAdmobContext();
 
   const next = () => {
-    if (appleTrackingDenied) {
-      navigate(AppRoutes.welcomeFinish.absolute);
-    } else {
-      navigate(AppRoutes.welcomePrivacy.absolute);
-    }
+    navigate(AppRoutes.welcomeFinish.absolute);
   };
   return (
     <>

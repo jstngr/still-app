@@ -6,14 +6,11 @@ import Pagination from './pagination';
 import styles from './welcome.module.css';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSettingsContext } from 'service/settings.service';
-import { useAdmobContext } from 'service/admob.service';
 
 export default function WelcomeViewFinish() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { onInitialized } = useSettingsContext();
-
-  const { appleTrackingDenied } = useAdmobContext();
 
   const next = async () => {
     await onInitialized();
@@ -46,7 +43,7 @@ export default function WelcomeViewFinish() {
         </Stack>
       </Flex>
       <Flex flex="1" align="end">
-        <Pagination active={appleTrackingDenied ? 4 : 5} />
+        <Pagination active={4} />
       </Flex>
     </>
   );

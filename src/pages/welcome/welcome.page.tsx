@@ -8,12 +8,8 @@ import WelcomeViewSettings from './welcome-view-settings';
 import WelcomeViewFinish from './welcome-view-finish';
 import WelcomeViewFeeding from './welcome-view-feeding';
 import styles from './welcome.module.css';
-import WelcomeViewPrivacy from './welcome-view-privacy';
-import { useAdmobContext } from 'service/admob.service';
 
 export default function WelcomePage() {
-  const { appleTrackingDenied } = useAdmobContext();
-
   return (
     <AppShell>
       <AppShell.Main
@@ -32,12 +28,7 @@ export default function WelcomePage() {
                   element={<WelcomeViewSettings />}
                 />
                 <Route path={AppRoutes.welcomeFeeding.relative} element={<WelcomeViewFeeding />} />
-                {!appleTrackingDenied && (
-                  <Route
-                    path={AppRoutes.welcomePrivacy.relative}
-                    element={<WelcomeViewPrivacy />}
-                  />
-                )}
+
                 <Route path={AppRoutes.welcomeFinish.relative} element={<WelcomeViewFinish />} />
               </Routes>
             </Flex>

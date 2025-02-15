@@ -2,6 +2,8 @@ import { createTheme, MantineProvider, MantineThemeOverride } from '@mantine/cor
 import themeColors from './colors';
 import React, { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 
+const FOOTER_PADDING = 64;
+
 const theme: MantineThemeOverride = createTheme({
   fontFamily: 'Poppins',
   ...themeColors,
@@ -94,14 +96,13 @@ export const ThemeProvider: React.FC<IThemeProviderProps> = ({ children }) => {
         },
       });
     }
-
     return temp;
   }, [footerHeight]);
 
   return (
     <ThemeContext.Provider
       value={{
-        setFooterHeight,
+        setFooterHeight: (height: number) => setFooterHeight(height + FOOTER_PADDING),
       }}
     >
       <MantineProvider theme={mantineTheme}>{children}</MantineProvider>

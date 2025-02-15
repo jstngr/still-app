@@ -8,8 +8,8 @@ const config: CapacitorConfig = {
   webDir: 'build',
   // server: {
   //   // hot reload
-  //   // url: 'http://192.168.178.22:3000',
-  //   url: 'http://localhost:3000',
+  //   url: 'http://192.168.178.22:3000',
+  //   // url: 'http://localhost:3000',
   //   cleartext: true,
   // },
   plugins: {
@@ -46,6 +46,11 @@ const config: CapacitorConfig = {
       resize: KeyboardResize.Body,
       style: KeyboardStyle.Dark,
       resizeOnFullScreen: true,
+    },
+    AdMob: {
+      appId: 'ca-app-pub-3385049365741222~1441830408',
+      autoShow: true,
+      requestTrackingAuthorization: true,
     },
   },
 };
