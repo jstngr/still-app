@@ -1,17 +1,21 @@
 import { CapacitorConfig } from '@capacitor/cli';
 import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
+// Environment-specific configurations
+const isDevelopment = process.env.NODE_ENV === 'development';
+const localUrl = process.env.CAPACITOR_LOCAL_URL || 'http://localhost:3000';
+
 const config: CapacitorConfig = {
   appId: 'de.mini-genie.feedandsleep',
   appName: 'Feed and Sleep',
   bundledWebRuntime: false,
   webDir: 'build',
-  // server: {
-  //   // hot reload
-  //   url: 'http://192.168.178.22:3000',
-  //   // url: 'http://localhost:3000',
-  //   cleartext: true,
-  // },
+  ...(isDevelopment && {
+    server: {
+      url: localUrl,
+      cleartext: true,
+    },
+  }),
   plugins: {
     CapacitorSQLite: {
       iosDatabaseLocation: 'Library/CapacitorDatabase',

@@ -1,24 +1,48 @@
+# Feed and Sleep
+
+A comprehensive mobile application for tracking baby feeding times and sleep patterns, built with React and Capacitor.
+
 ## Getting Started
 
-To begin, you'll need to install `node` (using brew):
+### Prerequisites
+
+- Node.js (install via brew):
+  ```console
+  brew install node
+  ```
+- Xcode (for iOS development)
+- Android Studio (for Android development)
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```console
+   npm ci
+   ```
+3. Start the development server:
+   ```console
+   npm start
+   ```
+   App will be available at `localhost:3000`
+
+### Building for Mobile Platforms
+
+#### iOS
 
 ```console
-brew install node
+npm run build
+npx cap sync ios
+npx cap open ios
 ```
 
-Go to the directory of this prject and install the packages:
+#### Android
 
 ```console
-npm ci
+npm run build
+npx cap sync android
+npx cap open android
 ```
-
-Start the app:
-
-```console
-npm start
-```
-
-App is reachable on `localhost:3000`
 
 ## App Overview
 
@@ -28,56 +52,169 @@ App is reachable on `localhost:3000`
 
 1. **Feeding and Sleep Tracking**:
 
-   - Track baby feeding times and sleep patterns with ease.
+   - Track baby feeding times with precise timing
+   - Monitor sleep patterns and durations
+   - Historical data viewing and analysis
+   - Real-time tracking capabilities
 
 2. **User Interface and Navigation**:
 
-   - Utilizes `Mantine` and `React Router` for a seamless UI and navigation experience.
-   - Structured layout with `AppShell` for main content and footer navigation.
+   - Modern UI built with `Mantine` components
+   - Responsive design for various screen sizes
+   - Intuitive navigation using `React Router`
+   - Structured layout with `AppShell`
+   - Bottom navigation for easy access
 
-3. **Settings and Customization**:
+3. **Data Management**:
 
-   - Customize your experience through a dedicated settings page.
-   - Manage user settings with `SettingsProvider`.
+   - Local data storage using `CapacitorSQLite`
+   - Platform-specific database locations:
+     - iOS: `Library/CapacitorDatabase`
+     - Android: App-specific storage
+     - Windows: `C:\\ProgramData\\CapacitorDatabases`
+   - Optional encryption support
+   - Automatic data backup
 
-4. **SQLite Database**:
+4. **AdMob Integration**:
 
-   - Local data storage using `CapacitorSQLite` for iOS, Android, and Electron platforms.
+   - Banner ads implementation
+   - GDPR compliance with consent management
+   - iOS App Tracking Transparency support
+   - Production and test ad units:
+     ```typescript
+     BANNER_AD_ID = {
+       PROD: "ca-app-pub-3385049365741222/3427416213",
+       TEST: "ca-app-pub-3940256099942544/2435281174",
+     };
+     ```
+   - Adaptive banner sizing
+   - Error handling and recovery
+   - Personalized/Non-personalized ads support
 
-5. **Splash Screen and Keyboard Customization**:
+5. **Privacy and Security**:
 
-   - Enhanced user experience with a splash screen during app launch.
-   - Keyboard plugin adjusts layout for smooth user interaction.
+   - GDPR-compliant data handling
+   - App Tracking Transparency implementation
+   - Optional biometric authentication
+   - Secure data storage
 
-6. **AdMob Integration**:
+6. **User Experience**:
 
-   - Monetize the app with integrated AdMob ads.
+   - Custom splash screen with configurable duration
+   - Keyboard handling and resizing
+   - Screen orientation support
+   - Keep awake functionality for tracking
+   - In-app review integration
 
-7. **In-App Review**:
+7. **Internationalization**:
+   - Multi-language support with `i18next`
+   - Currently supported languages:
+     - English
+     - German
+   - Localized interface elements
+   - RTL support
 
-   - Gather user feedback with in-app review functionality.
+### Technical Specifications
 
-8. **Biometric Authentication**:
+1. **Frontend Stack**:
 
-   - Configurations for biometric authentication on iOS and Android for secure access.
+   - React
+   - TypeScript
+   - Mantine UI Framework
+   - React Router for navigation
 
-9. **Internationalization**:
+2. **Mobile Framework**:
 
-   - Supports multiple languages with `i18next` for internationalization.
+   - Capacitor
+   - Native plugins for platform-specific features
+   - SQLite for data persistence
 
-10. **Platform-Specific Configurations**:
-    - Configured for iOS and Android platforms with specific settings.
+3. **Development Tools**:
 
-### Development and Deployment
+   - ESLint for code quality
+   - Prettier for code formatting
+   - Webpack for bundling
+   - TypeScript for type safety
 
-- **Development Server**:
-  - Run on a local development server (`localhost:3000`) with hot reloading options.
-- **Build and Deployment Scripts**:
-  - Streamlined development workflow with scripts for building, testing, and deploying the app.
+4. **Testing and Quality**:
+   - Unit testing setup
+   - E2E testing capabilities
+   - Code quality checks
+   - Performance monitoring
 
-### Additional Features
+### Configuration
 
-- **Screen Lock and Keep Awake**:
-  - Manage device screen behavior with `useScreenLock` and `useKeepAwake` hooks.
+1. **Capacitor Configuration** (`capacitor.config.ts`):
 
-Overall, "Feed and Sleep" is a comprehensive app designed to assist parents in tracking their baby's feeding and sleeping patterns, with a focus on user experience, customization, and cross-platform compatibility.
+   ```typescript
+   {
+     appId: 'de.mini-genie.feedandsleep',
+     appName: 'Feed and Sleep',
+     plugins: {
+       AdMob: {
+         appId: 'ca-app-pub-3385049365741222~1441830408',
+         autoShow: true,
+         requestTrackingAuthorization: true
+       },
+       // ... other plugin configs
+     }
+   }
+   ```
+
+2. **Database Configuration**:
+
+   - iOS/Android: Auto-configured paths
+   - Optional encryption
+   - Biometric auth support
+
+3. **Build Configuration**:
+   - Webpack optimization
+   - Asset management
+   - Environment-specific settings
+
+### Development Workflow
+
+1. **Local Development**:
+
+   ```console
+   npm start           # Start dev server
+   npm run build      # Build for production
+   npm run lint       # Run linter
+   npm run format     # Format code
+   ```
+
+2. **Mobile Development**:
+   ```console
+   npx cap sync       # Sync web code to mobile
+   npx cap open ios   # Open iOS project
+   npx cap open android # Open Android project
+   ```
+
+### Deployment
+
+1. **iOS App Store**:
+
+   - Requires Apple Developer account
+   - Follow App Store guidelines
+   - Submit through App Store Connect
+
+2. **Google Play Store**:
+   - Requires Google Play Developer account
+   - Follow Play Store guidelines
+   - Submit through Play Console
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For support, please open an issue in the repository or contact the development team.
