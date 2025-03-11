@@ -1,69 +1,59 @@
 import { CapacitorConfig } from '@capacitor/cli';
-import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
-
-// Environment-specific configurations
-const isDevelopment = process.env.NODE_ENV === 'development';
-const localUrl = process.env.CAPACITOR_LOCAL_URL || 'http://localhost:3000';
 
 const config: CapacitorConfig = {
-  appId: 'de.mini-genie.feedandsleep',
-  appName: 'Feed and Sleep',
-  bundledWebRuntime: false,
-  webDir: 'build',
-  ...(isDevelopment && {
-    server: {
-      url: localUrl,
-      cleartext: true,
-    },
-  }),
-  plugins: {
-    CapacitorSQLite: {
-      iosDatabaseLocation: 'Library/CapacitorDatabase',
-      iosIsEncryption: false,
-      iosKeychainPrefix: 'cap',
-      iosBiometric: {
-        biometricAuth: false,
-        biometricTitle: 'Biometric login for capacitor sqlite',
+  "appId": "de.mini-genie.feedandsleep",
+  "appName": "Feed and Sleep",
+  "bundledWebRuntime": false,
+  "webDir": "build",
+  "plugins": {
+    "CapacitorSQLite": {
+      "iosDatabaseLocation": "Library/CapacitorDatabase",
+      "iosIsEncryption": false,
+      "iosKeychainPrefix": "cap",
+      "iosBiometric": {
+        "biometricAuth": false,
+        "biometricTitle": "Biometric login for capacitor sqlite"
       },
-      androidIsEncryption: false,
-      androidBiometric: {
-        biometricAuth: false,
-        biometricTitle: 'Biometric login for capacitor sqlite',
-        biometricSubTitle: 'Log in using your biometric',
+      "androidIsEncryption": false,
+      "androidBiometric": {
+        "biometricAuth": false,
+        "biometricTitle": "Biometric login for capacitor sqlite",
+        "biometricSubTitle": "Log in using your biometric"
       },
-      electronWindowsLocation: 'C:\\ProgramData\\CapacitorDatabases',
-      electronMacLocation: 'YOUR_VOLUME/CapacitorDatabases',
-      electronLinuxLocation: 'Databases',
+      "electronWindowsLocation": "C:\\ProgramData\\CapacitorDatabases",
+      "electronMacLocation": "YOUR_VOLUME/CapacitorDatabases",
+      "electronLinuxLocation": "Databases"
     },
-    SplashScreen: {
-      launchShowDuration: 2000, // Show splash for 3 seconds
-      launchAutoHide: false, // Automatically hide splash screen after 3 seconds
-      backgroundColor: '#ffffff', // Splash screen background color
-      androidScaleType: 'CENTER_CROP', // How the splash image is scaled on Android
-      showSpinner: true, // Show loading spinner
-      spinnerStyle: 'large', // Spinner style
-      spinnerColor: '#999999', // Spinner color
-      splashFullScreen: true, // Fullscreen mode for the splash screen
-      splashImmersive: true, // Immersive mode (Android)
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": false,
+      "backgroundColor": "#ffffff",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": true,
+      "spinnerStyle": "large",
+      "spinnerColor": "#999999",
+      "splashFullScreen": true,
+      "splashImmersive": true
     },
-    Keyboard: {
-      resize: KeyboardResize.Body,
-      style: KeyboardStyle.Dark,
-      resizeOnFullScreen: true,
+    "Keyboard": {
+      "resize": "body",
+      "style": "DARK",
+      "resizeOnFullScreen": true
     },
-    AdMob: {
-      appId: 'ca-app-pub-3385049365741222~1441830408',
-      autoShow: true,
-      requestTrackingAuthorization: true,
-    },
+    "AdMob": {
+      "appId": "ca-app-pub-3385049365741222~1441830408",
+      "autoShow": true,
+      "requestTrackingAuthorization": true
+    }
   },
+  "server": {
+    "url": "http://192.168.178.22:3000",
+    "cleartext": true,
+    "androidScheme": "http"
+  },
+  "android": {
+    "allowMixedContent": true
+  }
 };
 
 export default config;
-
-// server: {
-//   // hot reload
-//   // url: 'http://192.168.178.22:3000',
-//   // url: 'http://localhost:3000',
-//   cleartext: true,
-// },

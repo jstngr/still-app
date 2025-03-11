@@ -7,9 +7,11 @@ A comprehensive mobile application for tracking baby feeding times and sleep pat
 ### Prerequisites
 
 - Node.js (install via brew):
-  ```console
-  brew install node
-  ```
+
+```console
+brew install node
+```
+
 - Xcode (for iOS development)
 - Android Studio (for Android development)
 

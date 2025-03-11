@@ -14,6 +14,7 @@ import { useThemeContext } from 'theme';
 const AdMobBanner = () => {
   const { setFooterHeight } = useThemeContext();
   const [npa, setNpa] = useState<boolean | null>(null);
+  const isDevelopment = process.env.NODE_ENV === 'development';
 
   useEffect(() => {
     const initializeAdMob = async () => {
@@ -62,7 +63,7 @@ const AdMobBanner = () => {
           adSize: BannerAdSize.ADAPTIVE_BANNER,
           position: BannerAdPosition.BOTTOM_CENTER,
           margin: 0,
-          isTesting: false, // Set to true for testing
+          isTesting: isDevelopment, // Set to true for testing
           npa: npa ?? undefined, // Apply NPA if required
         };
 
