@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkFeed_and_Sleep=self.webpackChunkFeed_and_Sleep||[]).push([[411],{7411:function(e,n,s){s.r(n),s.d(n,{SplashScreenWeb:function(){return c}});var a=s(6546);class c extends a.E_{async show(e){}async hide(e){}}}}]);
-//# sourceMappingURL=411.js.map

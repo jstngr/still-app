@@ -46,6 +46,17 @@ const baseConfig: Partial<CapacitorConfig> = {
       autoShow: true,
       requestTrackingAuthorization: true,
     },
+    LocalNotifications: {
+      smallIcon: 'ic_stat_icon_config_sample',
+      iconColor: '#488AFF',
+      sound: 'beep.wav',
+    },
+  },
+  android: {
+    allowMixedContent: true,
+  },
+  ios: {
+    contentInset: 'always',
   },
 };
 
