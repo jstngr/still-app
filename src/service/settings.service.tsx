@@ -14,6 +14,8 @@ import {
   saveFeedingUnitToDB,
   saveInitializedToDb,
   saveLanguageToDB,
+  saveNotificationsEnabledToDB,
+  saveNotificationTimeToDB,
   savePoopTrackerEnabledToDB,
   saveSleepTrackerEnabledToDB,
 } from './sqlite/settings-database.helpers';
@@ -42,6 +44,11 @@ interface ISettingsContextType {
   settingsLoaded: boolean;
   appRated: boolean;
   onAppRated: () => Promise<void>;
+  saveNotificationsEnabled: (enabled: boolean) => Promise<void>;
+  saveNotificationTime: (values: { hours: number; minutes: number }) => Promise<void>;
+  notificationsEnabled: boolean;
+  notificationHours: number;
+  notificationMinutes: number;
 }
 
 export interface ISettingsObject {
@@ -56,6 +63,9 @@ export interface ISettingsObject {
   defaultVolume: number;
   feedByBottle: boolean;
   appRated: boolean;
+  notificationsEnabled: boolean;
+  notificationHours: number;
+  notificationMinutes: number;
 }
 
 const SettingsContext = createContext<ISettingsContextType | undefined>(undefined);
@@ -77,6 +87,9 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
   const [feedingUnit, setFeedingUnit] = useState('ml');
   const [defaultVolume, setDefaultVolume] = useState(100);
   const [appRated, setAppRated] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [notificationHours, setNotificationHours] = useState(0);
+  const [notificationMinutes, setNotificationMinutes] = useState(0);
 
   const { db, sqlReady } = useSQLiteContext();
 
@@ -97,6 +110,9 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
       setDefaultVolume(data.defaultVolume);
       setAppRated(data.appRated);
       setSettingsLoaded(true);
+      setNotificationsEnabled(data.notificationsEnabled);
+      setNotificationHours(data.notificationHours);
+      setNotificationMinutes(data.notificationMinutes);
     }
   }
 
@@ -205,6 +221,25 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
     }
   };
 
+  const saveNotificationsEnabled = async (enabled: boolean) => {
+    if (db) {
+      const result = await saveNotificationsEnabledToDB(db, enabled);
+      if (result !== null) {
+        setNotificationsEnabled(enabled);
+      }
+    }
+  };
+
+  const saveNotificationTime = async ({ hours, minutes }: { hours: number; minutes: number }) => {
+    if (db) {
+      const result = await saveNotificationTimeToDB(db, { hours, minutes });
+      if (result !== null) {
+        setNotificationHours(result.hours);
+        setNotificationMinutes(result.minutes);
+      }
+    }
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -230,6 +265,11 @@ export const SettingsProvider: React.FC<ISettingsProviderProps> = ({ children })
         onChangeDefaultVolume,
         onAppRated,
         appRated,
+        saveNotificationsEnabled,
+        saveNotificationTime,
+        notificationsEnabled,
+        notificationHours,
+        notificationMinutes,
       }}
     >
       {children}

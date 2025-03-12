@@ -1,9 +1,10 @@
-import { ActionIcon, Box, Flex, Title } from '@mantine/core';
+import { ActionIcon, Box, Flex, Group, Title } from '@mantine/core';
 import { IconSettings } from '@tabler/icons-react';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useSettingsContext } from 'service/settings.service';
 import AppRoutes from 'shared/constants/app-routes';
+import NotificationSettings from './NotificationSettings';
 
 export default function AppTitle() {
   const navigate = useNavigate();
@@ -24,9 +25,12 @@ export default function AppTitle() {
         {babyName || '-'}
       </Title>
       <Box pos={'absolute'} right="1rem">
-        <ActionIcon variant="subtle" onClick={onNavigate}>
-          <IconSettings />
-        </ActionIcon>
+        <Group gap="sm">
+          <NotificationSettings />
+          <ActionIcon variant="subtle" onClick={onNavigate}>
+            <IconSettings />
+          </ActionIcon>
+        </Group>
       </Box>
     </Flex>
   );

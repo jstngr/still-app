@@ -44,15 +44,23 @@ const config: CapacitorConfig = {
       "appId": "ca-app-pub-3385049365741222~1441830408",
       "autoShow": true,
       "requestTrackingAuthorization": true
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_icon_config_sample",
+      "iconColor": "#488AFF",
+      "sound": "beep.wav"
     }
-  },
-  "server": {
-    "url": "http://192.168.178.22:3000",
-    "cleartext": true,
-    "androidScheme": "http"
   },
   "android": {
     "allowMixedContent": true
+  },
+  "ios": {
+    "contentInset": "always"
+  },
+  "server": {
+    "url": "http://localhost:3000",
+    "cleartext": true,
+    "androidScheme": "http"
   }
 };
 

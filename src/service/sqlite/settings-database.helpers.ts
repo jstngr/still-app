@@ -19,7 +19,10 @@ async function createTable(db: SQLiteDBConnection): Promise<boolean> {
         initialized BOOLEAN NOT NULL,
         feedingUnit TEXT NOT NULL,
         defaultVolume INTEGER NOT NULL,
-        appRated BOOLEAN NOT NULL
+        appRated BOOLEAN NOT NULL,
+        notificationsEnabled BOOLEAN NOT NULL DEFAULT false,
+        notificationHours INTEGER NOT NULL DEFAULT 0,
+        notificationMinutes INTEGER NOT NULL DEFAULT 0
       );
     `;
   try {
@@ -48,13 +51,63 @@ async function addSettingsRowIfNotExist(db: SQLiteDBConnection): Promise<void> {
       const language = await getSystemLanguage();
       await db.run(`
       INSERT INTO settings 
-        (babyName, language, poopTracker, sleepTracker, initialized, feedByBoob, feedByBottle, defaultVolume, feedingUnit, appRated) 
+        (babyName, language, poopTracker, sleepTracker, initialized, feedByBoob, feedByBottle, defaultVolume, feedingUnit, appRated, notificationsEnabled, notificationHours, notificationMinutes) 
       VALUES 
-        ("", "${language}", true, true, false, true, false, 100, "ml", false)
+        ("", "${language}", true, true, false, true, false, 100, "ml", false, false, 0, 0)
       ;`);
     }
   } catch (err) {
     console.error('[SettingsDatabase] Error setting row: ', err);
+  }
+}
+
+/**
+ * Checks for and adds notification columns to the settings table if they don't exist.
+ * Does nothing if the table doesn't exist or if the columns are already present.
+ *
+ * @param db - The SQLiteDBConnection instance
+ * @returns Promise<void>
+ */
+async function addNotificationColumns(db: SQLiteDBConnection): Promise<void> {
+  try {
+    // Check if table exists
+    const tableCheck = await db.query(`
+      SELECT name 
+      FROM sqlite_master 
+      WHERE type='table' AND name='settings';
+    `);
+
+    if (!tableCheck?.values?.length) {
+      return;
+    }
+
+    const columnInfo = await db.query(`PRAGMA table_info(settings);`);
+    const columns = columnInfo.values as Array<{ name: string }>;
+
+    const hasNotificationColumns = columns.some(
+      (col) =>
+        col.name === 'notificationsEnabled' ||
+        col.name === 'notificationHours' ||
+        col.name === 'notificationMinutes',
+    );
+
+    if (!hasNotificationColumns) {
+      try {
+        await db.execute(
+          'ALTER TABLE settings ADD COLUMN notificationsEnabled BOOLEAN NOT NULL DEFAULT false;',
+        );
+        await db.execute(
+          'ALTER TABLE settings ADD COLUMN notificationHours INTEGER NOT NULL DEFAULT 0;',
+        );
+        await db.execute(
+          'ALTER TABLE settings ADD COLUMN notificationMinutes INTEGER NOT NULL DEFAULT 0;',
+        );
+      } catch (err) {
+        console.error('[SettingsDatabase] Error adding notification columns:', err);
+      }
+    }
+  } catch (err) {
+    console.error('[SettingsDatabase] Error checking notification columns:', err);
   }
 }
 
@@ -72,6 +125,7 @@ async function initSettingsDB(db?: SQLiteDBConnection): Promise<void> {
     return;
   }
 
+  await addNotificationColumns(db);
   const result = await createTable(db);
   if (result) {
     await addSettingsRowIfNotExist(db);
@@ -102,6 +156,7 @@ async function getSettingsFromDB(db?: SQLiteDBConnection): Promise<ISettingsObje
       data.feedByBoob = !!data.feedByBoob;
       data.feedByBottle = !!data.feedByBottle;
       data.appRated = !!data.appRated;
+      data.notificationsEnabled = !!data.notificationsEnabled;
     }
     return (data as ISettingsObject) || null;
   } catch (err) {
@@ -317,6 +372,36 @@ async function deleteSettingsFromDB(db: SQLiteDBConnection): Promise<boolean> {
   }
 }
 
+// Add new functions to handle notification settings
+async function saveNotificationsEnabledToDB(
+  db: SQLiteDBConnection,
+  enabled: boolean,
+): Promise<boolean | null> {
+  try {
+    await db.run(`UPDATE settings SET notificationsEnabled = ?`, [enabled ? 1 : 0]);
+    return enabled;
+  } catch (err) {
+    console.error('[SettingsDatabase] Error saving notifications enabled:', err);
+    return null;
+  }
+}
+
+async function saveNotificationTimeToDB(
+  db: SQLiteDBConnection,
+  { hours, minutes }: { hours: number; minutes: number },
+): Promise<{ hours: number; minutes: number } | null> {
+  try {
+    await db.run(`UPDATE settings SET notificationHours = ?, notificationMinutes = ?`, [
+      hours,
+      minutes,
+    ]);
+    return { hours, minutes };
+  } catch (err) {
+    console.error('[SettingsDatabase] Error saving notification time:', err);
+    return null;
+  }
+}
+
 export {
   deleteSettingsFromDB,
   initSettingsDB,
@@ -331,4 +416,6 @@ export {
   saveFeedingUnitToDB,
   saveDefaultVolumeToDB,
   saveAppRatedToDb,
+  saveNotificationsEnabledToDB,
+  saveNotificationTimeToDB,
 };

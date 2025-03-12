@@ -12,6 +12,7 @@ import {
   updateFeedingEntryInDB,
 } from './sqlite/feeding-database.helpers';
 import { useSettingsContext } from './settings.service';
+import { cancelAllNotifications, scheduleNotification } from './notification.service';
 
 interface IFeedingContextType {
   activeFeeding?: IFeedingEntry;
@@ -51,7 +52,8 @@ interface IFeedingProviderProps {
 
 export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) => {
   const [feedingEntries, setFeedingEntries] = useState<IFeedingEntry[]>([]);
-  const { defaultVolume } = useSettingsContext();
+  const settings = useSettingsContext();
+  const defaultVolume = settings.defaultVolume;
   const [activeFeeding, setActiveFeeding] = useState<IFeedingEntry>();
   const [boobSwitchModalOpened, { open: openBoobSwitchModal, close: closeBoobSwitchModal }] =
     useDisclosure(false);
@@ -107,15 +109,25 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
   };
 
   const stopFeeding = async () => {
-    if (!activeFeeding) {
-      return;
-    }
+    if (!activeFeeding) return;
+
     const currentFeeding = new FeedingEntry(activeFeeding);
     currentFeeding.stop();
+
     if (currentFeeding.getDuration() < 2000) {
       await deleteFeeding(currentFeeding.getId());
     } else {
-      updateFeedingEntry(currentFeeding);
+      await updateFeedingEntry(currentFeeding);
+      await loadData();
+
+      // Schedule notification if enabled
+      if (settings.notificationsEnabled) {
+        await scheduleNotification({
+          hours: settings.notificationHours,
+          minutes: settings.notificationMinutes,
+          baseTime: new Date().getTime(),
+        });
+      }
     }
     setActiveFeeding(undefined);
   };
@@ -141,6 +153,7 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
     }
     setActiveFeeding(newFeeding.toObject());
     setFeedingEntries((current) => [newFeeding.toObject(), ...current]);
+    cancelAllNotifications();
   };
 
   const switchBoob = () => {
