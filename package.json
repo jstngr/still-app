@@ -82,6 +82,7 @@
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.7.7",
     "buffer": "^6.0.3",
+    "capacitor-native-settings": "^6.0.1",
     "color": "^4.2.3",
     "crypto-browserify": "^3.12.1",
     "dayjs": "^1.11.13",

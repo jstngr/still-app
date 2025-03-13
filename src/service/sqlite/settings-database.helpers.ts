@@ -21,7 +21,7 @@ async function createTable(db: SQLiteDBConnection): Promise<boolean> {
         defaultVolume INTEGER NOT NULL,
         appRated BOOLEAN NOT NULL,
         notificationsEnabled BOOLEAN NOT NULL DEFAULT false,
-        notificationHours INTEGER NOT NULL DEFAULT 0,
+        notificationHours INTEGER NOT NULL DEFAULT 2,
         notificationMinutes INTEGER NOT NULL DEFAULT 0
       );
     `;

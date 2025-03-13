@@ -13,6 +13,7 @@ import {
 } from './sqlite/feeding-database.helpers';
 import { useSettingsContext } from './settings.service';
 import { cancelAllNotifications, scheduleNotification } from './notification.service';
+import { useTranslation } from 'react-i18next';
 
 interface IFeedingContextType {
   activeFeeding?: IFeedingEntry;
@@ -51,6 +52,7 @@ interface IFeedingProviderProps {
 }
 
 export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) => {
+  const { t } = useTranslation();
   const [feedingEntries, setFeedingEntries] = useState<IFeedingEntry[]>([]);
   const settings = useSettingsContext();
   const defaultVolume = settings.defaultVolume;
@@ -122,7 +124,8 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
 
       // Schedule notification if enabled
       if (settings.notificationsEnabled) {
-        await scheduleNotification({
+        await scheduleNotification(t, {
+          babyName: settings.babyName,
           hours: settings.notificationHours,
           minutes: settings.notificationMinutes,
           baseTime: new Date().getTime(),

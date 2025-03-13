@@ -19,6 +19,8 @@ PODS:
     - Capacitor
   - CapacitorLocalNotifications (6.0.0):
     - Capacitor
+  - CapacitorNativeSettings (6.0.1):
+    - Capacitor
   - CapacitorPreferences (6.0.2):
     - Capacitor
   - CapacitorScreenOrientation (6.0.3):
@@ -45,6 +47,7 @@ DEPENDENCIES:
   - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
+  - CapacitorNativeSettings (from `../../node_modules/capacitor-native-settings`)
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
   - "CapacitorScreenOrientation (from `../../node_modules/@capacitor/screen-orientation`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
@@ -75,6 +78,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/keyboard"
   CapacitorLocalNotifications:
     :path: "../../node_modules/@capacitor/local-notifications"
+  CapacitorNativeSettings:
+    :path: "../../node_modules/capacitor-native-settings"
   CapacitorPreferences:
     :path: "../../node_modules/@capacitor/preferences"
   CapacitorScreenOrientation:
@@ -92,6 +97,7 @@ SPEC CHECKSUMS:
   CapacitorDevice: 7097a1deb4224b77fd13a6e60a355d0062a5d772
   CapacitorKeyboard: 460c6f9ec5e52c84f2742d5ce2e67bbc7ab0ebb0
   CapacitorLocalNotifications: 4ab68f0be5f697a579558fadd307d823a9ec1c26
+  CapacitorNativeSettings: 1ce5585ff07b161616cd0a795702637316677af2
   CapacitorPreferences: e8284bf740cf8c6d3f25409af3c01df87dfeb5a1
   CapacitorScreenOrientation: 3bb823f5d265190301cdc5d58a568a287d98972a
   CapacitorSplashScreen: 250df9ef8014fac5c7c1fd231f0f8b1d8f0b5624
@@ -100,6 +106,6 @@ SPEC CHECKSUMS:
   SQLCipher: 77fbe633cd84db04b07876dd50766b4924b57d61
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: a4b6e18646cc0bb84de632cdb3a09750d82b3b58
+PODFILE CHECKSUM: 7e2c487c7504dfd02e9b99807be0ac32203283e8
 
 COCOAPODS: 1.16.2
