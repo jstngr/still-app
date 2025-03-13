@@ -84,103 +84,98 @@ export default function SettingsPage() {
       <Container fluid w="100%" h="calc(100% - 76px)" pb="8px">
         <Stack gap="lg" align="start" h="100%" w="100%">
           <Title order={5}>{t('settings-page-title')}</Title>
-          <Card withBorder w="100%">
-            <Stack>
-              <Title order={5}>{t('settings-page-card-title-misc')}</Title>
-              <TextInput
-                label={t('settings-page-input-label-name')}
-                onChange={onChangeName}
-                value={babyName}
+          <Stack w="100%">
+            <TextInput
+              label={t('settings-page-input-label-name')}
+              onChange={onChangeName}
+              value={babyName}
+            />
+            <Select
+              allowDeselect={false}
+              checkIconPosition="left"
+              data={[
+                { value: 'de', label: t('language_not_translated_de') },
+                { value: 'en', label: t('language_not_translated_en') },
+              ]}
+              label={t('settings-page-input-label-language')}
+              placeholder="Pick value"
+              value={language}
+              aria-autocomplete="none"
+              onChange={(_value, option) => onChangeLanguage(option.value as TLanguage)}
+            />
+            <Divider />
+            <Text ta="left" size="sm">
+              {t('settings-page-feeding-description', { name: babyName })}
+            </Text>
+            <Stack gap="sm">
+              <Switch
+                label={t('settings-page-input-label-breast')}
+                checked={feedByBoob}
+                onChange={(event) => onChangeFeedByBoob(event.currentTarget.checked)}
               />
-              <Select
-                allowDeselect={false}
-                checkIconPosition="left"
-                data={[
-                  { value: 'de', label: t('language_not_translated_de') },
-                  { value: 'en', label: t('language_not_translated_en') },
-                ]}
-                label={t('settings-page-input-label-language')}
-                placeholder="Pick value"
-                value={language}
-                aria-autocomplete="none"
-                onChange={(_value, option) => onChangeLanguage(option.value as TLanguage)}
+              <Switch
+                label={t('settings-page-input-label-bottle')}
+                checked={feedByBottle}
+                onChange={(event) => onChangeFeedByBottle(event.currentTarget.checked)}
               />
-              <Stack align="left">
-                <Text ta="left">{t('settings-page-feeding-description', { name: babyName })}</Text>
-                <Stack gap="sm">
-                  <Switch
-                    label={t('settings-page-input-label-breast')}
-                    checked={feedByBoob}
-                    onChange={(event) => onChangeFeedByBoob(event.currentTarget.checked)}
+              <Card withBorder bg="none">
+                <Stack>
+                  <TextInput
+                    label={t('settings-page-input-label-unit')}
+                    onChange={onChangeUnit}
+                    value={feedingUnit}
+                    disabled={!feedByBottle}
+                    maxLength={5}
+                    leftSection={<IconRuler2 stroke="1" />}
                   />
-                  <Switch
-                    label={t('settings-page-input-label-bottle')}
-                    checked={feedByBottle}
-                    onChange={(event) => onChangeFeedByBottle(event.currentTarget.checked)}
+                  <NumberInput
+                    leftSection={<IconDropletHalfFilled stroke="1" />}
+                    label={t('settings-page-input-label-default-volume', {
+                      suffix: feedingUnit,
+                    })}
+                    value={defaultVolume}
+                    onChange={onChangeVolume}
+                    suffix={` ${feedingUnit}`}
+                    allowNegative={false}
+                    allowDecimal={false}
+                    hideControls
+                    max={5000}
+                    disabled={!feedByBottle}
                   />
-                  <Card withBorder>
-                    <Stack>
-                      <TextInput
-                        label={t('settings-page-input-label-unit')}
-                        onChange={onChangeUnit}
-                        value={feedingUnit}
-                        disabled={!feedByBottle}
-                        maxLength={5}
-                        leftSection={<IconRuler2 stroke="1" />}
-                      />
-                      <NumberInput
-                        leftSection={<IconDropletHalfFilled stroke="1" />}
-                        label={t('settings-page-input-label-default-volume', {
-                          suffix: feedingUnit,
-                        })}
-                        value={defaultVolume}
-                        onChange={onChangeVolume}
-                        suffix={` ${feedingUnit}`}
-                        allowNegative={false}
-                        allowDecimal={false}
-                        hideControls
-                        max={5000}
-                        disabled={!feedByBottle}
-                      />
-                    </Stack>
-                  </Card>
                 </Stack>
-              </Stack>
+              </Card>
             </Stack>
-          </Card>
-          <Card withBorder w="100%">
-            <Stack>
-              <Title order={5}>{t('settings-page-card-title-app-functions')}</Title>
-              <Stack gap="sm">
-                <Switch
-                  label="Show poop tracker"
-                  checked={poopTrackerEnabled}
-                  onChange={(event) => onChangePoopTrackerEnabled(event.currentTarget.checked)}
-                />
-                <Switch
-                  label="Show sleep tracker"
-                  checked={sleepTrackerEnabled}
-                  onChange={(event) => onChangeSleepTrackerEnabled(event.currentTarget.checked)}
-                />
-              </Stack>
+          </Stack>
+
+          <Divider w="100%" />
+
+          <Text size="sm">{t('settings-page-card-title-app-functions')}</Text>
+          <Stack gap="sm">
+            <Switch
+              label="Show poop tracker"
+              checked={poopTrackerEnabled}
+              onChange={(event) => onChangePoopTrackerEnabled(event.currentTarget.checked)}
+            />
+            <Switch
+              label="Show sleep tracker"
+              checked={sleepTrackerEnabled}
+              onChange={(event) => onChangeSleepTrackerEnabled(event.currentTarget.checked)}
+            />
+          </Stack>
+
+          <Alert
+            variant="light"
+            title={`${t('settings-page-alert-title-reset')}`}
+            icon={<IconAlertTriangle />}
+            w="100%"
+          >
+            <Stack gap="xs">
+              <Text size="sm">{t('settings-page-warning-text-reset')}</Text>
+              <Flex justify="end">
+                <Button onClick={openResetWarning}>{t('settings-page-button-label-reset')}</Button>
+              </Flex>
             </Stack>
-          </Card>
-          <Card withBorder w="100%" p={0}>
-            <Alert
-              variant="light"
-              title={`${t('settings-page-alert-title-reset')}`}
-              icon={<IconAlertTriangle />}
-            >
-              <Stack gap="xs">
-                <Text size="sm">{t('settings-page-warning-text-reset')}</Text>
-                <Flex justify="end">
-                  <Button onClick={openResetWarning}>
-                    {t('settings-page-button-label-reset')}
-                  </Button>
-                </Flex>
-              </Stack>
-            </Alert>
-          </Card>
+          </Alert>
         </Stack>
       </Container>
       <Modal
