@@ -28,3 +28,7 @@ body {
 .mantine-Switch-root {
   -webkit-tap-highlight-color: transparent;
 }
+
+#root {
+  height: 100vh;
+}

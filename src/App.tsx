@@ -24,7 +24,7 @@ import AdMobBanner from 'components/admob-banner';
 
 function AppFrame() {
   return (
-    <AppShell>
+    <AppShell bd="1px solid green">
       <AppShell.Main>
         <Stack h="100%" gap="xl">
           <AppTitle />
