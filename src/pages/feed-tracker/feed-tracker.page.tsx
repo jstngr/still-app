@@ -15,6 +15,7 @@ import { IFeedingEntry } from 'shared/types/types';
 import EditBottleFeedingEntryDrawer from './components/edit-bottle-feeding-entry-drawer';
 import TimeAgoTimer from '../../components/time-ago-timer';
 import FeedingEntry from 'classes/feeding-entry.class';
+import { useAppRefreshContext } from 'service/app-refresh.service';
 
 export default function FeedTracker() {
   const { feedingEntries, addFeedingEntry, activeFeeding } = useFeedingContext();
@@ -26,6 +27,11 @@ export default function FeedTracker() {
     if (!lastEntry) return 0;
     return new FeedingEntry(lastEntry).getTimeAgo();
   }, [lastEntry]);
+
+  const { toggleState } = useAppRefreshContext();
+  if (toggleState) {
+    return <div />;
+  }
 
   return (
     <Container fluid h="100%" w="100%">

@@ -5,11 +5,17 @@ import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
 import PoopHistoryItem from 'components/poop-history-item';
 import { t } from 'i18next';
 import React from 'react';
+import { useAppRefreshContext } from 'service/app-refresh.service';
 import { usePoopContext } from 'service/poop.service';
 import { IPoopEntry } from 'shared/types/types';
 
 export default function PoopPage() {
   const { poopEntries, addPoopEntry } = usePoopContext();
+
+  const { toggleState } = useAppRefreshContext();
+  if (toggleState) {
+    return <div />;
+  }
 
   return (
     <Container fluid h="100%" w="100%">

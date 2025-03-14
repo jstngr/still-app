@@ -11,6 +11,7 @@ import SleepHistoryItem from './components/sleep-history-item';
 import EditSleepEntryDrawer from './components/edit-sleep-entry-drawer';
 import TimeAgoTimer from 'components/time-ago-timer';
 import SleepEntry from 'classes/sleep-entry.class';
+import { useAppRefreshContext } from 'service/app-refresh.service';
 
 export default function SleepPage() {
   const { activeSleep, sleepEntries, stopSleep, addSleepEntry, startSleep } = useSleepContext();
@@ -20,6 +21,11 @@ export default function SleepPage() {
     if (!lastEntry) return 0;
     return new SleepEntry(lastEntry).getTimeAgo();
   }, [lastEntry]);
+
+  const { toggleState } = useAppRefreshContext();
+  if (toggleState) {
+    return <div />;
+  }
 
   return (
     <Container fluid h="100%" w="100%">
