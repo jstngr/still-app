@@ -5,9 +5,10 @@ import BaseHistoryItem from 'components/history/BaseHistoryItem';
 import DurationDisplay from 'components/history/DurationDisplay';
 import IconBadge from 'components/history/IconBadge';
 import TimeDisplay from 'components/history/TimeDisplay';
+import { useHistoryEdit } from 'components/history/useHistoryEdit';
+import { useHistoryEntry } from 'components/history/useHistoryEntry';
 import React from 'react';
 import { useSleepContext } from 'service/sleep.service';
-import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import { SleepHistoryItemProps } from 'shared/types/history-item.types';
 
 export default function SleepHistoryItem({
@@ -17,25 +18,23 @@ export default function SleepHistoryItem({
 }: SleepHistoryItemProps): React.ReactNode {
   const { editSleepEntryDrawer, activeSleep } = useSleepContext();
 
-  const handleEdit = (id: number) => {
-    editSleepEntryDrawer.openSleepEntryDrawer(id);
-  };
+  const { handleEdit } = useHistoryEdit({
+    data,
+    onEdit: (id) => editSleepEntryDrawer.openSleepEntryDrawer(id),
+  });
 
   const renderContent = (entry: SleepHistoryItemProps['data'][0]) => {
     const sleepEntry = new SleepEntry(entry);
-    const isRunning = sleepEntry.isRunning();
-    const timeFrom = formatTimeFromTimestamp(sleepEntry.getStarted());
-    const timeTo = sleepEntry.getStopped()
-      ? formatTimeFromTimestamp(sleepEntry.getStopped())
-      : '--:--';
+    const { timeFrom, timeTo, durationInSeconds, isEntryRunning } = useHistoryEntry({
+      entry,
+      getDuration: () => sleepEntry.getDuration(),
+      isRunning: () => sleepEntry.isRunning(),
+    });
 
     return (
       <Stack gap="0">
         <TimeDisplay startTime={timeFrom} endTime={timeTo} />
-        <DurationDisplay
-          isRunning={isRunning}
-          durationInSeconds={Math.floor(sleepEntry.getDuration() / 1000)}
-        />
+        <DurationDisplay isRunning={isEntryRunning} durationInSeconds={durationInSeconds} />
       </Stack>
     );
   };

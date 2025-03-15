@@ -4,11 +4,12 @@ import BaseHistoryItem from 'components/history/BaseHistoryItem';
 import DurationDisplay from 'components/history/DurationDisplay';
 import FeedingTypeBadge from 'components/history/FeedingTypeBadge';
 import TimeDisplay from 'components/history/TimeDisplay';
+import { useHistoryEdit } from 'components/history/useHistoryEdit';
+import { useHistoryEntry } from 'components/history/useHistoryEntry';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 import { useSettingsContext } from 'service/settings.service';
-import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
 import { FeedingHistoryItemProps } from 'shared/types/history-item.types';
 
 export default function FeedingHistoryItem({
@@ -21,24 +22,26 @@ export default function FeedingHistoryItem({
   const { feedingUnit } = useSettingsContext();
   const { t } = useTranslation();
 
-  const handleEdit = (id: number) => {
-    const entry = data.find((e) => e.id === id);
-    if (!entry) return;
-
-    if (entry.type === 'Bottle') {
-      editBottleFeedingEntryDrawer.openBottleFeedingEntryDrawer(id);
-    } else {
-      editFeedingEntryDrawer.openFeedingEntryDrawer(id);
-    }
-  };
+  const { handleEdit } = useHistoryEdit({
+    data,
+    onEdit: (id) => {
+      const entry = data.find((e) => e.id === id);
+      if (!entry) return;
+      if (entry.type === 'Bottle') {
+        editBottleFeedingEntryDrawer.openBottleFeedingEntryDrawer(id);
+      } else {
+        editFeedingEntryDrawer.openFeedingEntryDrawer(id);
+      }
+    },
+  });
 
   const renderContent = (entry: FeedingHistoryItemProps['data'][0]) => {
     const feedingEntry = new FeedingEntry(entry);
-    const isRunning = feedingEntry.isRunning();
-    const timeFrom = formatTimeFromTimestamp(feedingEntry.getStarted());
-    const timeTo = feedingEntry.getStopped()
-      ? formatTimeFromTimestamp(feedingEntry.getStopped())
-      : '--:--';
+    const { timeFrom, timeTo, durationInSeconds, isEntryRunning } = useHistoryEntry({
+      entry,
+      getDuration: () => feedingEntry.getDuration(),
+      isRunning: () => feedingEntry.isRunning(),
+    });
     const isBottle = entry.type === 'Bottle';
 
     return (
@@ -51,10 +54,7 @@ export default function FeedingHistoryItem({
           </Text>
         )}
         {!isBottle && (
-          <DurationDisplay
-            isRunning={isRunning}
-            durationInSeconds={Math.floor(feedingEntry.getDuration() / 1000)}
-          />
+          <DurationDisplay isRunning={isEntryRunning} durationInSeconds={durationInSeconds} />
         )}
       </Stack>
     );

@@ -1,22 +1,22 @@
 type IFeedingType = 'Left' | 'Right' | 'Bottle';
 
-interface IFeedingEntry {
-  id?: number;
-  created: number;
-  stopped?: number;
+export interface IFeedingEntry {
+  id: number;
   type: IFeedingType;
+  started: number;
+  stopped?: number;
   volume?: number;
 }
 
 interface IPoopEntry {
-  id?: number;
+  id: number;
   created: number;
 }
 
 interface ISleepEntry {
-  id?: number;
+  id: number;
   created: number;
-  stopped: number;
+  stopped?: number;
 }
 
 interface IBoobDistribution {
@@ -26,4 +26,4 @@ interface IBoobDistribution {
   RightFeedings: IFeedingEntry[];
 }
 
-export type { ISleepEntry, IFeedingType, IFeedingEntry, IPoopEntry, IBoobDistribution };
+export type { ISleepEntry, IFeedingType, IPoopEntry, IBoobDistribution };
