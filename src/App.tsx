@@ -25,7 +25,7 @@ import { AppRefreshProvider } from 'service/app-refresh.service';
 
 function AppFrame() {
   return (
-    <AppShell bd="1px solid green">
+    <AppShell>
       <AppShell.Main>
         <Stack h="100%" gap="xl">
           <AppTitle />
