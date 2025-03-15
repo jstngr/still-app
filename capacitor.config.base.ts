@@ -4,7 +4,6 @@ import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 const baseConfig: Partial<CapacitorConfig> = {
   appId: 'de.mini-genie.feedandsleep',
   appName: 'Feed and Sleep',
-  bundledWebRuntime: false,
   webDir: 'build',
   plugins: {
     CapacitorSQLite: {
