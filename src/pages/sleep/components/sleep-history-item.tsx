@@ -1,31 +1,27 @@
-import { Badge, Flex, Stack } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import { IconBedFlat } from '@tabler/icons-react';
 import SleepEntry from 'classes/sleep-entry.class';
 import BaseHistoryItem from 'components/history/BaseHistoryItem';
 import DurationDisplay from 'components/history/DurationDisplay';
+import IconBadge from 'components/history/IconBadge';
 import TimeDisplay from 'components/history/TimeDisplay';
 import React from 'react';
 import { useSleepContext } from 'service/sleep.service';
 import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
-import monoStyles from 'shared/styles/mono-styles.module.css';
-import { ISleepEntry } from 'shared/types/types';
+import { SleepHistoryItemProps } from 'shared/types/history-item.types';
 
 export default function SleepHistoryItem({
   index,
   style,
   data,
-}: {
-  index: number;
-  style: React.CSSProperties;
-  data: ISleepEntry[];
-}): React.ReactNode {
+}: SleepHistoryItemProps): React.ReactNode {
   const { editSleepEntryDrawer, activeSleep } = useSleepContext();
 
   const handleEdit = (id: number) => {
     editSleepEntryDrawer.openSleepEntryDrawer(id);
   };
 
-  const renderContent = (entry: ISleepEntry) => {
+  const renderContent = (entry: SleepHistoryItemProps['data'][0]) => {
     const sleepEntry = new SleepEntry(entry);
     const isRunning = sleepEntry.isRunning();
     const timeFrom = formatTimeFromTimestamp(sleepEntry.getStarted());
@@ -49,19 +45,7 @@ export default function SleepHistoryItem({
       index={index}
       style={style}
       data={data}
-      icon={
-        <Badge
-          w="2.5rem"
-          variant="outline"
-          color="primary"
-          size="lg"
-          className={monoStyles.monoFont}
-        >
-          <Flex>
-            <IconBedFlat size={14} stroke={2} />
-          </Flex>
-        </Badge>
-      }
+      icon={<IconBadge icon={<IconBedFlat size={14} stroke={2} />} />}
       onEdit={handleEdit}
       isActive={activeSleep?.id === data[index].id}
       renderContent={renderContent}

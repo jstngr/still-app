@@ -9,17 +9,13 @@ import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 import { useSettingsContext } from 'service/settings.service';
 import formatTimeFromTimestamp from 'shared/helpers/format-time-from-timestamp';
-import { IFeedingEntry } from 'shared/types/types';
+import { FeedingHistoryItemProps } from 'shared/types/history-item.types';
 
 export default function FeedingHistoryItem({
   index,
   style,
   data,
-}: {
-  index: number;
-  style: React.CSSProperties;
-  data: IFeedingEntry[];
-}): React.ReactNode {
+}: FeedingHistoryItemProps): React.ReactNode {
   const { editFeedingEntryDrawer, editBottleFeedingEntryDrawer, activeFeeding } =
     useFeedingContext();
   const { feedingUnit } = useSettingsContext();
@@ -36,7 +32,7 @@ export default function FeedingHistoryItem({
     }
   };
 
-  const renderContent = (entry: IFeedingEntry) => {
+  const renderContent = (entry: FeedingHistoryItemProps['data'][0]) => {
     const feedingEntry = new FeedingEntry(entry);
     const isRunning = feedingEntry.isRunning();
     const timeFrom = formatTimeFromTimestamp(feedingEntry.getStarted());
