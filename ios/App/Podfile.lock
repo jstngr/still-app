@@ -1,33 +1,33 @@
 PODS:
-  - Capacitor (6.1.2):
+  - Capacitor (7.1.0):
     - CapacitorCordova
-  - CapacitorApp (6.0.0):
+  - CapacitorApp (7.0.0):
     - Capacitor
   - CapacitorCommunityAdmob (7.0.1):
     - Capacitor
     - Google-Mobile-Ads-SDK (= 11.3.0)
-  - CapacitorCommunityInAppReview (6.0.0):
+  - CapacitorCommunityInAppReview (7.0.0):
     - Capacitor
-  - CapacitorCommunityKeepAwake (5.0.1):
+  - CapacitorCommunityKeepAwake (7.0.0):
     - Capacitor
-  - CapacitorCommunitySqlite (6.0.2):
+  - CapacitorCommunitySqlite (7.0.0):
     - Capacitor
     - SQLCipher
     - ZIPFoundation
-  - CapacitorCordova (6.1.2)
-  - CapacitorDevice (6.0.1):
+  - CapacitorCordova (7.1.0)
+  - CapacitorDevice (7.0.0):
     - Capacitor
-  - CapacitorKeyboard (6.0.3):
+  - CapacitorKeyboard (7.0.0):
     - Capacitor
-  - CapacitorLocalNotifications (6.0.0):
+  - CapacitorLocalNotifications (7.0.0):
     - Capacitor
-  - CapacitorNativeSettings (6.0.1):
+  - CapacitorNativeSettings (7.0.1):
     - Capacitor
-  - CapacitorPreferences (6.0.2):
+  - CapacitorPreferences (7.0.0):
     - Capacitor
-  - CapacitorScreenOrientation (6.0.3):
+  - CapacitorScreenOrientation (7.0.0):
     - Capacitor
-  - CapacitorSplashScreen (6.0.2):
+  - CapacitorSplashScreen (7.0.0):
     - Capacitor
   - Google-Mobile-Ads-SDK (11.3.0):
     - GoogleUserMessagingPlatform (>= 1.1)
@@ -93,20 +93,20 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/splash-screen"
 
 SPEC CHECKSUMS:
-  Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
-  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
+  Capacitor: 68ff8eabbcce387e69767c13b5fbcc1c5399eabc
+  CapacitorApp: 45cb7cbef4aa380b9236fd6980033eb5cde6fcd2
   CapacitorCommunityAdmob: 07ffab7299c2707f78e8b557e5ea4093e2843f50
-  CapacitorCommunityInAppReview: c69a9392f39a10f28092d823cfa979637f4fa079
-  CapacitorCommunityKeepAwake: e2ddd50812e3407f8dc3a2c28e97d66e9b59b2f5
-  CapacitorCommunitySqlite: 47dab3a2d9a9581a0fe7642cf9cffd34c5d5b358
-  CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
-  CapacitorDevice: 7097a1deb4224b77fd13a6e60a355d0062a5d772
-  CapacitorKeyboard: 460c6f9ec5e52c84f2742d5ce2e67bbc7ab0ebb0
-  CapacitorLocalNotifications: 4ab68f0be5f697a579558fadd307d823a9ec1c26
-  CapacitorNativeSettings: 1ce5585ff07b161616cd0a795702637316677af2
-  CapacitorPreferences: e8284bf740cf8c6d3f25409af3c01df87dfeb5a1
-  CapacitorScreenOrientation: 3bb823f5d265190301cdc5d58a568a287d98972a
-  CapacitorSplashScreen: 250df9ef8014fac5c7c1fd231f0f8b1d8f0b5624
+  CapacitorCommunityInAppReview: a01a1508adc1bf02dda70b33a521ef627324d898
+  CapacitorCommunityKeepAwake: 00dfd8fa3cca0df003c9a3e2cd7bee678aeec68b
+  CapacitorCommunitySqlite: 6501e7349acf998346acf24ef757861bb3f6fc2b
+  CapacitorCordova: 866217f32c1d25b326c568a10ea3ed0c36b13e29
+  CapacitorDevice: 62066b65e148a133df7b8c5bf972ba835b329748
+  CapacitorKeyboard: 2c26c6fccde35023c579fc37d4cae6326d5e6343
+  CapacitorLocalNotifications: 1270d26b56181ce081ccfab078b888c2f43d0fd0
+  CapacitorNativeSettings: 03d126571fc0e12f89ffeb1516788bf371b528bc
+  CapacitorPreferences: e24a50a936f0e4f54a6b43be6121f923b4d91c27
+  CapacitorScreenOrientation: 4b2778087f4b4b138705cdabe431de0829116974
+  CapacitorSplashScreen: f4e58cc02aafd91c7cbaf32a3d1b44d02a115125
   Google-Mobile-Ads-SDK: 301a16c461c331ba34ff4dab40a22ab7c147af61
   GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
   SQLCipher: 77fbe633cd84db04b07876dd50766b4924b57d61
