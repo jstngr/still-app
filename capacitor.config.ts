@@ -54,7 +54,8 @@ const config: CapacitorConfig = {
     "allowMixedContent": true
   },
   "ios": {
-    "contentInset": "always"
+    "contentInset": "always",
+    "backgroundColor": "#fbf3ee"
   },
   "server": {
     "url": "http://localhost:3000",

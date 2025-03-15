@@ -2,7 +2,7 @@ import { createTheme, MantineProvider, MantineThemeOverride } from '@mantine/cor
 import themeColors from './colors';
 import React, { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 
-const FOOTER_PADDING = 64;
+const FOOTER_PADDING = 32;
 
 const theme: MantineThemeOverride = createTheme({
   fontFamily: 'Poppins',
@@ -27,10 +27,10 @@ const theme: MantineThemeOverride = createTheme({
         style: {
           overflow: 'hidden',
         },
-        footer: { height: 64 },
+        footer: { height: 28 },
         bg: 'var(--mantine-color-background-0)',
-        padding:
-          'env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-left, 20px) env(safe-area-inset-bottom, 20px)',
+        // padding:
+        //   'env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-left, 20px) env(safe-area-inset-bottom, 20px)',
       },
     },
     AppShellFooter: {
@@ -40,7 +40,7 @@ const theme: MantineThemeOverride = createTheme({
     },
     AppShellMain: {
       defaultProps: {
-        p: 'env(safe-area-inset-top, 20px) env(safe-area-inset-left, 20px) 0 env(safe-area-inset-right, 20px)',
+        p: '8px env(safe-area-inset-left, 20px) 0 env(safe-area-inset-right, 20px)',
         h: 'calc(100dvh - var(--app-shell-footer-height) - env(safe-area-inset-bottom, 20px))',
         mih: 'calc(100dvh - var(--app-shell-footer-height) - env(safe-area-inset-bottom, 20px))',
         mah: 'calc(100dvh - var(--app-shell-footer-height) - env(safe-area-inset-bottom, 20px))',
@@ -62,7 +62,7 @@ const theme: MantineThemeOverride = createTheme({
       styles: (theme) => ({
         content: {
           borderRadius: theme.radius.md,
-          paddingBottom: 64,
+          paddingBottom: FOOTER_PADDING,
         },
       }),
     },
@@ -92,7 +92,7 @@ export const ThemeProvider: React.FC<IThemeProviderProps> = ({ children }) => {
       temp.components.Drawer.styles = (theme) => ({
         content: {
           borderRadius: theme.radius.md,
-          paddingBottom: Math.max(footerHeight - 64 + 8, 0),
+          paddingBottom: Math.max(footerHeight - FOOTER_PADDING + 8, 0),
         },
       });
     }

@@ -53,9 +53,11 @@ const baseConfig: Partial<CapacitorConfig> = {
   },
   android: {
     allowMixedContent: true,
+    backgroundColor: '#fbf3ee',
   },
   ios: {
     contentInset: 'always',
+    backgroundColor: '#fbf3ee',
   },
 };
 
