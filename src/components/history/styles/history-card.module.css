@@ -7,6 +7,7 @@
   display: grid;
   color: var(--mantine-color-primary-2);
 }
+
 .activeCardIndicator:before,
 .activeCardIndicator:after {
   content: "";
@@ -20,12 +21,23 @@
     300% 2px,
     2px 300%;
   background-repeat: no-repeat;
-  animation: l15 8s infinite;
+  animation: activeIndicator 8s infinite;
 }
+
 .activeCardIndicator:after {
   animation-delay: -4s;
 }
-@keyframes l15 {
+
+.card {
+  border-radius: 0;
+  position: relative;
+}
+
+.dashedBorderTop {
+  border-top: 1px dashed var(--mantine-color-background-2);
+}
+
+@keyframes activeIndicator {
   0% {
     background-position:
       50% 0,
