@@ -1,6 +1,6 @@
 {
   "name": "Feed and Sleep",
-  "version": "1.7.2",
+  "version": "2.0.0",
   "description": "Capacitor wrapped react app to provide a simple solution of baby feeding timing",
   "main": "index.tsx",
   "author": "Tobias Justinger",
