@@ -1,6 +1,6 @@
 import { ActionIcon, Box, Button, Drawer, Flex, Group, Stack } from '@mantine/core';
-import { TimeInput } from '@mantine/dates';
-import { IconClockPlay, IconClockStop, IconTrash } from '@tabler/icons-react';
+import { TimeInput, DatePickerInput } from '@mantine/dates';
+import { IconCalendar, IconClockPlay, IconClockStop, IconTrash } from '@tabler/icons-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEntryForm, EntryBase } from 'shared/hooks/useEntryForm';
@@ -41,6 +41,8 @@ export default function EntryFormDrawer<T extends EntryBase>({
     updateForm,
     updateTimeField,
     getTimeValue,
+    updateDateField,
+    getDateValue,
     handleSave,
     handleDelete,
     handleClose,
@@ -73,31 +75,52 @@ export default function EntryFormDrawer<T extends EntryBase>({
           flexGrow: '1',
           display: 'flex',
           justifyContent: 'center',
+          paddingBottom: 'env(safe-area-inset-bottom, 20px)',
         },
       }}
     >
       <Flex maw="500px" direction="column" flex="1">
         <Stack>
-          <Group grow align="center">
-            <TimeInput
-              leftSection={<IconClockPlay stroke="1" />}
-              label={fromLabel || t('feeding-entry-drawer-input-label-from')}
-              value={getTimeValue(startTime)}
-              onChange={(event) =>
-                updateTimeField(startField as keyof T, event.currentTarget.value, startTime)
-              }
-              maxTime={showStopTime && stopTime ? getTimeValue(stopTime) : undefined}
-            />
-            {showStopTime && (
+          <Group grow align="flex-start">
+            <Stack gap="xs">
               <TimeInput
-                leftSection={<IconClockStop stroke="1" />}
-                label={toLabel || t('feeding-entry-drawer-input-label-to')}
-                value={getTimeValue(stopTime)}
+                leftSection={<IconClockPlay stroke="1" />}
+                label={fromLabel || t('feeding-entry-drawer-input-label-from')}
+                value={getTimeValue(startTime)}
                 onChange={(event) =>
-                  updateTimeField('stopped' as keyof T, event.currentTarget.value, stopTime)
+                  updateTimeField(startField as keyof T, event.currentTarget.value, startTime)
                 }
-                minTime={getTimeValue(startTime)}
+                maw="50vw"
+                maxTime={showStopTime ? getTimeValue(stopTime) : undefined}
               />
+              <DatePickerInput
+                leftSection={<IconCalendar stroke="1" />}
+                value={getDateValue(startTime)}
+                maw="50vw"
+                onChange={(date) => updateDateField(startField as keyof T, date, startTime)}
+                maxDate={showStopTime ? getDateValue(stopTime) : undefined}
+              />
+            </Stack>
+            {showStopTime && (
+              <Stack gap="xs">
+                <TimeInput
+                  leftSection={<IconClockStop stroke="1" />}
+                  label={toLabel || t('feeding-entry-drawer-input-label-to')}
+                  value={getTimeValue(stopTime)}
+                  onChange={(event) =>
+                    updateTimeField('stopped' as keyof T, event.currentTarget.value, stopTime)
+                  }
+                  minTime={getTimeValue(startTime)}
+                  maw="50vw"
+                />
+                <DatePickerInput
+                  leftSection={<IconCalendar stroke="1" />}
+                  value={getDateValue(stopTime)}
+                  onChange={(date) => updateDateField('stopped' as keyof T, date, stopTime)}
+                  minDate={getDateValue(startTime)}
+                  maw="50vw"
+                />
+              </Stack>
             )}
           </Group>
 

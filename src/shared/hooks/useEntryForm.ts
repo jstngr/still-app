@@ -77,11 +77,25 @@ export function useEntryForm<T extends EntryBase>({
     return timeStampToTime(timestamp);
   };
 
+  const updateDateField = (field: keyof T, date: Date | null, currentTimestamp: number) => {
+    if (!date) return;
+    const currentDate = new Date(currentTimestamp);
+    date.setHours(currentDate.getHours());
+    date.setMinutes(currentDate.getMinutes());
+    updateForm(field, date.getTime() as T[keyof T]);
+  };
+
+  const getDateValue = (timestamp: number) => {
+    return new Date(timestamp);
+  };
+
   return {
     formData,
     updateForm,
     updateTimeField,
     getTimeValue,
+    updateDateField,
+    getDateValue,
     handleSave,
     handleDelete,
     handleClose: onClose,
