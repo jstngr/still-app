@@ -126,8 +126,8 @@ export const FeedingProvider: React.FC<IFeedingProviderProps> = ({ children }) =
       if (settings.notificationsEnabled) {
         await scheduleNotification(t, {
           babyName: settings.babyName,
-          hours: settings.notificationHours,
-          minutes: settings.notificationMinutes,
+          hours: settings.notificationHours.toString(),
+          minutes: settings.notificationMinutes.toString(),
           baseTime: new Date().getTime(),
         });
       }

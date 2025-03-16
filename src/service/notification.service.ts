@@ -16,12 +16,15 @@ export async function scheduleNotification(
     baseTime,
     babyName,
   }: {
-    hours: number;
-    minutes: number;
+    hours: string;
+    minutes: string;
     baseTime: number;
     babyName: string;
   },
 ) {
+  const hoursInt = parseInt(hours, 10);
+  const minutesInt = parseInt(minutes, 10);
+
   try {
     // Request permission
     const permissionStatus = await LocalNotifications.requestPermissions();
@@ -34,16 +37,20 @@ export async function scheduleNotification(
     await LocalNotifications.cancel({ notifications: [{ id: NOTIFICATION_ID }] });
 
     // Calculate the trigger time in milliseconds
-    const totalMinutes = hours * 60 + minutes;
+    const totalMinutes = hoursInt * 60 + minutesInt;
     const triggerInMs = totalMinutes * 60 * 1000;
 
     let body = '';
-    if (hours === 0) {
-      body = t('notification-settings-info-minutes_one', { minutes, count: minutes });
-    } else if (minutes !== 0) {
-      body = t('notification-settings-info-hours-minutes', { hours, minutes });
+
+    if (hoursInt === 0) {
+      body = t('notification-settings-info-minutes', { minutes: minutesInt, count: minutesInt });
+    } else if (minutesInt !== 0) {
+      body = t('notification-settings-info-hours-minutes', {
+        hours: hoursInt,
+        minutes: minutesInt,
+      });
     } else {
-      body = t('notification-settings-info-hours_one', { hours, count: hours });
+      body = t('notification-settings-info-hours', { hours: hoursInt, count: hoursInt });
     }
 
     // Schedule the notification
@@ -77,13 +84,15 @@ export function useNotificationScheduler() {
 
   useEffect(() => {
     if (settings.notificationsEnabled) {
-      if (baseTime < Date.now()) {
+      const totalMinutes = settings.notificationHours * 60 + settings.notificationMinutes;
+      const triggerInMs = totalMinutes * 60 * 1000;
+      if (baseTime + triggerInMs < Date.now()) {
         return;
       }
       scheduleNotification(t, {
         babyName: settings.babyName,
-        hours: settings.notificationHours,
-        minutes: settings.notificationMinutes,
+        hours: settings.notificationHours.toString(),
+        minutes: settings.notificationMinutes.toString(),
         baseTime,
       });
     } else {
