@@ -1,37 +1,10 @@
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Chip,
-  Drawer,
-  Flex,
-  Group,
-  InputLabel,
-  Stack,
-} from '@mantine/core';
-import { TimeInput } from '@mantine/dates';
-import { IconClockPlay, IconClockStop, IconTrash } from '@tabler/icons-react';
+import { Chip, Group, InputLabel, Stack } from '@mantine/core';
 import FeedingEntry from 'classes/feeding-entry.class';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
+import EntryFormDrawer from 'components/form/EntryFormDrawer';
 import { IFeedingEntry } from 'shared/types/types';
-
-function timeToTimeStamp(original: number, time: string) {
-  const hours = parseInt(time.split(':')[0], 10);
-  const minutes = parseInt(time.split(':')[1], 10);
-  const date = new Date(original);
-  date.setHours(hours);
-  date.setMinutes(minutes);
-  return date.getTime();
-}
-
-function timeStampToTime(original: number) {
-  const date = new Date(original);
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
 
 function EditFeedingEntryDrawer() {
   const { t } = useTranslation();
@@ -45,111 +18,46 @@ function EditFeedingEntryDrawer() {
     [feedingEntries, feedingEntryDrawerEntryId],
   );
 
-  const [formData, setformData] = useState(entry);
-  const updateForm = (key: keyof IFeedingEntry, value: IFeedingEntry[keyof IFeedingEntry]) => {
-    setformData(
-      (current) =>
-        ({
-          ...current,
-          [key]: value,
-        }) as IFeedingEntry,
-    );
-  };
+  const renderContent = (
+    formData: IFeedingEntry,
+    updateForm: (key: keyof IFeedingEntry, value: IFeedingEntry[keyof IFeedingEntry]) => void,
+  ) => (
+    <Stack gap="2px">
+      <InputLabel>{t('feeding-entry-drawer-chip-label-feeded-with')}</InputLabel>
+      <Chip.Group
+        value={formData.type}
+        onChange={(value) => updateForm('type', value as 'Left' | 'Right')}
+      >
+        <Group>
+          <Chip value="Left" variant="outline">
+            {t('feeding-entry-drawer-chip-left-boob')}
+          </Chip>
+          <Chip value="Right" variant="outline">
+            {t('feeding-entry-drawer-chip-right-boob')}
+          </Chip>
+        </Group>
+      </Chip.Group>
+    </Stack>
+  );
 
-  useEffect(() => {
-    setformData(entry);
-  }, [entry?.id]);
-
-  const onSave = () => {
-    if (formData) {
-      const entryInstance = new FeedingEntry(formData);
-      updateFeedingEntry(entryInstance);
-    }
-    closeFeedingEntryDrawer();
-  };
-  const onDelete = async () => {
-    if (entry?.id) {
-      await deleteFeeding(entry.id);
-    }
-    closeFeedingEntryDrawer();
+  const handleDelete = async (id: string) => {
+    await deleteFeeding(parseInt(id, 10));
   };
 
   return (
-    <Drawer
-      position="bottom"
-      opened={feedingEntryDrawerOpened}
+    <EntryFormDrawer
+      entry={entry}
+      onSave={(data) => updateFeedingEntry(new FeedingEntry(data))}
       onClose={closeFeedingEntryDrawer}
+      onDelete={handleDelete}
       title={t('feeding-entry-drawer-title')}
-      styles={{
-        content: {
-          display: 'flex',
-          flexDirection: 'column',
-        },
-        body: {
-          flexGrow: '1',
-          display: 'flex',
-          justifyContent: 'center',
-          paddingBottom: 'env(safe-area-inset-bottom, 20px)',
-        },
-      }}
+      opened={feedingEntryDrawerOpened}
+      fromLabel={t('feeding-entry-drawer-input-label-from')}
+      toLabel={t('feeding-entry-drawer-input-label-to')}
+      saveLabel={t('feeding-entry-drawer-button-label-save')}
     >
-      <Flex maw="500px" direction="column" flex="1">
-        <Stack>
-          <Group grow align="center">
-            <TimeInput
-              leftSection={<IconClockPlay stroke="1" />}
-              label={t('feeding-entry-drawer-input-label-from')}
-              value={timeStampToTime(formData?.created || 0)}
-              onChange={(event) =>
-                updateForm(
-                  'created',
-                  timeToTimeStamp(formData?.created || 0, event.currentTarget.value),
-                )
-              }
-              maxTime={timeStampToTime(formData?.stopped || 0)}
-            />
-            <TimeInput
-              leftSection={<IconClockStop stroke="1" />}
-              label={t('feeding-entry-drawer-input-label-to')}
-              value={timeStampToTime(formData?.stopped || 0)}
-              onChange={(event) =>
-                updateForm(
-                  'stopped',
-                  timeToTimeStamp(formData?.stopped || 0, event.currentTarget.value),
-                )
-              }
-              minTime={timeStampToTime(formData?.created || 0)}
-            />
-          </Group>
-          <Stack gap="2px">
-            <InputLabel>{t('feeding-entry-drawer-chip-label-feeded-with')}</InputLabel>
-            <Group>
-              <Chip.Group
-                value={formData?.type}
-                onChange={(value) => updateForm('type', value as 'Left' | 'Right')}
-              >
-                <Chip value="Left" variant="outline">
-                  {t('feeding-entry-drawer-chip-left-boob')}
-                </Chip>
-                <Chip value="Right" variant="outline">
-                  {t('feeding-entry-drawer-chip-right-boob')}
-                </Chip>
-              </Chip.Group>
-            </Group>
-          </Stack>
-        </Stack>
-        <Flex flex="1" align="end" mb="1rem">
-          <Group flex="1" align="stretch" justify="space-between">
-            <Box>
-              <ActionIcon variant="outline" h="2.25rem" w="2.25rem" onClick={onDelete}>
-                <IconTrash stroke="1.5" size="18px" />
-              </ActionIcon>
-            </Box>
-            <Button onClick={onSave}>{t('feeding-entry-drawer-button-label-save')}</Button>
-          </Group>
-        </Flex>
-      </Flex>
-    </Drawer>
+      {renderContent}
+    </EntryFormDrawer>
   );
 }
 

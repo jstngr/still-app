@@ -1,32 +1,14 @@
-import { ActionIcon, Box, Button, Drawer, Flex, Group, NumberInput } from '@mantine/core';
-import { TimeInput } from '@mantine/dates';
-import { IconClockPlay, IconDropletHalfFilled, IconTrash } from '@tabler/icons-react';
+import { NumberInput, Stack } from '@mantine/core';
 import FeedingEntry from 'classes/feeding-entry.class';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
-import { useSettingsContext } from 'service/settings.service';
+import EntryFormDrawer from 'components/form/EntryFormDrawer';
 import { IFeedingEntry } from 'shared/types/types';
-
-function timeToTimeStamp(original: number, time: string) {
-  const hours = parseInt(time.split(':')[0], 10);
-  const minutes = parseInt(time.split(':')[1], 10);
-  const date = new Date(original);
-  date.setHours(hours);
-  date.setMinutes(minutes);
-  return date.getTime();
-}
-
-function timeStampToTime(original: number) {
-  const date = new Date(original);
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
+import { useSettingsContext } from 'service/settings.service';
 
 function EditBottleFeedingEntryDrawer() {
   const { t } = useTranslation();
-  const { defaultVolume, feedingUnit } = useSettingsContext();
   const { editBottleFeedingEntryDrawer, feedingEntries, deleteFeeding, updateFeedingEntry } =
     useFeedingContext();
   const {
@@ -34,105 +16,49 @@ function EditBottleFeedingEntryDrawer() {
     closeBottleFeedingEntryDrawer,
     bottleFeedingEntryDrawerEntryId,
   } = editBottleFeedingEntryDrawer;
+  const { feedingUnit } = useSettingsContext();
 
   const entry = useMemo(
     () => feedingEntries.find(({ id }) => id === bottleFeedingEntryDrawerEntryId),
     [feedingEntries, bottleFeedingEntryDrawerEntryId],
   );
 
-  const [formData, setformData] = useState(entry);
-  const updateForm = (key: keyof IFeedingEntry, value: IFeedingEntry[keyof IFeedingEntry]) => {
-    setformData(
-      (current) =>
-        ({
-          ...current,
-          [key]: value,
-        }) as IFeedingEntry,
-    );
-  };
+  const renderContent = (
+    formData: IFeedingEntry,
+    updateForm: (key: keyof IFeedingEntry, value: IFeedingEntry[keyof IFeedingEntry]) => void,
+  ) => (
+    <Stack>
+      <NumberInput
+        label={t('bottle-feeding-entry-drawer-input-label-volume', { suffix: feedingUnit })}
+        value={formData.volume}
+        onChange={(value) =>
+          updateForm('volume', typeof value === 'string' ? parseInt(value, 10) : value)
+        }
+        min={0}
+        max={1000}
+        step={5}
+      />
+    </Stack>
+  );
 
-  useEffect(() => {
-    setformData(entry);
-  }, [entry?.id]);
-
-  const onSave = () => {
-    if (formData) {
-      const entryInstance = new FeedingEntry(formData);
-      updateFeedingEntry(entryInstance);
-    }
-    closeBottleFeedingEntryDrawer();
-  };
-  const onDelete = async () => {
-    if (entry?.id) {
-      await deleteFeeding(entry.id);
-    }
-    closeBottleFeedingEntryDrawer();
-  };
-
-  const valueToNumber = (value: string | number) => {
-    if (!value) return 0;
-    if (typeof value === 'string') return parseInt(value, 10);
-    return value;
+  const handleDelete = async (id: string) => {
+    await deleteFeeding(parseInt(id, 10));
   };
 
   return (
-    <Drawer
-      position="bottom"
-      opened={bottleFeedingEntryDrawerOpened}
+    <EntryFormDrawer
+      entry={entry}
+      onSave={(data) => updateFeedingEntry(new FeedingEntry(data))}
       onClose={closeBottleFeedingEntryDrawer}
-      title={t('feeding-entry-drawer-title')}
-      styles={{
-        content: {
-          display: 'flex',
-          flexDirection: 'column',
-        },
-        body: {
-          flexGrow: '1',
-          display: 'flex',
-          justifyContent: 'center',
-          paddingBottom: 'env(safe-area-inset-bottom, 20px)',
-        },
-      }}
+      onDelete={handleDelete}
+      title={t('bottle-feeding-entry-drawer-title')}
+      opened={bottleFeedingEntryDrawerOpened}
+      fromLabel={t('bottle-feeding-entry-drawer-input-label-created')}
+      saveLabel={t('bottle-feeding-entry-drawer-button-label-save')}
+      showStopTime={false}
     >
-      <Flex maw="500px" direction="column" flex="1">
-        <Group align="center" grow>
-          <TimeInput
-            leftSection={<IconClockPlay stroke="1" />}
-            label={t('bottle-feeding-entry-drawer-input-label-created')}
-            value={timeStampToTime(formData?.created || 0)}
-            onChange={(event) =>
-              updateForm(
-                'created',
-                timeToTimeStamp(formData?.created || 0, event.currentTarget.value),
-              )
-            }
-            maxTime={timeStampToTime(formData?.stopped || 0)}
-          />
-          <NumberInput
-            leftSection={<IconDropletHalfFilled stroke="1" />}
-            label={t('bottle-feeding-entry-drawer-input-label-volume', { suffix: feedingUnit })}
-            value={formData?.volume}
-            onChange={(value) => updateForm('volume', valueToNumber(value))}
-            suffix={` ${feedingUnit}`}
-            defaultValue={defaultVolume}
-            allowNegative={false}
-            allowDecimal={false}
-            hideControls
-            max={5000}
-          />
-        </Group>
-        <Flex flex="1" align="end">
-          <Group flex="1" align="stretch" justify="space-between">
-            <Box>
-              <ActionIcon variant="outline" h="2.25rem" w="2.25rem" onClick={onDelete}>
-                <IconTrash stroke="1.5" size="18px" />
-              </ActionIcon>
-            </Box>
-            <Button onClick={onSave}>{t('feeding-entry-drawer-button-label-save')}</Button>
-          </Group>
-        </Flex>
-      </Flex>
-    </Drawer>
+      {renderContent}
+    </EntryFormDrawer>
   );
 }
 
