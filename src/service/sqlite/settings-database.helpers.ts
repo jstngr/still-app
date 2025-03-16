@@ -53,7 +53,7 @@ async function addSettingsRowIfNotExist(db: SQLiteDBConnection): Promise<void> {
       INSERT INTO settings 
         (babyName, language, poopTracker, sleepTracker, initialized, feedByBoob, feedByBottle, defaultVolume, feedingUnit, appRated, notificationsEnabled, notificationHours, notificationMinutes) 
       VALUES 
-        ("", "${language}", true, true, false, true, false, 100, "ml", false, false, 0, 0)
+        ("", "${language}", true, true, false, true, false, 100, "ml", false, false, 2, 0)
       ;`);
     }
   } catch (err) {

@@ -83,7 +83,7 @@ const NotificationSettings: React.FC = () => {
     const splitted = value.split(':');
     const hours = splitted[0];
     let minutes = splitted[1];
-    if (parseInt(hours, 10) === 0 && parseInt(minutes, 10) < 1) {
+    if (parseInt(hours, 10) === 0 && parseInt(minutes, 10) < 5) {
       minutes = '05';
     }
     setHours(Number(hours));
