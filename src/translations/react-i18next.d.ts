@@ -7,4 +7,16 @@ declare module 'react-i18next' {
   }
 }
 
-export type TLanguage = 'de' | 'en';
+export type TLanguage =
+  | 'de'
+  | 'en'
+  | 'es'
+  | 'ru'
+  | 'uk'
+  | 'pl'
+  | 'fr'
+  | 'nl'
+  | 'pt'
+  | 'tr'
+  | 'zh'
+  | 'ja';

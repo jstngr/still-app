@@ -96,6 +96,16 @@ export default function SettingsPage() {
               data={[
                 { value: 'de', label: t('language_not_translated_de') },
                 { value: 'en', label: t('language_not_translated_en') },
+                { value: 'es', label: t('language_not_translated_es') },
+                { value: 'ru', label: t('language_not_translated_ru') },
+                { value: 'uk', label: t('language_not_translated_uk') },
+                { value: 'pl', label: t('language_not_translated_pl') },
+                { value: 'fr', label: t('language_not_translated_fr') },
+                { value: 'nl', label: t('language_not_translated_nl') },
+                { value: 'pt', label: t('language_not_translated_pt') },
+                { value: 'tr', label: t('language_not_translated_tr') },
+                { value: 'zh', label: t('language_not_translated_zh') },
+                { value: 'ja', label: t('language_not_translated_ja') },
               ]}
               label={t('settings-page-input-label-language')}
               placeholder="Pick value"
