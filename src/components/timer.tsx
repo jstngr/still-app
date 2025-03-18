@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState, useRef } from 'react';
 
 interface ITimerProps {
   startingSeconds?: number;
@@ -20,10 +20,13 @@ export default function Timer(props: ITimerProps) {
   const { isRunning, isStopped, startingSeconds, timerId } = props;
   const [seconds, setSeconds] = useState(startingSeconds || 0);
   const [resetId, setResetId] = useState(timerId || 0);
+  const startTimeRef = useRef<number>(Date.now() - (startingSeconds || 0) * 1000);
+  const frameRef = useRef<number>();
 
   useEffect(() => {
     if (resetId !== timerId) {
       setSeconds(startingSeconds || 0);
+      startTimeRef.current = Date.now() - (startingSeconds || 0) * 1000;
       setResetId(timerId || 0);
     }
   }, [startingSeconds, resetId, timerId]);
@@ -31,22 +34,31 @@ export default function Timer(props: ITimerProps) {
   useEffect(() => {
     if (isStopped) {
       setSeconds(0);
+      startTimeRef.current = Date.now();
       return;
     }
   }, [isStopped]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
+    const updateTimer = () => {
+      if (isRunning) {
+        const now = Date.now();
+        const elapsedSeconds = Math.floor((now - startTimeRef.current) / 1000);
+        setSeconds(elapsedSeconds);
+        frameRef.current = requestAnimationFrame(updateTimer);
+      }
+    };
 
     if (isRunning) {
-      interval = setInterval(() => {
-        setSeconds((prevSeconds) => prevSeconds + 1);
-      }, 1000);
-    } else if (!isRunning && seconds !== 0) {
-      clearInterval(interval);
+      frameRef.current = requestAnimationFrame(updateTimer);
     }
-    return () => clearInterval(interval);
-  }, [isRunning, seconds]);
+
+    return () => {
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+      }
+    };
+  }, [isRunning]);
 
   return (
     <TimerContext.Provider value={{ seconds }}>
