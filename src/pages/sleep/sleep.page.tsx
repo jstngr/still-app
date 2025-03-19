@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Button, Container, Group, Stack, Text, Title } from '@mantine/core';
 import { IconPlus, IconZzz, IconZzzOff } from '@tabler/icons-react';
 
 import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
@@ -23,9 +23,6 @@ export default function SleepPage() {
   }, [lastEntry]);
 
   const { toggleState } = useAppRefreshContext();
-  if (toggleState) {
-    return <div />;
-  }
 
   return (
     <Container fluid h="100%" w="100%">
@@ -51,17 +48,22 @@ export default function SleepPage() {
             </Text>
           </Stack>
         </Button>
-
-        {activeSleep ? (
-          <SleepTimer />
+        {toggleState ? (
+          <Box h="42px" />
         ) : (
-          <TimeAgoTimer
-            timeAgo={timeAgo}
-            tooLongAgoLabel={t('sleep-page-time-ago-label-more-than-24-hours')}
-            sinceLabel={t('sleep-page-time-ago-label')}
-            hasNoPreviousEntry={!lastEntry}
-            noEntryLabel={t('sleep-page-time-ago-label-no-entry')}
-          />
+          <>
+            {activeSleep ? (
+              <SleepTimer />
+            ) : (
+              <TimeAgoTimer
+                timeAgo={timeAgo}
+                tooLongAgoLabel={t('sleep-page-time-ago-label-more-than-24-hours')}
+                sinceLabel={t('sleep-page-time-ago-label')}
+                hasNoPreviousEntry={!lastEntry}
+                noEntryLabel={t('sleep-page-time-ago-label-no-entry')}
+              />
+            )}
+          </>
         )}
 
         <Stack flex="1 0 0" w="100%" gap="xs">

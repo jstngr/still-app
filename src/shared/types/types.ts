@@ -6,6 +6,7 @@ export interface IFeedingEntry {
   started: number;
   stopped?: number;
   volume?: number;
+  created: number;
 }
 
 interface IPoopEntry {

@@ -162,12 +162,12 @@ export default function SettingsPage() {
           <Text size="sm">{t('settings-page-card-title-app-functions')}</Text>
           <Stack gap="sm">
             <Switch
-              label="Show poop tracker"
+              label={t('settings-page-switch-label-diaper-tracker')}
               checked={poopTrackerEnabled}
               onChange={(event) => onChangePoopTrackerEnabled(event.currentTarget.checked)}
             />
             <Switch
-              label="Show sleep tracker"
+              label={t('settings-page-switch-label-sleep-tracker')}
               checked={sleepTrackerEnabled}
               onChange={(event) => onChangeSleepTrackerEnabled(event.currentTarget.checked)}
             />

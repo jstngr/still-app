@@ -1,10 +1,8 @@
 import { Flex, Text } from '@mantine/core';
-import React from 'react';
-import { useFeedingContext } from 'service/feeding.service';
+import React, { useEffect, useState } from 'react';
 
 import formatTime from 'shared/helpers/format-time';
 import monoStyles from 'shared/styles/mono-styles.module.css';
-import Timer from './timer';
 
 interface ITimeAgoTimerProps {
   tooLongAgoLabel: string;
@@ -15,8 +13,30 @@ interface ITimeAgoTimerProps {
 }
 
 export default function TimeAgoTimer(props: ITimeAgoTimerProps) {
-  const { feedingEntries } = useFeedingContext();
-  const lastEntry = feedingEntries[0];
+  // Use state instead of Timer component
+  const [seconds, setSeconds] = useState(Math.floor(props.timeAgo / 1000));
+
+  // Update seconds directly with requestAnimationFrame
+  useEffect(() => {
+    // Set initial seconds based on timeAgo
+    setSeconds(Math.floor(props.timeAgo / 1000));
+
+    // Reference time when this timer started
+    const startTime = Date.now() - props.timeAgo;
+    let frameId: number;
+
+    const updateTimer = () => {
+      const elapsedMs = Date.now() - startTime;
+      setSeconds(Math.floor(elapsedMs / 1000));
+      frameId = requestAnimationFrame(updateTimer);
+    };
+
+    frameId = requestAnimationFrame(updateTimer);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, [props.timeAgo]);
 
   if (props.hasNoPreviousEntry || props.timeAgo < 0) {
     return (
@@ -42,14 +62,7 @@ export default function TimeAgoTimer(props: ITimeAgoTimerProps) {
         {props.sinceLabel}
       </Text>
       <Text size="20px" className={monoStyles.monoFont}>
-        <Timer
-          isRunning={true}
-          isStopped={false}
-          startingSeconds={Math.floor(props.timeAgo / 1000)}
-          timerId={lastEntry?.id}
-        >
-          {(timer) => <>{formatTime(timer.seconds)}</>}
-        </Timer>
+        {formatTime(seconds)}
       </Text>
     </Flex>
   );

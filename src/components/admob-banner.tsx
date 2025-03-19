@@ -10,11 +10,11 @@ import {
 } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 import { useThemeContext } from 'theme';
+import { isDevelopment } from 'variables';
 
 const AdMobBanner = () => {
   const { setFooterHeight } = useThemeContext();
   const [npa, setNpa] = useState<boolean | null>(null);
-  const isDevelopment = process.env.NODE_ENV === 'development';
 
   useEffect(() => {
     const initializeAdMob = async () => {

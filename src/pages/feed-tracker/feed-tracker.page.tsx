@@ -1,4 +1,4 @@
-import { ActionIcon, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Container, Group, Stack, Text, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import BoobButton from 'pages/feed-tracker/components/boob-button/boob-button';
 import BoobSwitchModal from 'pages/feed-tracker/components/boob-button/boob-switch-modal';
@@ -29,9 +29,6 @@ export default function FeedTracker() {
   }, [lastEntry]);
 
   const { toggleState } = useAppRefreshContext();
-  if (toggleState) {
-    return <div />;
-  }
 
   return (
     <Container fluid h="100%" w="100%">
@@ -41,15 +38,21 @@ export default function FeedTracker() {
           {feedByBottle && <BottleButton />}
           {feedByBoob && <BoobButton label={t('right')} orientation="Right" />}
         </Group>
-        {activeFeeding && feedByBoob && <FeedTimer />}
-        {!activeFeeding && (
-          <TimeAgoTimer
-            timeAgo={timeAgo}
-            tooLongAgoLabel={t('time-ago-label-more-than-24-hours')}
-            sinceLabel={t('time-ago-label')}
-            hasNoPreviousEntry={!lastEntry}
-            noEntryLabel={t('feed-tracker-time-ago-label-no-entry')}
-          />
+        {toggleState ? (
+          <Box h="42px" />
+        ) : (
+          <>
+            {activeFeeding && feedByBoob && <FeedTimer />}
+            {!activeFeeding && (
+              <TimeAgoTimer
+                timeAgo={timeAgo}
+                tooLongAgoLabel={t('time-ago-label-more-than-24-hours')}
+                sinceLabel={t('time-ago-label')}
+                hasNoPreviousEntry={!lastEntry}
+                noEntryLabel={t('feed-tracker-time-ago-label-no-entry')}
+              />
+            )}
+          </>
         )}
         <Stack flex="1 0 0" w="100%" gap="xs">
           <Group justify="space-between" align="center">

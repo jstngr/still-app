@@ -12,6 +12,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import React from 'react';
 import { useSettingsContext } from './settings.service';
 import { useThemeContext } from 'theme';
+import { isDevelopment } from 'variables';
 
 // Constants
 const FOOTER_PADDING = 64;
@@ -170,7 +171,7 @@ export async function admobBanner(
     adSize: BannerAdSize.ADAPTIVE_BANNER,
     position: BannerAdPosition.BOTTOM_CENTER,
     margin: 0,
-    isTesting: false,
+    isTesting: isDevelopment, // Set to true for testing
     npa: !isPersonalised,
   };
 
