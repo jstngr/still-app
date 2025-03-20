@@ -51,16 +51,12 @@ const config: CapacitorConfig = {
     }
   },
   "android": {
-    "allowMixedContent": true
+    "allowMixedContent": true,
+    "backgroundColor": "#fbf3ee"
   },
   "ios": {
     "contentInset": "always",
     "backgroundColor": "#fbf3ee"
-  },
-  "server": {
-    "url": "http://localhost:3000",
-    "cleartext": true,
-    "androidScheme": "http"
   }
 };
 

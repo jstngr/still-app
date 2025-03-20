@@ -49,11 +49,29 @@ export default function Timer(props: ITimerProps) {
       }
     };
 
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (frameRef.current) {
+          cancelAnimationFrame(frameRef.current);
+        }
+      } else {
+        const now = Date.now();
+        const elapsedSeconds = Math.floor((now - startTimeRef.current) / 1000);
+        setSeconds(elapsedSeconds);
+        if (isRunning) {
+          frameRef.current = requestAnimationFrame(updateTimer);
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     if (isRunning) {
       frameRef.current = requestAnimationFrame(updateTimer);
     }
 
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current);
       }

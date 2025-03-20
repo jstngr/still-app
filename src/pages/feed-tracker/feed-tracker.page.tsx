@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Container, Group, Stack, Text, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import BoobButton from 'pages/feed-tracker/components/boob-button/boob-button';
 import BoobSwitchModal from 'pages/feed-tracker/components/boob-button/boob-switch-modal';
@@ -7,15 +7,13 @@ import EditFeedingEntryDrawer from 'pages/feed-tracker/components/edit-feeding-e
 import FeedTimer from 'pages/feed-tracker/components/feed-timer';
 import FeedingHistoryItem from 'pages/feed-tracker/components/feeding-history-item';
 import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeedingContext } from 'service/feeding.service';
 import { useSettingsContext } from 'service/settings.service';
 import { IFeedingEntry } from 'shared/types/types';
 import EditBottleFeedingEntryDrawer from './components/edit-bottle-feeding-entry-drawer';
 import TimeAgoTimer from '../../components/time-ago-timer';
-import FeedingEntry from 'classes/feeding-entry.class';
-import { useAppRefreshContext } from 'service/app-refresh.service';
 
 export default function FeedTracker() {
   const { feedingEntries, addFeedingEntry, activeFeeding } = useFeedingContext();
@@ -23,12 +21,6 @@ export default function FeedTracker() {
   const { t } = useTranslation();
 
   const lastEntry = feedingEntries[0];
-  const timeAgo = useMemo(() => {
-    if (!lastEntry) return 0;
-    return new FeedingEntry(lastEntry).getTimeAgo();
-  }, [lastEntry]);
-
-  const { toggleState } = useAppRefreshContext();
 
   return (
     <Container fluid h="100%" w="100%">
@@ -38,22 +30,18 @@ export default function FeedTracker() {
           {feedByBottle && <BottleButton />}
           {feedByBoob && <BoobButton label={t('right')} orientation="Right" />}
         </Group>
-        {toggleState ? (
-          <Box h="42px" />
-        ) : (
-          <>
-            {activeFeeding && feedByBoob && <FeedTimer />}
-            {!activeFeeding && (
-              <TimeAgoTimer
-                timeAgo={timeAgo}
-                tooLongAgoLabel={t('time-ago-label-more-than-24-hours')}
-                sinceLabel={t('time-ago-label')}
-                hasNoPreviousEntry={!lastEntry}
-                noEntryLabel={t('feed-tracker-time-ago-label-no-entry')}
-              />
-            )}
-          </>
+
+        {activeFeeding && feedByBoob && <FeedTimer />}
+        {!activeFeeding && (
+          <TimeAgoTimer
+            startTime={lastEntry?.stopped || 0}
+            tooLongAgoLabel={t('time-ago-label-more-than-24-hours')}
+            sinceLabel={t('time-ago-label')}
+            hasNoPreviousEntry={!lastEntry}
+            noEntryLabel={t('feed-tracker-time-ago-label-no-entry')}
+          />
         )}
+
         <Stack flex="1 0 0" w="100%" gap="xs">
           <Group justify="space-between" align="center">
             <Title order={5}>{t('feeding-history-title')}</Title>

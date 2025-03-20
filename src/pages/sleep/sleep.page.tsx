@@ -1,8 +1,8 @@
-import { ActionIcon, Box, Button, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Button, Container, Group, Stack, Text, Title } from '@mantine/core';
 import { IconPlus, IconZzz, IconZzzOff } from '@tabler/icons-react';
 
 import HistoryInfiniteScrollList from 'components/history-infinite-scroll-list';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ISleepEntry } from 'shared/types/types';
 import SleepTimer from './components/sleep-timer';
@@ -10,19 +10,11 @@ import { useSleepContext } from 'service/sleep.service';
 import SleepHistoryItem from './components/sleep-history-item';
 import EditSleepEntryDrawer from './components/edit-sleep-entry-drawer';
 import TimeAgoTimer from 'components/time-ago-timer';
-import SleepEntry from 'classes/sleep-entry.class';
-import { useAppRefreshContext } from 'service/app-refresh.service';
 
 export default function SleepPage() {
   const { activeSleep, sleepEntries, stopSleep, addSleepEntry, startSleep } = useSleepContext();
   const { t } = useTranslation();
   const lastEntry = sleepEntries[0];
-  const timeAgo = useMemo(() => {
-    if (!lastEntry) return 0;
-    return new SleepEntry(lastEntry).getTimeAgo();
-  }, [lastEntry]);
-
-  const { toggleState } = useAppRefreshContext();
 
   return (
     <Container fluid h="100%" w="100%">
@@ -48,22 +40,17 @@ export default function SleepPage() {
             </Text>
           </Stack>
         </Button>
-        {toggleState ? (
-          <Box h="42px" />
+
+        {activeSleep ? (
+          <SleepTimer />
         ) : (
-          <>
-            {activeSleep ? (
-              <SleepTimer />
-            ) : (
-              <TimeAgoTimer
-                timeAgo={timeAgo}
-                tooLongAgoLabel={t('sleep-page-time-ago-label-more-than-24-hours')}
-                sinceLabel={t('sleep-page-time-ago-label')}
-                hasNoPreviousEntry={!lastEntry}
-                noEntryLabel={t('sleep-page-time-ago-label-no-entry')}
-              />
-            )}
-          </>
+          <TimeAgoTimer
+            startTime={lastEntry?.stopped || 0}
+            tooLongAgoLabel={t('sleep-page-time-ago-label-more-than-24-hours')}
+            sinceLabel={t('sleep-page-time-ago-label')}
+            hasNoPreviousEntry={!lastEntry}
+            noEntryLabel={t('sleep-page-time-ago-label-no-entry')}
+          />
         )}
 
         <Stack flex="1 0 0" w="100%" gap="xs">
