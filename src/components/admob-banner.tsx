@@ -10,7 +10,6 @@ import {
 } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 import { useThemeContext } from 'theme';
-import { isDevelopment } from 'variables';
 
 const AdMobBanner = () => {
   const { setFooterHeight } = useThemeContext();
@@ -63,7 +62,7 @@ const AdMobBanner = () => {
           adSize: BannerAdSize.ADAPTIVE_BANNER,
           position: BannerAdPosition.BOTTOM_CENTER,
           margin: 0,
-          isTesting: isDevelopment, // Set to true for testing
+          isTesting: false, // Set to true for testing
           npa: npa ?? undefined, // Apply NPA if required
         };
 
