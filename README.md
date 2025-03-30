@@ -85,7 +85,7 @@ npx cap open android
    - Production and test ad units:
      ```typescript
      BANNER_AD_ID = {
-       PROD: "ca-app-pub-3385049365741222/3427416213",
+       PROD: "ca-app-pub-8154242292803839~2016455523",
        TEST: "ca-app-pub-3940256099942544/2435281174",
      };
      ```
@@ -154,7 +154,7 @@ npx cap open android
      appName: 'Feed and Sleep',
      plugins: {
        AdMob: {
-         appId: 'ca-app-pub-3385049365741222~1441830408',
+         appId: 'ca-app-pub-8154242292803839~2016455523',
          autoShow: true,
          requestTrackingAuthorization: true
        },

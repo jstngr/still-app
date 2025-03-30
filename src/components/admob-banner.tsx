@@ -58,7 +58,7 @@ const AdMobBanner = () => {
     if (npa !== null) {
       const showBannerAd = async () => {
         const options: BannerAdOptions = {
-          adId: 'ca-app-pub-3385049365741222/3427416213', // Replace with your Ad Unit ID
+          adId: 'ca-app-pub-8154242292803839/6885638829', // Replace with your Ad Unit ID
           adSize: BannerAdSize.ADAPTIVE_BANNER,
           position: BannerAdPosition.BOTTOM_CENTER,
           margin: 0,

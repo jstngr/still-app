@@ -41,7 +41,7 @@ const baseConfig: Partial<CapacitorConfig> = {
       resizeOnFullScreen: true,
     },
     AdMob: {
-      appId: 'ca-app-pub-3385049365741222~1441830408',
+      appId: 'ca-app-pub-8154242292803839~2016455523',
       autoShow: true,
       requestTrackingAuthorization: true,
     },
