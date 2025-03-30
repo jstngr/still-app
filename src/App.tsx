@@ -20,7 +20,6 @@ import SleepPage from 'pages/sleep/sleep.page';
 import useScreenLock from 'shared/hooks/screen-lock';
 import useKeepAwake from 'shared/hooks/keep-awake';
 import { AppRatingProvider } from 'service/app-rating.service';
-import AdMobBanner from 'components/admob-banner';
 import { AppRefreshProvider } from 'service/app-refresh.service';
 
 function AppFrame() {
@@ -113,7 +112,7 @@ export default function App() {
                       </AppRatingProvider>
                     </PoopProvider>
                   </SleepProvider>
-                  <AdMobBanner />
+                  {/* <AdMobBanner /> */}
                 </FeedingProvider>
               )}
             </SettingsContext.Consumer>
