@@ -35,8 +35,6 @@ const config: CapacitorConfig = {
       splashImmersive: true,
     },
     Keyboard: {
-      resize: 'body',
-      style: 'DARK',
       resizeOnFullScreen: true,
     },
     AdMob: {

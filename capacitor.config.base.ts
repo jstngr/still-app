@@ -1,5 +1,4 @@
 import { CapacitorConfig } from '@capacitor/cli';
-import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
 const baseConfig: Partial<CapacitorConfig> = {
   appId: 'de.mini-genie.feedandsleep',
@@ -36,8 +35,6 @@ const baseConfig: Partial<CapacitorConfig> = {
       splashImmersive: true,
     },
     Keyboard: {
-      resize: KeyboardResize.Body,
-      style: KeyboardStyle.Dark,
       resizeOnFullScreen: true,
     },
     AdMob: {
